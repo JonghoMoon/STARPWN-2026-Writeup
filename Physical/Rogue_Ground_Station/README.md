@@ -197,5 +197,5 @@ spacecraft_capture.pcap
 # Flag
 
 ```text
-flag(CAFE0000,DF400000)
+flag(CAFE0000,DF400000}
 ```
