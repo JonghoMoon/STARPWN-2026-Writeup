@@ -105,7 +105,7 @@ Command : DF400000
 
 The spacecraft accepts the response and acknowledges through its onboard indicators.
 
-## 7. Reconstructed QRY1 Layout
+**7. Reconstructed QRY1 Layout**
 
 The application payload format could be partially reconstructed.
 
