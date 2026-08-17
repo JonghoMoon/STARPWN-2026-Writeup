@@ -56,7 +56,7 @@ def main():
     )
 
     #
-    # 텔레메트리 조금 받기
+    # Received Telemetry
     #
 
     t0 = time.time()
@@ -65,7 +65,7 @@ def main():
         m.recv_match(blocking=True, timeout=0.5)
 
     #
-    # heartbeat 하나 보내기
+    # heartbeat sending
     #
 
     print("[*] Sending HEARTBEAT")
@@ -94,7 +94,7 @@ def main():
     )
 
     #
-    # 응답 대기
+    # Waiting response
     #
 
     print("[*] Waiting response...")
