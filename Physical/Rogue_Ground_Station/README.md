@@ -28,7 +28,7 @@ Once you have recovered a valid answer, construct an infrared transmission and s
 - Large application messages don't always fit inside a single packet. Sequence counts and sequence flags exist for a reason.
 - The application payload isn't encrypted, but it isn't immediately readable either. Consider what might happen after the packets are reassembled.
 
-**Attachments:** `spacecraft_capture.pcap`, `decode_qry_apid.py`
+**Attachments:** `spacecraft_capture.pcap`
 
 ## Solution
 
