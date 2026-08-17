@@ -10,9 +10,9 @@ This write-up was written to help those interested in CTFs.
   - One to Rule Them All
   - Rogue Ground Station
   - ...
-- Satellite
-- Reverse
-- Crypto
+- Forensics
+- Ground Operations
+- Misc....
 
 ## Environment
 
