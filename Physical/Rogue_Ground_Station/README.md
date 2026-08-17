@@ -105,8 +105,6 @@ Command : DF400000
 
 The spacecraft accepts the response and acknowledges through its onboard indicators.
 
----
-
 ## 7. Reconstructed QRY1 Layout
 
 The application payload format could be partially reconstructed.
@@ -127,8 +125,6 @@ Body            Variable
 ```
 
 Although the packet structure was recovered, the semantic meaning of the body could not be fully decoded despite several days of analysis.
-
----
 
 ### Attack Summary
 
