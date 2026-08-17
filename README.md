@@ -14,7 +14,7 @@ Most write-ups include not only the final solution but also the analysis scripts
   - ...
 - Forensics
 - Ground Operations
-- Miscellaneous
+- Misc
 - ...
 
 ## Environment
