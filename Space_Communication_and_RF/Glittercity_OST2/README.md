@@ -47,7 +47,7 @@ ffmpeg -i ost2.wav \
 
 Before the three Dead-Eye calls, there is a separate 2-FSK transmission around the 15-second mark.
 
-![Flag](/Space_Communication_and_RF/Glittercity_OST2/images/audacity.png)
+![Audacity](/Space_Communication_and_RF/Glittercity_OST2/images/audacity.png)
 
 This signal acts as a known-good demodulation reference. Analysis gives:
 
