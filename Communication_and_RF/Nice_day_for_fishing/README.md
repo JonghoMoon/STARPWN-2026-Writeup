@@ -14,6 +14,8 @@ You wake up with one your alarms going off. Cortex has picked up some interestin
 
 **Attachments:** `nice_day_for_fishing.zip` (`aquilon_mead_sigint_node42.sigmf-data`, `.sigmf-meta`, `outputs_file_1.tiff`, `outputs_file_2.tiff`)
 
+You need to extract the `aquilon_mead_sigint_node42` file. It was compressed because of its large size.
+
 ## Solution
 
 ### Steps
