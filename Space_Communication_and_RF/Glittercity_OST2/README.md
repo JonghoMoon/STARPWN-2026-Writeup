@@ -143,6 +143,8 @@ print("FLAG: STARPWN{THIS_WAS_OFF_TOO_MUCH}")
 
 ## Flag
 
+![Flag](/Space_Communication_and_RF/Glittercity_OST2/images/dead_eye_message.png)
+
 ```
 STARPWN{THIS_WAS_OFF_TOO_MUCH}
 ```
