@@ -105,31 +105,30 @@ Command : DF400000
 
 The spacecraft accepts the response and acknowledges through its onboard indicators.
 
-**7. QRY1 Message Format**
+---
 
-After reassembly, the application-layer QRY1 packets have the following structure.
+## 7. Reconstructed QRY1 Layout
 
+The application payload format could be partially reconstructed.
+
+```
 QRY1            4 bytes   ASCII identifier
-ID              2 bytes   Correlation identifier
+ID              2 bytes   Correlation ID
 Length          2 bytes   Payload length
-Unknown32       4 bytes   Unknown (not CRC, timestamp or hash)
+Unknown32       4 bytes   Unknown field
 
-
-Header
-────────────────────────────────────
-0x22 0xC6       2 bytes   Constant
-Subtype         1 byte    Six observed operation types
+-----------------------------------------
+0x22 0xC6       Constant
+Subtype         1 byte
 Field A         2 bytes
 Field B         2 bytes
 Ancillary       4 bytes
-                e.g. 0x6A565A8A → 2026-07-14
+Body            Variable
+```
 
+Although the packet structure was recovered, the semantic meaning of the body could not be fully decoded despite several days of analysis.
 
-Body
-────────────────────────────────────
-Variable-length payload
-
-At this stage the body itself is still not fully decoded, but the packet structure is sufficient to correlate requests and responses.
+---
 
 ### Attack Summary
 
