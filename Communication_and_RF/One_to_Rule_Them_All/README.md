@@ -107,7 +107,7 @@ The drone exposes the ArduPilot MAVLink FTP service (`FILE_TRANSFER_PROTOCOL`).
 List the filesystem:
 
 ```bash
-python3 find_png.py
+python3 find_image.py
 ```
 
 Result:
