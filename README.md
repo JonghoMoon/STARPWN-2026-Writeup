@@ -1,10 +1,6 @@
 # STARPWN-2026-Writeup
 CTF Writeup for STARPWN 2026
 
-# STARPWN 2026 Writeup
-
-> CTF Writeup for STARPWN 2026
-
 ## Results
 
 | Category | Solved |
