@@ -1,8 +1,10 @@
 # STARPWN 2026 Writeup
 
-Write-ups and analysis scripts for challenges from **STARPWN 2026**.
+Write-ups and analysis scripts for challenges for **STARPWN 2026**.
 
 Since I did not participate in the on-site event, this repository excludes challenges that required physical attendance or venue-specific interaction. The goal of this repository is to document the solving process and provide reproducible analyses for anyone interested in CTFs, especially satellite, RF, and embedded security challenges.
+
+Most write-ups include not only the final solution but also the analysis scripts and tools used during the solving process, allowing the results to be reproduced.
 
 ## Categories
 
