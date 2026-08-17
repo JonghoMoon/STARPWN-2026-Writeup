@@ -36,7 +36,7 @@ Each challenge directory contains:
 
 ## Results
 
-| Category | Solved |
+| Category | Challenges |
 |----------|--------|
 | Communication & RF | 6 |
 | Space Communication & RF | 5 |
