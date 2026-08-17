@@ -43,7 +43,7 @@ python3 analyse_eeprom.py eeprom.bin
 
 The script also reports populated EEPROM regions and searches for the signing-key magic.
 
-![EEPROM Layout](01-eeprom-layout.png)
+![EEPROM Layout](/Communication_and_RF/One_to_Rule_Them_All/images/01-eeprom-layout.png)
 
 ---
 
