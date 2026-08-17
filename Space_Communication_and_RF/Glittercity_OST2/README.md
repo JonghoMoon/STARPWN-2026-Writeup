@@ -44,7 +44,7 @@ call2_11080.wav  (center 11080 Hz)
 
 Use the `gr-satellites` AFSK demodulator block at 300 baud, 48 kHz sample rate, with the appropriate AF carrier and −1000 Hz deviation for each call. The GNU Radio flowgraph (`g2.grc` / `g2.py`) outputs a float soft-symbol file (`.soft`) per call.
 
-![GNU Radio](/images/gnu_radio_g2.png)
+![GNU Radio](Space_Communication_and_RF/Glittercity_OST2/images/gnu_radio_g2.png)
 
 **4. Soft-combine the three demodulated streams**
 
