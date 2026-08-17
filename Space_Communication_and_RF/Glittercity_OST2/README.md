@@ -44,6 +44,8 @@ call2_11080.wav  (center 11080 Hz)
 
 Use the `gr-satellites` AFSK demodulator block at 300 baud, 48 kHz sample rate, with the appropriate AF carrier and −1000 Hz deviation for each call. The GNU Radio flowgraph (`g2.grc` / `g2.py`) outputs a float soft-symbol file (`.soft`) per call.
 
+![GNU Radio](gnu_radio_g2.png)
+
 **4. Soft-combine the three demodulated streams**
 
 Sum the three `.soft` files sample-by-sample to exploit diversity combining — each call carries the same frame but with different noise realizations. Threshold the result to recover a hard-decision bit stream and assemble the 167-byte frame:
