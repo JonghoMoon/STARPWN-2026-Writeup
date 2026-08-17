@@ -89,6 +89,8 @@ Once the drone enters the ±100m radius around the RP, the ArduPilot console out
 starpwn{autonomous_until_someone_speaks_louder}
 ```
 
+![GNU Radio](/Communication_and_RF/Walk_the_False_Line/images/flag.png)
+
 ### Key Files
 
 | File | Description |
