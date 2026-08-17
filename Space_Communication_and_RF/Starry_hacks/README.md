@@ -92,6 +92,8 @@ The flag itself is leet-speak for *"through victory my chains are broken"* — a
 
 ## Flag
 
+![Flag](/Space_Communication_and_RF/Starry_hacks/images/flag.png)
+
 ```
 STARPWN{7h20u9h_v1c702y_my_ch41n5_423_820k3n}
 ```
