@@ -20,7 +20,7 @@ Once you have recovered a valid answer, construct an infrared transmission and s
 
 **Note:** Code the IR payload using the protocol NECext. The command should be the CRC-16-CCITT-ZERO of the answer to the question in all caps. The address is up to you to find.
 
-**Flag format:** `flag(AddressHex,CommandHex)` — e.g. `flag(DEAD0000,FEED0000)`
+**Flag format:** `flag(AddressHex,CommandHex}` — e.g. `flag(DEAD0000,FEED0000}`
 
 **Hints:**
 - Spacecraft rarely invent new packet formats. NASA has already solved many of these problems.
