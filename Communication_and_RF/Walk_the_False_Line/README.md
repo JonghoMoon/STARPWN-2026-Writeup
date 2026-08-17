@@ -20,8 +20,8 @@ Based on your intel, Prismantir traced the enemy team to their hideout. This is 
 - GPS RF input: `tcp:0.cloud.chals.io:<port>`
 - Truth monitor: `tcp:0.cloud.chals.io:<port>`
 
-- Hint: What should I send as an input?
-The simulated RF input is GPS L1 C/A (1575.42 MHz) complex baseband: it accepts a continuous real-time stream of signed 16-bit little-endian interleaved I/Q samples (I0,Q0,I1,Q1...) at the sample rate advertised by the monitor. For timed alignment, the stream begins with SPWN1 scenario_t=YYYY/MM/DD,HH:MM:SS sample_rate=<sample_rate>\n, associating the first IQ sample with its GPS time.
+**Hints:**
+- The simulated RF input is GPS L1 C/A (1575.42 MHz) complex baseband: it accepts a continuous real-time stream of signed 16-bit little-endian interleaved I/Q samples (I0,Q0,I1,Q1...) at the sample rate advertised by the monitor. For timed alignment, the stream begins with SPWN1 scenario_t=YYYY/MM/DD,HH:MM:SS sample_rate=<sample_rate>\n, associating the first IQ sample with its GPS time.
 
 ## Solution
 
