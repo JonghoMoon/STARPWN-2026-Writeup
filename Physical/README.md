@@ -4,4 +4,4 @@ Challenges involving physical-layer protocols, spacecraft communication systems,
 
 | # | Challenge | Points | Solves | Flag |
 |---|-----------|--------|--------|------|
-| 1 | [Rogue Ground Station](./Rogue_Ground_Station/) | 500 | 2 | flag(CAFE0000,DF400000) |
+| 1 | [Rogue Ground Station](./Rogue_Ground_Station/) | 500 | 2 | flag(CAFE0000,DF400000} |
