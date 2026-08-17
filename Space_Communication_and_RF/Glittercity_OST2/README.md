@@ -208,8 +208,8 @@ The resulting frame is 167 bytes and has the following structure:
 
 ```text
 1A CF FC 1D | 00 9F | [160-byte ciphertext] | 45
-^^^^^^^^^^^   ^^^^^                            ^^
-CCSDS ASM     length - 1                       CRC-8/DVB-S2
+^^^^^^^^^^^   ^^^^^                           ^^
+CCSDS ASM     length - 1                      CRC-8/DVB-S2
 ```
 
 The two-byte length field is big-endian:
