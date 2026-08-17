@@ -1,0 +1,7 @@
+pcap parsing
+ -> QRY1 framengation payload making
+ -> RSP1 packet making
+ -> common address CAFE check
+ -> wrong response(twice) 41 check
+ -> calculate 42 using CRC-16-CCITT-ZERO : DF40
+ -> flag(CAFE0000,DF400000} 
