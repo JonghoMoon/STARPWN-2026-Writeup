@@ -14,6 +14,8 @@ More info in the file, help them recover the hidden key.
 
 **Attachments:** `opensatkit-badpush-student.zip`
 
+I did not upload this file because it exceeds 600 MB. Please contact me privately if you need the original file.
+
 ## Solution
 
 ### Steps
