@@ -50,6 +50,7 @@ The script also reports populated EEPROM regions and searches for the signing-ke
 ## 2. Recover the MAVLink2 signing key
 
 `GCS_Signing.cpp` defines the persistent signing structure:
+(https://github.com/ArduPilot/ardupilot/blob/master/libraries/GCS_MAVLink/GCS.cpp)
 
 ```cpp
 struct SigningKey {
@@ -124,6 +125,7 @@ Result:
 ## 6. Download the flag image
 
 `downloader.py` implements the same packet format used by ArduPilot's `GCS_FTP.cpp`.
+(https://github.com/ArduPilot/ardupilot/blob/master/libraries/GCS_MAVLink/GCS_FTP.cpp)
 
 Protocol flow:
 
