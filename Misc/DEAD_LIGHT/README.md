@@ -170,6 +170,8 @@ if __name__ == "__main__":
 
 ## Flag
 
+![Flag](/Misc/DEAD_LIGHT/images/raw_C.png)
+
 ```
 STARPWN{DEAD_SIGN_RETURNS}
 ```
