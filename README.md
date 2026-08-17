@@ -34,7 +34,7 @@ Each challenge directory contains:
 - Solver / exploit
 - Artifacts
 
-## Results
+## Summary
 
 | Category | Challenges |
 |----------|--------|
