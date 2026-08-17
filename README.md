@@ -4,6 +4,32 @@ CTF Writeup for STARPWN 2026
 As I did not participate in the event on-site, I excluded problems that could only be solved at the venue.
 This write-up was written to help those interested in CTFs.
 
+## Categories
+
+- Communication & RF
+  - One to Rule Them All
+  - Rogue Ground Station
+  - ...
+- Satellite
+- Reverse
+- Crypto
+
+## Environment
+
+- Ubuntu 22.04
+- Python 3.12
+- pymavlink
+- scapy
+- ccsdspy
+
+Each challenge directory contains:
+
+- README.md
+- Original challenge description
+- Analysis scripts
+- Solver
+- Artifacts
+
 ## Results
 
 | Category | Solved |
