@@ -161,7 +161,7 @@ Output:
 
 Open `flag.jpg`.
 
-![Recovered Flag](flag.jpg)
+![Recovered Flag](/Communication_and_RF/One_to_Rule_Them_All/images/flag.png)
 
 The image contains the sentence:
 
