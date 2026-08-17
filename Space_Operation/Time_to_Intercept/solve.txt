@@ -1,0 +1,87 @@
+user@user:~/Downloads$ nc 0.cloud.chals.io 20725
+======================================================================
+  SATELLITE ORBITAL INTERCEPT MISSION
+  Space Force - Orbital Warfare Division
+======================================================================
+SITUATION REPORT:
+An unknown aggressor satellite has been detected in orbit.
+Intelligence suggests it poses a threat to critical infrastructure.
+Your mission: Calculate an intercept trajectory using a Hohmann transfer.
+MISSION OBJECTIVE:
+Calculate the delta-v for the intercept burn and wait time for the
+correct phase angle. You must rendezvous with the aggressor satellite.
+======================================================================
+ORBITAL INTELLIGENCE:
+======================================================================
+YOUR SATELLITE: DEFENDER-1
+  Altitude: 501.767 km
+  Orbital Radius: 6872.767 km
+  Orbital Velocity: 7615.474 m/s
+  Orbital Period: 94.507 minutes
+TARGET SATELLITE: AGGRESSOR-X
+  Altitude: 1168.111 km
+  Orbital Radius: 7539.111 km
+  Orbital Velocity: 7271.143 m/s
+  Orbital Period: 108.579 minutes
+CURRENT GEOMETRY:
+  Phase Angle: 229.968 degrees
+  (Angle between satellites in their orbits)
+======================================================================
+MISSION BRIEFING:
+1. Use a Hohmann transfer to change from your orbit to the target orbit
+2. Calculate the required delta-v for the initial burn
+3. Calculate wait time for correct phase angle alignment
+4. The target must be at the right position when you start the burn
+KEY EQUATIONS:
+  - Orbital velocity: v = sqrt(μ/r)
+  - Transfer orbit semi-major axis: a = (r1 + r2)/2
+  - Vis-viva equation: v = sqrt(μ(2/r - 1/a))
+--- Attempt 1/5 ---
+Enter your calculated intercept parameters:
+Format: delta_v_burn wait_time
+  delta_v_burn: Initial burn delta-v in m/s
+  wait_time: Time to wait before burn in seconds
+Example: 245.5 1820.3
+
+174.067 26514.44
+Calculating intercept trajectory...
+TRAJECTORY ANALYSIS:
+  Submitted delta-v: 174.067 m/s
+  Required delta-v: 127.051 m/s
+  Error: 47.016 m/s
+  Submitted wait time: 26514.440 s (441.91 min)
+  Required wait time: 18204.091 s (303.40 min)
+  Error: 8310.349 s
+Delta-v error too large (tolerance: ±10.0 m/s)
+Wait time error too large (tolerance: ±60.0 s)
+Intercept trajectory will miss the target. Recalculate and try again.
+--- Attempt 2/5 ---
+Enter your calculated intercept parameters:
+Format: delta_v_burn wait_time
+  delta_v_burn: Initial burn delta-v in m/s
+  wait_time: Time to wait before burn in seconds
+Example: 245.5 1820.3
+
+127.051 18204.091
+Calculating intercept trajectory...
+TRAJECTORY ANALYSIS:
+  Submitted delta-v: 127.051 m/s
+  Required delta-v: 127.051 m/s
+  Error: 0.000 m/s
+  Submitted wait time: 18204.091 s (303.40 min)
+  Required wait time: 18204.091 s (303.40 min)
+  Error: 0.000 s
+======================================================================
+INTERCEPT SUCCESS!
+======================================================================
+Excellent work! Your calculations are accurate.
+Simulating intercept sequence...
+  T-303.4 minutes: Waiting for phase angle alignment...
+  T-00:00: Phase angle optimal
+  T+00:00: Executing burn, Δv = 127.1 m/s
+  T+50.7 minutes: Coast phase complete
+  T+50.7 minutes: Circularization burn, Δv = 124.9 m/s
+  T+END: Rendezvous achieved!
+The aggressor satellite has been successfully intercepted.
+Mission accomplished.
+Here is your flag: STARPWN{h0hm4nn_tr4nsf3r_1nt3rc3pt}

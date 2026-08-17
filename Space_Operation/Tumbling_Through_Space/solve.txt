@@ -1,0 +1,75 @@
+(venv) user@user:~/starpwn/tumbling_through_space$ nc 0.cloud.chals.io 10429
+======================================================================
+  SATELLITE DETUMBLING CHALLENGE
+  Mission Control - ADCS Subsystem Interface
+======================================================================
+
+SITUATION REPORT:
+Our satellite has been struck by space debris and is tumbling!
+The Attitude Determination and Control System (ADCS) is operational,
+but we need YOU to calculate the correct control torques.
+
+MISSION OBJECTIVE:
+Calculate and apply control torques to detumble the satellite.
+Reduce angular velocity magnitude below 0.01 rad/s to stabilize.
+
+======================================================================
+CURRENT TELEMETRY:
+======================================================================
+Moment of Inertia (kg*m^2):
+  Ixx = 17.742776
+  Iyy = 13.455368
+  Izz = 17.491645
+
+Angular Velocity (rad/s):
+  omega_x = +0.383487
+  omega_y = -0.303548
+  omega_z = +0.174217
+  |omega|  = 0.519187
+
+Angular Momentum (kg*m^2/s):
+  Lx = +6.804129
+  Ly = -4.084344
+  Lz = +3.047343
+
+Rotational Energy: 2.189994 J
+======================================================================
+
+HINTS:
+1. To stop rotation, you need to cancel angular momentum: L = I * omega
+2. Torque changes angular momentum: dL/dt = T
+3. For detumbling: T = -L / t (where t is application time)
+4. You can apply torque for a duration to reduce tumble rate
+
+--- Attempt 1/5 ---
+
+Enter control torques (N*m) and duration (s):
+Format: Tx Ty Tz duration
+Example: -0.5 0.3 -0.2 10
+>
+-0.756014 0.453817 -0.338594 9.0
+
+Applying control torques...
+
+UPDATED TELEMETRY:
+Angular Velocity (rad/s):
+  omega_x = +0.000000
+  omega_y = +0.000001
+  omega_z = -0.000000
+  |omega|  = 0.000001
+
+Rotational Energy: 0.000000 J
+
+======================================================================
+SUCCESS! SATELLITE STABILIZED!
+======================================================================
+
+The satellite has been successfully detumbled!
+Angular velocity is now below threshold.
+ADCS has resumed normal operations.
+
+Mission Control is pleased with your performance.
+
+Here is your flag: STARPWN{d3tumbl3_m4st3r_sp4c3_0p5}
+
+======================================================================
