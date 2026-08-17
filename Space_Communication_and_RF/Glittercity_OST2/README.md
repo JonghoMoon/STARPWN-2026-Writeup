@@ -117,6 +117,8 @@ The three calls carry the same frame, but different portions of each reception a
 
 Use GNU Radio Companion with the `gr-satellites` **AFSK Demodulator**.
 
+![GNU Radio](/Space_Communication_and_RF/Glittercity_OST2/images/gnu_radio_g2.png)
+
 A minimal flowgraph is:
 
 ```text
@@ -180,8 +182,6 @@ The first four bytes are the CCSDS Attached Sync Marker:
 ```text
 1A CF FC 1D
 ```
-
-![GNU Radio](/Space_Communication_and_RF/Glittercity_OST2/images/gnu_radio_g2.png)
 
 ---
 
