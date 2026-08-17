@@ -1,8 +1,8 @@
-# STARPWN-2026-Writeup
-CTF Writeup for STARPWN 2026
+# STARPWN 2026 Writeup
 
-As I did not participate in the event on-site, I excluded problems that could only be solved at the venue.
-This write-up was written to help those interested in CTFs.
+Write-ups and analysis scripts for challenges from **STARPWN 2026**.
+
+Since I did not participate in the on-site event, this repository excludes challenges that required physical attendance or venue-specific interaction. The goal of this repository is to document the solving process and provide reproducible analyses for anyone interested in CTFs, especially satellite, RF, and embedded security challenges.
 
 ## Categories
 
@@ -12,7 +12,8 @@ This write-up was written to help those interested in CTFs.
   - ...
 - Forensics
 - Ground Operations
-- Misc....
+- Miscellaneous
+- ...
 
 ## Environment
 
@@ -24,10 +25,10 @@ This write-up was written to help those interested in CTFs.
 
 Each challenge directory contains:
 
-- README.md
+- `README.md` (write-up)
 - Original challenge description
 - Analysis scripts
-- Solver
+- Solver / Exploit
 - Artifacts
 
 ## Results
