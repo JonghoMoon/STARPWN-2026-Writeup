@@ -24,6 +24,7 @@ Most write-ups include not only the final solution but also the analysis scripts
 - pymavlink
 - scapy
 - ccsdspy
+- ...
 
 Each challenge directory contains:
 
