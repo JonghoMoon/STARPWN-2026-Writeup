@@ -1,9 +1,8 @@
-
 # Rogue Ground Station
 
-| Item | Value |
-|------|-------|
-| **Category** | Communication & RF |
+| | |
+|---|---|
+| **Category** | Physical |
 | **Points** | 500 |
 | **Solves** | 2 |
 
@@ -17,67 +16,38 @@ Your objective is to determine what the spacecraft is actually asking, identify 
 
 Once you have recovered a valid answer, construct an infrared transmission and send it directly to the spacecraft. If the spacecraft accepts your response, it will acknowledge your command through its onboard indicators.
 
-Sometimes the easiest way into a system isn't exploitation, it's simply being more trustworthy than Mission Control.
+> *Sometimes the easiest way into a system isn't exploitation, it's simply being more trustworthy than Mission Control.*
 
-Note: Please code the IR payload using the protocol NECext. The command should be the CRC-16-CCITT-ZERO of the answer to the question in all caps. The address is up to you to find.
+**Note:** Code the IR payload using the protocol NECext. The command should be the CRC-16-CCITT-ZERO of the answer to the question in all caps. The address is up to you to find.
 
-Flag Format: flag(AddressHex,CommandHex}. Example: flag(DEAD0000,FEED0000}
+**Flag format:** `flag(AddressHex,CommandHex)` — e.g. `flag(DEAD0000,FEED0000)`
 
----
+**Hints:**
+- Spacecraft rarely invent new packet formats. NASA has already solved many of these problems.
+- Not every Application Process ID (APID) is equally interesting. Start by identifying unusual conversations before trying to decode everything.
+- Large application messages don't always fit inside a single packet. Sequence counts and sequence flags exist for a reason.
+- The application payload isn't encrypted, but it isn't immediately readable either. Consider what might happen after the packets are reassembled.
 
-## Key Hints
+**Attachments:** `spacecraft_capture.pcap`, `decode_qry_apid.py`
 
-The challenge description already provides several important clues.
+## Solution
 
-1. **The packet capture contains a dialogue**, not independent packets.
-   Therefore the first objective is to reconstruct complete request /
-   response pairs.
+### Steps
 
-2. **The ground station repeatedly answers incorrectly.**
-   This indicates that identical wrong answers should appear multiple
-   times in the reconstructed conversations.
+**1. Parse the PCAP and extract CCSDS packets**
 
-3. **Only one correct answer is required.**
-   It is unnecessary to fully reverse every application payload if one
-   valid response can be inferred.
-
-4. **The final transmission uses the NECext protocol.**
-   The recovered answer must therefore be converted into an NECext
-   command using the algorithm described in the challenge.
-
----
-
-# Files
-
-- `spacecraft_capture.pcap`
-- `decode_qry_apid.py`
-
----
-
-# Solution
-
-## 1. Parse the PCAP
-
-The supplied capture contains CCSDS packets transported over UDP.
-
-The first step is to extract the CCSDS byte stream, split packets by APID, identify fragmented CCSDS packets using the sequence flags, and reconstruct the application payload.
+The capture contains CCSDS (Consultative Committee for Space Data Systems) Space Packets transported over UDP. Extract the byte stream, split by APID, and identify fragmented packets using the sequence flags. Reassemble fragmented payloads into complete application-layer messages.
 
 ```bash
 python3 decode_qry_apid.py <APID>
 ```
 
-This reconstructs complete application-layer payloads for each APID.
+**2. Reassemble QRY1 / RSP1 conversations**
 
----
+After reconstruction, eight complete `QRY1` request messages were recovered. Each `QRY1` was matched with a corresponding `RSP1` ground station response using correlation fields:
 
-## 2. Reassemble QRY1 / RSP1 Conversations
-
-After reconstruction, eight complete `QRY1` messages were recovered.
-
-Each `QRY1` request could be matched with a corresponding `RSP1` response using the correlation fields.
-
-| APID | Ground Station Response | Field (4B) |
-|------|-------------------------|------------|
+| APID | Ground Station Response | Correlation Field |
+|------|------------------------|-------------------|
 | 0x341 | RETRY | 85b6d49a |
 | 0x219 | **41** | 940f1e28 |
 | 0x100 | NOMINAL | ed65a4fb |
@@ -87,115 +57,71 @@ Each `QRY1` request could be matched with a corresponding `RSP1` response using 
 | 0x4A7 | UNKNOWN | ea715537 |
 | 0x313 | SKYNET | 3f584b71 |
 
-Among the reconstructed conversations, only the response **41** appears twice.
+**3. Identify the incorrect repeated response**
 
----
-
-## 3. Reconstructed QRY1 Layout
-
-The application payload format could be partially reconstructed.
-
-```
-QRY1            4 bytes   ASCII identifier
-ID              2 bytes   Correlation ID
-Length          2 bytes   Payload length
-Unknown32       4 bytes   Unknown field
-
------------------------------------------
-0x22 0xC6       Constant
-Subtype         1 byte
-Field A         2 bytes
-Field B         2 bytes
-Ancillary       4 bytes
-Body            Variable
-```
-
-Although the packet structure was recovered, the semantic meaning of the body could not be fully decoded despite several days of analysis.
-
----
-
-## 4. Recover the Correct Answer
-
-The challenge description contains the critical clue:
-
-> *"...the ground station repeatedly answers incorrectly."*
-
-Since only **41** is repeated across the reconstructed conversations, it is identified as the intentionally incorrect response mentioned in the problem.
-
-The challenge requires sending **one correct answer**, so the natural correction is inferred to be:
+The challenge states *"the ground station repeatedly answers incorrectly."* Only the response `41` appears twice across all conversations — this is the intentionally incorrect answer. The natural correct answer is therefore:
 
 ```
 42
 ```
 
----
+(A classic reference to *The Hitchhiker's Guide to the Galaxy*: "the answer to life, the universe, and everything.")
 
-## 5. Determine the Address
+**4. Determine the address**
 
-The reconstructed application packets consistently use the common address:
+The reconstructed application packets consistently use the address field:
 
 ```
 CAFE
 ```
 
-Therefore the NECext address is:
+Therefore the NECext address is `CAFE0000`.
 
-```
-CAFE0000
-```
-
----
-
-## 6. Construct the NECext Command
+**5. Compute the NECext command**
 
 The challenge specifies:
 
 ```
-Command = CRC-16-CCITT-ZERO(ANSWER)
+Command = CRC-16-CCITT-ZERO(ANSWER in all caps)
 ```
 
-Using the inferred answer:
-
-```
-ANSWER = "42"
-```
-
-produces
-
-```
-CRC16-CCITT-ZERO("42") = DF40
+```python
+import crcmod
+crc_fn = crcmod.predefined.mkCrcFun('crc-ccitt-false')  # CRC-16-CCITT-ZERO
+answer = "42".encode('ascii')
+print(hex(crc_fn(answer)))   # → 0xdf40
 ```
 
-Thus:
+Result: `DF40` → padded to `DF400000`
+
+**6. Transmit via NECext IR protocol**
+
+Send the NECext IR command to the spacecraft:
 
 ```
 Address : CAFE0000
 Command : DF400000
 ```
 
----
+The spacecraft accepts the response and acknowledges through its onboard indicators.
 
-# Attack Summary
+### Attack Summary
 
-```text
+```
 spacecraft_capture.pcap
-        │
-        ├── Extract CCSDS stream
-        ├── Split by APID
-        ├── Reassemble fragmented payloads
-        ├── Match QRY1 ↔ RSP1
-        ├── Find repeated incorrect response ("41")
-        ├── Infer correct answer ("42")
-        ├── CRC16-CCITT-ZERO("42") → DF40
-        └── Transmit NECext
-                Address = CAFE0000
-                Command = DF400000
+    └── Extract CCSDS stream (UDP transport)
+        └── Split by APID → reassemble fragmented payloads
+            └── Match QRY1 ↔ RSP1 conversations
+                └── Find repeated incorrect response: "41"
+                    └── Infer correct answer: "42"
+                        └── CRC-16-CCITT-ZERO("42") = DF40
+                            └── NECext IR transmission
+                                    Address = CAFE0000
+                                    Command = DF400000
 ```
 
----
+## Flag
 
-# Flag
-
-```text
-flag(CAFE0000,DF400000}
+```
+flag(CAFE0000,DF400000)
 ```
