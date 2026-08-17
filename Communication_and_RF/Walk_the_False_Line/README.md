@@ -37,6 +37,7 @@ python3 truth_log.py <truth_port> -o truth_log.csv
 ```
 
 Active PRNs in this session: **1, 2, 7, 14, 15, 17, 19, 20**
+
 This PRNs are determined randomly for each server. If a new server is launched, you must read the "truth monitor" logs to match it.
 
 **2. Generate a session-specific RINEX nav file**
