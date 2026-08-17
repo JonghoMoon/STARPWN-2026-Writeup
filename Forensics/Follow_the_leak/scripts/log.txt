@@ -1,0 +1,49 @@
+user@user:~/starpwn/follow_the_leak/opensatkit-badpush-student/student/.git$ git log --all --oneline --decorate -30
+6d7902d5 (HEAD) remove large binaries
+8ae9b83f (origin/main, origin/HEAD, main) docs: add telemetry quicklook + incident log (student satellite team)
+e92021ca docs: incident report for credential scrub (history rewrite)
+035b9b27 docs: incident report for credential scrub (history rewrite)
+669daf67 docs: add telemetry quicklook cheat sheet
+8b64cc72 docs: add telemetry quicklook cheat sheet
+9967456c cosmos:temp lab key
+260db5f9 cosmos:temp lab key
+5b8cb96e mission and comms plan
+145ef834 mission and comms plan
+b99f2da3 updated README
+6f30c3ff updated README
+132bb397 Merge pull request #87 from OpenSatKit/dependabot/bundler/cosmos/nokogiri-1.13.4
+6b513889 Merge pull request #87 from OpenSatKit/dependabot/bundler/cosmos/nokogiri-1.13.4
+96a529d8 Bump nokogiri from 1.10.4 to 1.13.4 in /cosmos
+19f82bf3 Bump nokogiri from 1.10.4 to 1.13.4 in /cosmos
+07b5ec2b simsat screen and demo refactor with mission management apps
+e14b366e simsat screen and demo refactor with mission management apps
+8541c79a simsat screen and demo refactor with mission management apps
+f955d38f simsat screen and demo refactor with mission management apps
+12ca6be6 Initial 4.0 refactor removed isim, hc, hsim and added pl_mgr, pl_sim
+7e49aaec Initial 4.0 refactor removed isim, hc, hsim and added pl_mgr, pl_sim
+5dcea38a Update Gemfille ruby-termios dependency
+4dd60c79 Update Gemfille ruby-termios dependency
+e5f82f88 Update Gemfille ruby-termios dependency
+126c984b Update Gemfille ruby-termios dependency
+04cc65e6 Updated efl2tbl tool and many small fixes
+4e0ec6de Updated efl2tbl tool and many small fixes
+619e8a24 Updated efl2tbl tool and many small fixes
+4c9d8f19 Updated efl2tbl tool and many small fixes
+
+user@user:~/starpwn/follow_the_leak/opensatkit-badpush-student/student/.git$ git show --stat --summary 9967456c
+commit 9967456c66dba0ef2df2a86c263f14145afad596
+Author: nunya business <nunya@business>
+Date:   Fri Feb 13 00:24:38 2026 -0800
+
+    cosmos:temp lab key
+
+ cosmos/.cdskeyfile | 3 +++
+ 1 file changed, 3 insertions(+)
+
+user@user:~/starpwn/follow_the_leak/opensatkit-badpush-student/student/.git$ git show 9967456c:cosmos/.cdskeyfile
+# NOTE: TEMPORARY — remove before flight
+CDS_KEY=ZmxhZ3s1MHJyeV9XMTVoX1czX0MwdWxkX0cwXzcwXzdoM19NMDBuXzcwZzM3aDNyfQ==
+
+user@user:~/starpwn/follow_the_leak/opensatkit-badpush-student/student/.git$ echo "ZmxhZ3s1MHJyeV9XMTVoX1czX0MwdWxkX0cwXzcwXzdoM19NMDBuXzcwZzM3aDNyfQ==" | base64 -d
+
+flag{50rry_W15h_W3_C0uld_G0_70_7h3_M00n_70g37h3r}

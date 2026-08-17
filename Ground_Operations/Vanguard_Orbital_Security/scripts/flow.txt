@@ -1,0 +1,25 @@
+1단계: 현재 위치와 권한 확인
+
+bash
+whoami
+id
+pwd
+ls -la
+
+2단계: Gitea 서버 정보 수집
+문제에서 내부 Gitea 서버가 127.0.0.1:3000에 떠 있다고 했으니 접근 가능한지 확인:
+
+bash
+curl -s http://127.0.0.1:3000/api/v1/version
+curl -s http://127.0.0.1:3000/
+
+3단계: CI/CD 설정 파일 찾기
+Gitea + CI/CD 조합이면 보통 Gitea Actions(또는 Drone CI, Woodpecker CI 연동). 저장소나 워크플로우 search:
+
+bash
+find / -iname "*.gitea*" 2>/dev/null
+find / -iname "*.yml" -path "*workflows*" 2>/dev/null
+find / -iname "*runner*" 2>/dev/null
+env
+
+

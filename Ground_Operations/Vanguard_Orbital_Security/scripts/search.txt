@@ -1,0 +1,36 @@
+2f7d9049babc:~$ id
+uid=1001(player) gid=1001(player) groups=1001(player)
+2f7d9049babc:~$ pwd
+/home/player
+2f7d9049babc:~$ whoami
+player
+2f7d9049babc:~$ id
+uid=1001(player) gid=1001(player) groups=1001(player)
+2f7d9049babc:~$ pwd
+/home/player
+2f7d9049babc:~$ ls -la
+total 28
+drwxr-sr-x 1 player player 4096 May 11 22:33 .
+drwxr-xr-x 1 root   root   4096 May 11 22:36 ..
+-rw-r--r-- 1 player player   50 May 11 22:32 .git-credentials
+-rw-r--r-- 1 player player   55 May 11 23:18 .gitconfig
+-rw-r--r-- 1 player player   82 May 11 22:32 backup.env
+-rw-r--r-- 1 player player  164 May 11 22:32 notes.txt
+2f7d9049babc:~$
+
+2f7d9049babc:~$ cat notes.txt
+Build notes:
+- internal git is at http://127.0.0.1:3000
+- cubesat build-service lives under challenges namespace
+- I used credential helper once, should still work
+2f7d9049babc:~$ cat backup.env
+GITEA_URL=http://127.0.0.1:3000
+GITEA_USER=builddev
+GITEA_PASS=devsync_9f3a_build
+2f7d9049babc:~$ cat .gitconfig
+[user]
+        name = Developer
+        email = dev@vanguard.invalid
+2f7d9049babc:~$ cat .git-credentials
+http://builddev:devsync_9f3a_build@127.0.0.1:3000
+2f7d9049babc:~$

@@ -1,0 +1,44 @@
+2f7d9049babc:~/build-service$ cat scripts/sign.sh
+#!/bin/sh
+set -eu
+
+artifact="${1:-}"
+if [ -z "$artifact" ]; then
+  echo "usage: sign.sh <artifact>"
+  exit 1
+fi
+
+if [ -z "${SIGNING_KEY:-}" ]; then
+  echo "missing signing key"
+  exit 1
+fi
+
+if [ ! -f "$artifact" ]; then
+  echo "artifact not found: $artifact"
+  exit 1
+fi
+
+echo "signing release artifact for ${DEPLOY_ENV:-unknown}"
+echo "artifact signed"
+2f7d9049babc:~/build-service$ cat package-release.sh
+#!/bin/sh
+set -eu
+make build
+./scripts/sign.sh ./dist/app.tar.gz
+2f7d9049babc:~/build-service$ cat Makefile
+build:
+        mkdir -p dist
+        echo "telemetry: cubesat payload online" > dist/app.txt
+        tar -czf dist/app.tar.gz dist/app.txt
+        @echo "flight build complete"
+2f7d9049babc:~/build-service$ cat app.py
+print("orbital build-service helper")
+2f7d9049babc:~/build-service$ cat README.md
+# cubesat-build-service
+
+Tiny internal release service for the Orbital Cubesat Program.
+
+The project builds a release bundle for flight software.
+CI signs release artifacts before uplink windows.
+Developers can trigger rebuilds by pushing changes.
+Signing is handled by CI, not local developer machines. 2f7d9049babc:~/build-service$

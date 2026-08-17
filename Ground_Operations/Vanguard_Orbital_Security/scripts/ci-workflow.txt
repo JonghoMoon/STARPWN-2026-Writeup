@@ -1,0 +1,54 @@
+2f7d9049babc:~$ git clone http://builddev:devsync_9f3a_build@127.0.0.1:3000/challenges/build-service.git
+Cloning into 'build-service'...
+remote: Enumerating objects: 11, done.
+remote: Counting objects: 100% (11/11), done.
+remote: Compressing objects: 100% (7/7), done.
+remote: Total 11 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+Receiving objects: 100% (11/11), done.
+2f7d9049babc:~$ cd build-service
+2f7d9049babc:~/build-service$ ls -la
+total 36
+drwxr-sr-x 5 player player 4096 Aug  7 17:33 .
+drwxr-sr-x 1 player player 4096 Aug  7 17:33 ..
+drwxr-sr-x 8 player player 4096 Aug  7 17:33 .git
+drwxr-sr-x 3 player player 4096 Aug  7 17:33 .gitea
+-rw-r--r-- 1 player player  149 Aug  7 17:33 Makefile
+-rw-r--r-- 1 player player  312 Aug  7 17:33 README.md
+-rw-r--r-- 1 player player   38 Aug  7 17:33 app.py
+-rwxr-xr-x 1 player player   65 Aug  7 17:33 package-release.sh
+drwxr-sr-x 2 player player 4096 Aug  7 17:33 scripts
+2f7d9049babc:~/build-service$ find . -path ./.git -prune -o -print
+.
+./.gitea
+./.gitea/workflows
+./.gitea/workflows/release.yml
+./scripts
+./scripts/sign.sh
+./README.md
+./package-release.sh
+./Makefile
+./app.py
+2f7d9049babc:~/build-service$ cat .gitea/workflows/*.yml 2>/dev/null
+name: release
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      SIGNING_KEY: ${{ secrets.PROD_SIGNING_KEY }}
+      DEPLOY_ENV: ${{ secrets.DEPLOY_ENV }}
+    steps:
+      - name: Checkout repository
+        run: |
+          # Use Gitea template injection for variables and auth
+          git clone "http://${{ github.actor }}:${{ github.token }}@localhost:3000/${{ github.repository }}.git" .
+          git checkout "${{ github.sha }}"
+      - name: Build release bundle
+        run: make build
+      - name: Sign release bundle
+        run: ./scripts/sign.sh ./dist/app.tar.gz
+2f7d9049babc:~/build-service$
