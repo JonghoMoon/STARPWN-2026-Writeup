@@ -2,6 +2,7 @@
 CTF Writeup for STARPWN 2026
 
 As I did not participate in the event on-site, I excluded problems that could only be solved at the venue.
+
 This write-up was written to help those interested in CTFs.
 
 ## Results
