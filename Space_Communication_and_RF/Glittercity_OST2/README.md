@@ -306,6 +306,8 @@ as seven scan lines and render them as a PBM or PNG image.
 
 The resulting image reads:
 
+![Flag](/Space_Communication_and_RF/Glittercity_OST2/images/dead_eye_message.png)
+
 ```text
 STARPWN{THIS_WAS_OFF_TOO_MUCH}
 ```
@@ -425,8 +427,6 @@ print("FLAG: STARPWN{THIS_WAS_OFF_TOO_MUCH}")
 ```
 
 ## Flag
-
-![Flag](/Space_Communication_and_RF/Glittercity_OST2/images/dead_eye_message.png)
 
 ```text
 STARPWN{THIS_WAS_OFF_TOO_MUCH}
