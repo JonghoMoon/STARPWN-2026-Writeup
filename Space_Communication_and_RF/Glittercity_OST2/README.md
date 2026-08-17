@@ -58,7 +58,7 @@ Samples/symbol     : 160
 Estimated tones    : ~10212.5 / 12212.5 Hz
 Tone mapping       : low tone = 1, high tone = 0
 Framing            : HDLC
-FCS                 : CRC-16/X-25
+FCS                : CRC-16/X-25
 ```
 
 The calibration signal contains repeated HDLC frames. After locating `0x7E` flags, removing HDLC bit stuffing, and validating the FCS, eight identical CRC-valid frames are recovered:
