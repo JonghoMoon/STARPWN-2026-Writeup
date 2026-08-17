@@ -22,6 +22,7 @@ Sometimes the easiest way into a system isn't exploitation, it's simply being mo
 Note: Please code the IR payload using the protocol NECext. The command should be the CRC-16-CCITT-ZERO of the answer to the question in all caps. The address is up to you to find.
 
 Flag Format: flag(AddressHex,CommandHex}. Example: flag(DEAD0000,FEED0000}
+
 ---
 
 ## Key Hints
