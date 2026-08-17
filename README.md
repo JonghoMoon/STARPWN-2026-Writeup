@@ -30,7 +30,7 @@ Each challenge directory contains:
 - `README.md` (write-up)
 - Original challenge description
 - Analysis scripts
-- Solver / Exploit
+- Solver / exploit
 - Artifacts
 
 ## Results
