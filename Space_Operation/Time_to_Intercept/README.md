@@ -160,7 +160,7 @@ Attempt 1: 174.067 26514.44
 
 Attempt 2: 127.051 18204.091
 → INTERCEPT SUCCESS!
-→ FLAG: STARPWN{h0hm4nn_tr4nsf3r_1nt3rc3pt}
+→ Here is your flag: STARPWN{h0hm4nn_tr4nsf3r_1nt3rc3pt}
 ```
 
 ## Flag
