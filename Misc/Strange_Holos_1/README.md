@@ -24,7 +24,7 @@ The glyphs on the holographic sign are written in **Aurebesh** — the Star Wars
 
 **2. Note the tricky character**
 
-The `=`-looking glyph in the sign is not an equals sign — it is **H (Herf)** in Aurebesh. The two horizontal bars stacked on top of each other make it easy to mistake for `=`.
+The `≡`-looking glyph in the sign is not an equals sign — it is **H (Herf)** in Aurebesh. The two horizontal bars stacked on top of each other make it easy to mistake for `=`.
 
 **3. Decode the inscription**
 
