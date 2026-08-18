@@ -26,7 +26,7 @@ starpwn{[A-Za-z_]+}
 - `analyse_signing.py`
 - `verify_key.py`
 - `heartbeat.py`
-- `find_png.py`
+- `find_image.py`
 - `downloader.py`
 
 ---
