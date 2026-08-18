@@ -51,7 +51,7 @@ Each challenge directory contains:
 
 ## Challenges
 
-All problems started at 500 points, and the point values ​​listed below are based on the competition's closing date.
+All challenges started at 500 points, and the point values ​​listed below are based on the competition's closing date.
 
 ### 📡 Communication & RF
 
