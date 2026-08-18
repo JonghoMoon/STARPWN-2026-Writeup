@@ -114,7 +114,6 @@ QRY1            4 bytes   ASCII identifier
 ID              2 bytes   Correlation ID
 Length          2 bytes   Payload length
 Unknown32       4 bytes   Unknown field
-
 -----------------------------------------
 0x22 0xC6       Constant
 Subtype         1 byte
