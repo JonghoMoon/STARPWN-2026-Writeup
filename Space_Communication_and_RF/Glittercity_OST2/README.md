@@ -45,7 +45,7 @@ ffmpeg -i ost2.wav \
 
 **2. Decode the ground-calibration transmission**
 
-Before the three Dead-Eye calls, there is a separate 2-FSK transmission around the 15-second mark.
+Let's open the file in Audacity and check the spectrum. Before the three Dead-Eye calls, there is a separate 2-FSK transmission around the 15-second mark.
 
 ![Audacity](/Space_Communication_and_RF/Glittercity_OST2/images/audacity.png)
 
