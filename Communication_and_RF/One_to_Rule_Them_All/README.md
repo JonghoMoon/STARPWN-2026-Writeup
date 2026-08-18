@@ -1,8 +1,8 @@
 
 # One to Rule Them All
 
-| Item | Value |
-|------|-------|
+| | |
+|---|---|
 | Category | Communication & RF |
 | Points | 499 |
 | Solves | 32 |
