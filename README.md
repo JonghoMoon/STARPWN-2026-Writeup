@@ -19,7 +19,7 @@ Most write-ups include not only the final solution but also the analysis scripts
 
 ## Environment
 
-- Ubuntu 22.04
+- Ubuntu 22.04.5
 - Python 3.12
 - pymavlink
 - scapy
