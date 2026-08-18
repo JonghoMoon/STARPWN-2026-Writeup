@@ -78,7 +78,7 @@ Upload `cubesat_upstream_driver-6.0.0.tar.gz` via the **Artifact Upload** panel 
 
 **4. Trigger the backdoor**
 
-Click **TRIGGER_BUILD** and the **STATUS** button (or send `STATUS` via the Command Console). `main.py` calls `handle_command("STATUS")`, the backdoor runs, and the output is returned to the console.
+Click **TRIGGER_BUILD** and after then **STATUS** button (or send `STATUS` via the Command Console). `main.py` calls `handle_command("STATUS")`, the backdoor runs, and the output is returned to the console.
 
 **5. Read the flag**
 
