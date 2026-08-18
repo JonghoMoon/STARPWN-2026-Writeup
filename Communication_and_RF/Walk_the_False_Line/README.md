@@ -1,7 +1,7 @@
 # Walk the False Line
 
-| Item | Value |
-|------|-------|
+| | |
+|---|---|
 | **Category** | Communication & RF |
 | **Points** | 500 |
 | **Solves** | 5 |
