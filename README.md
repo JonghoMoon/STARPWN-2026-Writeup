@@ -45,7 +45,6 @@ Each challenge directory contains:
 | Physical | 1 |
 | Space Communication & RF | 5 |
 | Space Operation | 4 |
-
 | **Total** | **27** |
 
 ---
