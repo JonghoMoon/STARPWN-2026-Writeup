@@ -26,7 +26,7 @@ Find the ghost. Recover the message.
 
 **1. Convert the MP3 to WAV and isolate the stereo difference channel**
 
-Let's open the MP3 file in Audacity and check the spectrum.
+Let's open the MP3 file in Audacity and check the spectrum. Four 2-FSK signals can be identified.
 
 ![Audacity](/Space_Communication_and_RF/Glittercity_OST2/images/audacity.png)
 
