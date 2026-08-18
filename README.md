@@ -39,12 +39,13 @@ Each challenge directory contains:
 | Category | Challenges |
 |----------|--------|
 | Communication & RF | 6 |
-| Space Communication & RF | 5 |
 | Forensics | 2 |
-| Ground Operations | 2 |
-| Space Operation | 4 |
 | Physical | 1 |
 | Misc | 7 |
+| Ground Operations | 2 |
+| Space Communication & RF | 5 |
+| Space Operation | 4 |
+
 | **Total** | **27** |
 
 ---
@@ -64,16 +65,6 @@ All challenges started at 500 points, and the point values ​​listed below ar
 | 5 | [Nice day for fishing](./Communication_and_RF/Nice_day_for_fishing/) | 500 | 25 |
 | 6 | [Is that static...moving?](./Communication_and_RF/Is_that_static_moving/) | 500 | 16 |
 
-### 🛰️ Space Communication & RF
-
-| # | Challenge | Points | Solves |
-|---|-----------|--------|--------|
-| 1 | [Beaconing from above](./Space_Communication_and_RF/Beaconing_from_above/) | 431 | 209 |
-| 2 | [Glittercity OST1](./Space_Communication_and_RF/Glittercity_OST1/) | 497 | 48 |
-| 3 | [Glittercity OST2](./Space_Communication_and_RF/Glittercity_OST2/) | 500 | 17 |
-| 4 | [Starry hacks](./Space_Communication_and_RF/Starry_hacks/) | 490 | 83 |
-| 5 | [Silent Beacon](./Space_Communication_and_RF/Silent_Beacon/) | 454 | 171 |
-
 ### 🔍 Forensics
 
 | # | Challenge | Points | Solves |
@@ -88,21 +79,6 @@ All challenges started at 500 points, and the point values ​​listed below ar
 | 1 | [Vanguard Orbital Security](./Ground_Operations/Vanguard_Orbital_Security/) | 480 | 115 |
 | 2 | [Space Infiltrations](./Ground_Operations/Space_Infiltrations/) | 483 | 105 |
 
-### 🚀 Space Operation
-
-| # | Challenge | Points | Solves |
-|---|-----------|--------|--------|
-| 1 | [Orbital Integrity](./Space_Operation/Orbital_Integrity/) | 421 | 224 |
-| 2 | [Tumbling Through Space](./Space_Operation/Tumbling_Through_Space/) | 471 | 137 |
-| 3 | [Time to Intercept](./Space_Operation/Time_to_Intercept/) | 473 | 132 |
-| 4 | [Time to Intercept -V2](./Space_Operation/Time_to_Intercept_V2/) | 494 | 65 |
-
-### 📻 Physical
-
-| # | Challenge | Points | Solves |
-|---|-----------|--------|--------|
-| 1 | [Rogue Ground Station](./Physical/Rogue_Ground_Station/) | 500 | 2 |
-
 ### 🎲 Misc
 
 | # | Challenge | Points | Solves |
@@ -114,3 +90,28 @@ All challenges started at 500 points, and the point values ​​listed below ar
 | 5 | [Strange Holos 5](./Misc/Strange_Holos_5/) | 442 | 193 |
 | 6 | [Oversized Downlink](./Misc/Oversized_Downlink/) | 450 | 178 |
 | 7 | [DEAD//LIGHT](./Misc/DEAD_LIGHT/) | 500 | 25 |
+
+### 📻 Physical
+
+| # | Challenge | Points | Solves |
+|---|-----------|--------|--------|
+| 1 | [Rogue Ground Station](./Physical/Rogue_Ground_Station/) | 500 | 2 |
+
+### 🛰️ Space Communication & RF
+
+| # | Challenge | Points | Solves |
+|---|-----------|--------|--------|
+| 1 | [Beaconing from above](./Space_Communication_and_RF/Beaconing_from_above/) | 431 | 209 |
+| 2 | [Glittercity OST1](./Space_Communication_and_RF/Glittercity_OST1/) | 497 | 48 |
+| 3 | [Glittercity OST2](./Space_Communication_and_RF/Glittercity_OST2/) | 500 | 17 |
+| 4 | [Starry hacks](./Space_Communication_and_RF/Starry_hacks/) | 490 | 83 |
+| 5 | [Silent Beacon](./Space_Communication_and_RF/Silent_Beacon/) | 454 | 171 |
+
+### 🚀 Space Operation
+
+| # | Challenge | Points | Solves |
+|---|-----------|--------|--------|
+| 1 | [Orbital Integrity](./Space_Operation/Orbital_Integrity/) | 421 | 224 |
+| 2 | [Tumbling Through Space](./Space_Operation/Tumbling_Through_Space/) | 471 | 137 |
+| 3 | [Time to Intercept](./Space_Operation/Time_to_Intercept/) | 473 | 132 |
+| 4 | [Time to Intercept -V2](./Space_Operation/Time_to_Intercept_V2/) | 494 | 65 |
