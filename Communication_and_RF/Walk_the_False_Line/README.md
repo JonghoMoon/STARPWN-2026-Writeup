@@ -92,6 +92,8 @@ SPWN1 scenario_t=2026/05/10,12:16:35 sample_rate=2600000\n
 <raw signed int16 little-endian I/Q samples>
 ```
 
+The gpssim.bin generation time and transmission time must match and be set to a time later than that of the truth monitor. Set the time for 1 to 2 minutes(4~5 if needed) ahead of the current time, and then initiate transmission 2 to 3 seconds before the truth monitor's time reaches that scheduled time.
+
 **5. Monitor the drone's position**
 
 Watch the Web UI — the drone's GPS fix shifts from its holding position toward `36.124093, -115.275197`. The flight controller in AUTO mode follows the spoofed waypoint as if it were real.
