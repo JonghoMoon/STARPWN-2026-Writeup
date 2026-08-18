@@ -65,7 +65,7 @@ CTF Beacon WAV - CW Morse Decoder
 Decodes 12 WPM Morse code on a 600 Hz tone and extracts the flag.
 
 Usage:
-    python3 beacon_decode.py [path/to/beacon.wav]
+    python3 solve.py [path/to/beacon.wav]
 """
 
 import sys
