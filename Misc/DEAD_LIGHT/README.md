@@ -76,7 +76,7 @@ Ghost C (`04_raw_C.png` / `07_C_enhanced.png`) yields the clearest rendering of 
 #!/usr/bin/env python3
 """
 Usage:
-    python3 solve_khepri.py deadlight-preview.png
+    python3 solve.py deadlight-preview.png
 """
 
 import argparse
