@@ -77,6 +77,8 @@ gps-sdr-sim -e brdc1300_rx_prn_1_2_7_14_15_17_19_20.26n \
             -o gpssim.bin
 ```
 
+The `gpssim.bim` file is not being uploaded because it exceeds 3 GB in size. It is recommended that you build it yourself.
+
 **4. Stream the IQ signal to the RF input port**
 
 Send the generated IQ file to the challenge's RF input port in real time, with the correct SPWN1 header specifying the scenario start time and sample rate:
