@@ -26,7 +26,11 @@ Find the ghost. Recover the message.
 
 **1. Convert the MP3 to WAV and isolate the stereo difference channel**
 
-Convert the MP3 to 48 kHz stereo PCM:
+Let's open the MP3 file in Audacity and check the spectrum.
+
+![Audacity](/Space_Communication_and_RF/Glittercity_OST2/images/audacity.png)
+
+And convert the MP3 to 48 kHz stereo PCM:
 
 ```bash
 ffmpeg -i Glittercity-OST2.mp3 -ar 48000 -ac 2 ost2.wav
@@ -45,9 +49,7 @@ ffmpeg -i ost2.wav \
 
 **2. Decode the ground-calibration transmission**
 
-Let's open the file in Audacity and check the spectrum. Before the three Dead-Eye calls, there is a separate 2-FSK transmission around the 15-second mark.
-
-![Audacity](/Space_Communication_and_RF/Glittercity_OST2/images/audacity.png)
+ Before the three Dead-Eye calls, there is a separate 2-FSK transmission around the 15-second mark.
 
 This signal acts as a known-good demodulation reference. Analysis gives:
 
