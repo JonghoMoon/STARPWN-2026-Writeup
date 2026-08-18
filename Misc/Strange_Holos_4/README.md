@@ -12,6 +12,8 @@ An underpass hologram in Glittercity displays Latin text — but the words are s
 
 **Attachments:** `space4-glitter.png`
 
+![Attchments](/Misc/Strange_Holos_4/challenges/space4-glitter.png)
+
 ## Solution
 
 ### Steps
