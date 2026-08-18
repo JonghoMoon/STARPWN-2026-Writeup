@@ -48,6 +48,11 @@ Apply CLAHE (contrast-limited adaptive histogram equalization) followed by unsha
 
 Ghost C (`04_raw_C.png` / `07_C_enhanced.png`) yields the clearest rendering of the message. Reading across the two lines gives the flag.
 
+![Raw_C](/Misc/DEAD_LIGHT/images/04_raw_C.png)
+
+![C-enhanced](/Misc/DEAD_LIGHT/images/07_C_enhanced.png)
+
+
 ### Images
 
 | File | Description |
