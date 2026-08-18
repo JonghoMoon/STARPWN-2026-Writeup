@@ -36,6 +36,10 @@ This is a **GPS spoofing** challenge. The target drone is flying in autonomous m
 Connect to the Truth Monitor port to observe which GPS satellites (PRNs) the drone is currently tracking:
 
 ```bash
+python3 connect_monitor.py
+
+or
+
 python3 truth_log.py <truth_port> -o truth_log.csv
 ```
 
