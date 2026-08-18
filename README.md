@@ -6,6 +6,8 @@ Since I did not participate in the on-site event, this repository excludes chall
 
 Most write-ups include not only the final solution but also the analysis scripts and tools used during the solving process, allowing the results to be reproduced.
 
+![Starpwn](/starpwn.png)
+
 ## Categories
 
 - Communication & RF
