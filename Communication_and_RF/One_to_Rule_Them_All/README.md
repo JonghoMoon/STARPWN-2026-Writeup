@@ -44,14 +44,12 @@ python3 analyse_eeprom.py eeprom.bin
 The script also reports populated EEPROM regions and searches for the signing-key magic.
 
 ArduPilot EEPROM Analysis
--------------------------
 
 Size : 16384 bytes
 Magic: PA
 Revision byte : 6
 
 Non-zero regions
-----------------
 0x0000 - 0x0002       3 bytes   entropy=1.58
 0x0005 - 0x0005       1 bytes   entropy=0.00
 0x0008 - 0x0008       1 bytes   entropy=0.00
@@ -64,9 +62,8 @@ Non-zero regions
 
 Searching for SigningKey magic...
 
-============================================================
 Possible SigningKey
-============================================================
+
 Offset     : 0x1F80
 Magic      : 0x3852FCD1
 Pad        : 0x00000000
