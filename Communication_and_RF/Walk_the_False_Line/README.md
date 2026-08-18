@@ -92,7 +92,7 @@ SPWN1 scenario_t=2026/05/10,12:16:35 sample_rate=2600000\n
 <raw signed int16 little-endian I/Q samples>
 ```
 
-The gpssim.bin generation time must match the transmission time and be later than the current truth monitor time. Set the target time 1–2 minutes ahead (or 4–5 minutes if necessary), and begin transmission 2–3 seconds before the truth monitor reaches that time.
+The `gpssim.bin` generation time must match the transmission time and be later than the current truth monitor time. Set the target time 1–2 minutes ahead (or 4–5 minutes if necessary), and begin transmission 2–3 seconds before the truth monitor reaches that time.
 
 **5. Monitor the drone's position**
 
