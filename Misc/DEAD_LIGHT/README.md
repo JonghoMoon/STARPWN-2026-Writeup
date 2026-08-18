@@ -16,6 +16,8 @@ The Khepri Array photographed something after its transmitter was already gone. 
 
 **Attachments:** `deadlight-preview.png`
 
+![Challenges](/Misc/DEAD_LIGHT/challenges/deadlight-preview.png)
+
 ## Solution
 
 ### Steps
