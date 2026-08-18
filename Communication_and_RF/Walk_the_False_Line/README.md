@@ -102,11 +102,11 @@ Watch the Web UI — the drone's GPS fix shifts from its holding position toward
 
 Once the drone enters the ±100m radius around the RP, the ArduPilot console outputs the flag repeatedly:
 
+![GNU Radio](/Communication_and_RF/Walk_the_False_Line/images/flag.png)
+
 ```
 starpwn{autonomous_until_someone_speaks_louder}
 ```
-
-![GNU Radio](/Communication_and_RF/Walk_the_False_Line/images/flag.png)
 
 ### Key Files
 
