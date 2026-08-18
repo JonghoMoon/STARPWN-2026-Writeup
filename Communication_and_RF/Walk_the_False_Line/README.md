@@ -119,7 +119,8 @@ starpwn{autonomous_until_someone_speaks_louder}
 | `motion_hold15_nw700_hold120_600s.csv` | Spoofed trajectory CSV for gps-sdr-sim |
 | `gpssim.bin` | Generated GPS L1 C/A IQ samples |
 | `stream_iq6.py` | Real-time TCP streamer for IQ data |
-| `truth_log.py` | Truth monitor client for PRN observation |
+| `truth_log.py` | Truth monitor client for PRN observation with file saving |
+| `connect_monitor.py` | Truth monitor client for PRN observation |
 
 ## Flag
 
