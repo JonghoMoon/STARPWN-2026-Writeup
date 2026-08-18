@@ -53,7 +53,7 @@ Parses a MAVLink2 .tlog, finds the drone that broke formation (BVLOS),
 and prints the flag: starpwn{Beyond_Visual_Line_Of_Sight}
 
 Usage:
-    python3 prism_decode.py [path/to/PRISM_S03_B10-30_20260830.raw]
+    python3 solve.py [path/to/PRISM_S03_B10-30_20260830.raw]
 """
 
 import sys
