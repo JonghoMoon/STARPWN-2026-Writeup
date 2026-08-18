@@ -12,6 +12,8 @@ A holographic sign appears on the wall of a rain-soaked Glittercity alley. The g
 
 **Attachments:** `space1-glitter.png`
 
+![Attchments](/Misc/Strange_Holos_1/images/space1-glitter.png)
+
 ## Solution
 
 ### Steps
