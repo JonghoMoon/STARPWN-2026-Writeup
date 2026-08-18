@@ -9,8 +9,8 @@ Most write-ups include not only the final solution but also the analysis scripts
 ## Categories
 
 - Communication & RF
-  - One to Rule Them All
-  - Rogue Ground Station
+  - Connect the dots
+  - Deadly Parade
   - ...
 - Forensics
 - Ground Operations
