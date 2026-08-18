@@ -58,13 +58,18 @@ python3 extract_decode_ost2_ground_calibration.py Glittercity-OST2.mp3
 ```
 
 ```text
-Sample rate        : 48000 Hz
-Baud rate          : 300
-Samples/symbol     : 160
-Estimated tones    : ~10212.5 / 12212.5 Hz
-Tone mapping       : low tone = 1, high tone = 0
-Framing            : HDLC
-FCS                : CRC-16/X-25
+[*] Input              : /home/jhmoon/starpwn/Glittercity-OST2/Glittercity-OST2.mp3
+[*] Extracted interval : 14.0000 - 30.0000 s
+[*] Stereo WAV         : /home/jhmoon/starpwn/Glittercity-OST2/ost2_ground_calibration/ground_calibration_stereo.wav
+[*] Side-channel WAV   : /home/jhmoon/starpwn/Glittercity-OST2/ost2_ground_calibration/ground_calibration_side.wav
+[*] Sample rate        : 48000 Hz
+[*] Baud rate          : 300.0
+[*] Samples/symbol     : 160
+[*] Estimated tones    : 10212.52 / 12212.52 Hz
+[*] Symbol phase       : 50 samples
+[*] Tone mapping       : low=1, high=0
+[*] HDLC flags found   : 167
+[+] CRC-valid frames   : 8
 ```
 
 The calibration signal contains repeated HDLC frames. After locating `0x7E` flags, removing HDLC bit stuffing, and validating the FCS, eight identical CRC-valid frames are recovered:
@@ -77,17 +82,14 @@ STATUS=GROUND CALIBRATION
 Example decoder output:
 
 ```text
-[*] Sample rate        : 48000 Hz
-[*] Baud rate          : 300.0
-[*] Samples/symbol     : 160
-[*] Estimated tones    : 10212.52 / 12212.52 Hz
-[*] Symbol phase       : 50 samples
-[*] Tone mapping       : low=1, high=0
-[*] HDLC flags found   : 167
-[+] CRC-valid frames   : 8
-[+] Frame 01: bits 420..757, destuff 329 -> 328 bits (removed 1),
-    FCS received=0x7E95, calculated=0x7E95 [OK]
-...
+[+] Frame 01: bits 420..757, destuff 329 -> 328 bits (removed 1), FCS received=0x7E95, calculated=0x7E95 [OK]
+[+] Frame 02: bits 901..1238, destuff 329 -> 328 bits (removed 1), FCS received=0x7E95, calculated=0x7E95 [OK]
+[+] Frame 03: bits 1382..1719, destuff 329 -> 328 bits (removed 1), FCS received=0x7E95, calculated=0x7E95 [OK]
+[+] Frame 04: bits 1863..2200, destuff 329 -> 328 bits (removed 1), FCS received=0x7E95, calculated=0x7E95 [OK]
+[+] Frame 05: bits 2344..2681, destuff 329 -> 328 bits (removed 1), FCS received=0x7E95, calculated=0x7E95 [OK]
+[+] Frame 06: bits 2825..3162, destuff 329 -> 328 bits (removed 1), FCS received=0x7E95, calculated=0x7E95 [OK]
+[+] Frame 07: bits 3306..3643, destuff 329 -> 328 bits (removed 1), FCS received=0x7E95, calculated=0x7E95 [OK]
+[+] Frame 08: bits 3787..4124, destuff 329 -> 328 bits (removed 1), FCS received=0x7E95, calculated=0x7E95 [OK]
 [+] Unique payloads    : 1
 
 --- Payload 1 ---
