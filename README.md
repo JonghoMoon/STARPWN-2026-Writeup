@@ -40,9 +40,9 @@ Each challenge directory contains:
 |----------|--------|
 | Communication & RF | 6 |
 | Forensics | 2 |
-| Physical | 1 |
-| Misc | 7 |
 | Ground Operations | 2 |
+| Misc | 7 |
+| Physical | 1 |
 | Space Communication & RF | 5 |
 | Space Operation | 4 |
 
