@@ -28,9 +28,9 @@ The payload text is hidden in the accretion disk around the black hole. Apply a 
 
 **2. Identify the 36 guide-lights manually**
 
-![Guide-Lights](/Misc/DEAD_LIGHT/images/polar_r220_460_3x.png)
-
 The polar image contains three overlapping "ghost" copies of the same message, each framed by 12 guide-lights. AI-assisted detection fails to reliably locate all lights, so the 36 guide-light pixel coordinates are confirmed manually by inspecting `polar_r220_460_3x.png`.
+
+![Guide-Lights](/Misc/DEAD_LIGHT/images/polar_r220_460_3x.png)
 
 **3. Extract three ghost images via ruled warp**
 
