@@ -24,10 +24,11 @@ The Khepri Array photographed something after its transmitter was already gone. 
 
 The payload text is hidden in the accretion disk around the black hole. Apply a polar transform centered at `(512, 506)` with radius range `[220, 460]` to unwrap the ring into a flat 2048×360 image (`01_polar.png`).
 
+![Polar](/Misc/DEAD_LIGHT/images/01_polar.png)
+
 **2. Identify the 36 guide-lights manually**
 
-![Flag](/Misc/DEAD_LIGHT/images/polar_r220_460_3x.png
-)
+![Guide-Lights](/Misc/DEAD_LIGHT/images/polar_r220_460_3x.png)
 
 The polar image contains three overlapping "ghost" copies of the same message, each framed by 12 guide-lights. AI-assisted detection fails to reliably locate all lights, so the 36 guide-light pixel coordinates are confirmed manually by inspecting `polar_r220_460_3x.png`.
 
