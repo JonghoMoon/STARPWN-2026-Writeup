@@ -53,6 +53,10 @@ ffmpeg -i ost2.wav \
 
 This signal acts as a known-good demodulation reference. Analysis gives:
 
+```bash
+python3 extract_decode_ost2_ground_calibration.py Glittercity-OST2.mp3
+```
+
 ```text
 Sample rate        : 48000 Hz
 Baud rate          : 300
