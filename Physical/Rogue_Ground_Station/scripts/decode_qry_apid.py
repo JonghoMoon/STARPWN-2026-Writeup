@@ -110,7 +110,7 @@ while pointer < total_bytes:
 
 # --- 4. Save the reassembled fragmented payload ---
 if packet_count > 0:
-    output_bin = f"fragmented_payload_{TARGET_APID:03X}.bin"
+    output_bin = f"apid_{TARGET_APID:03X}_QRY1_payload.bin"
     with open(output_bin, 'wb') as f:
         f.write(fragmented_payloads)
     print(f"\n[+] Reassembled {packet_count} fragmented cFS packets and saved the payload to '{output_bin}'.")
