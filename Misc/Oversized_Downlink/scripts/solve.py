@@ -6,44 +6,44 @@ def extract_lsb_r_channel(image_path):
         img = Image.open(image_path)
         img = img.convert("RGB")
     except FileNotFoundError:
-        print(f"[-] '{image_path}' 파일을 찾을 수 없습니다.")
+        print(f"[-] File not found: '{image_path}'")
         return
 
     width, height = img.size
     extracted_bits = ""
 
-    # 1. 픽셀을 순회하며 오직 'R 채널'의 LSB(bit 0)만 추출
+    # 1. Iterate over all pixels and extract only the LSB (bit 0) of the R channel
     for y in range(height):
         for x in range(width):
-            r, _, _ = img.getpixel((x, y)) # G, B 값은 무시
+            r, _, _ = img.getpixel((x, y))  # Ignore the G and B channels
             
-            # R 채널의 최하위 비트만 추가
+            # Append only the least significant bit of the R channel
             extracted_bits += str(r & 1)
 
-    # 2. 추출된 비트열을 8비트(1바이트) 단위로 묶어 문자로 변환
+    # 2. Group the extracted bitstream into 8-bit bytes and convert them to characters
     extracted_text = ""
     for i in range(0, len(extracted_bits), 8):
         byte = extracted_bits[i:i+8]
         if len(byte) == 8:
-            # 2진수 문자열을 문자로 디코딩 (깨진 문자 무시를 위해 예외 처리 추가 가능)
+            # Decode the binary string as a character
             extracted_text += chr(int(byte, 2))
 
-    # 3. 결과 출력
-    print("[+] R 채널 LSB 추출 완료!\n")
+    # 3. Print the extracted data
+    print("[+] R-channel LSB extraction complete!\n")
     
-    print("--- 추출된 데이터 시작부 ---")
+    print("--- Beginning of extracted data ---")
     print(extracted_text[:300]) 
     print("----------------------------\n")
 
-    # 4. 플래그 포맷 탐색
+    # 4. Search for the flag pattern
     flag_pattern = re.compile(r'STARPWN\{.*?\}')
     flags_found = flag_pattern.findall(extracted_text)
     
     if flags_found:
-        print(f"[!] 플래그 발견: {flags_found[0]}")
+        print(f"[!] Flag found: {flags_found[0]}")
     else:
-        print("[-] 평문은 복원되었으나 플래그를 찾지 못했습니다.")
+        print("[-] Plaintext was recovered, but no flag was found.")
 
-# 스크립트 실행
+# Run the script
 if __name__ == "__main__":
     extract_lsb_r_channel("downlink.png")
