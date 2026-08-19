@@ -2,16 +2,16 @@
 """
 Satellite Detumbling Auto-Solver
 ==================================
-nc 서버에 접속해 관성 모멘트·각속도를 읽고,
-T = -L / duration 공식으로 제어 토크를 계산·제출합니다.
+Connects to the nc server, reads the moments of inertia and angular velocity,
+then computes and submits the control torque using T = -L / duration.
 
-원리
+Principle
 ----
-  각운동량:  L = I · ω
-  제어 토크: T = -L / t   (t초 동안 적용하면 L → 0, ω → 0)
-  제약:      |T| ≤ 1.0 N·m  →  t ≥ |L|  이 되도록 duration 결정
+  Angular momentum: L = I · ω
+  Control torque: T = -L / t   (applied for t seconds, driving L → 0 and ω → 0)
+  Constraint: |T| ≤ 1.0 N·m  → choose duration so that t ≥ |L|
 
-사용법
+Usage
 ------
   python3 detumble.py <host> <port>
   python3 detumble.py 0.cloud.chals.io 10429
@@ -23,18 +23,18 @@ import socket
 import sys
 
 
-# ── 물리 계산 ─────────────────────────────────────────────────────────────────
+# ── Physics calculation ─────────────────────────────────────────────────────────────────
 def compute_torque(Ixx, Iyy, Izz, wx, wy, wz, max_torque=1.0, max_dur=100.0):
     """
     T = -L / duration  (L = I·ω)
 
-    duration은 |T| ≤ max_torque를 만족하는 최솟값으로 결정.
-    duration ≤ max_dur 제약도 적용.
+    Choose the minimum duration that satisfies |T| ≤ max_torque.
+    Also enforce the constraint duration ≤ max_dur.
 
     Returns
     -------
-    Tx, Ty, Tz  : 토크 (N·m)
-    duration    : 적용 시간 (s)
+    Tx, Ty, Tz  : torque components (N·m)
+    duration    : application time (s)
     """
     Lx = Ixx * wx
     Ly = Iyy * wy
@@ -42,9 +42,9 @@ def compute_torque(Ixx, Iyy, Izz, wx, wy, wz, max_torque=1.0, max_dur=100.0):
     L_mag = math.sqrt(Lx**2 + Ly**2 + Lz**2)
 
     # |T| = |L| / dur ≤ 1.0  →  dur ≥ |L|
-    # 올림 정수로 여유 확보, 단 max_dur 초과 불가
+    # Round up to provide margin, but do not exceed max_dur
     dur = min(math.ceil(L_mag), max_dur)
-    dur = max(dur, 1.0)          # 최소 1초
+    dur = max(dur, 1.0)          # Minimum duration: 1 second
 
     Tx = -Lx / dur
     Ty = -Ly / dur
@@ -53,7 +53,7 @@ def compute_torque(Ixx, Iyy, Izz, wx, wy, wz, max_torque=1.0, max_dur=100.0):
     return Tx, Ty, Tz, dur, L_mag
 
 
-# ── nc 클라이언트 ─────────────────────────────────────────────────────────────
+# ── netcat-style client ─────────────────────────────────────────────────────────────
 class NCClient:
     def __init__(self, host, port, timeout=15.0):
         self.sock = socket.create_connection((host, port), timeout=timeout)
@@ -81,7 +81,7 @@ class NCClient:
         self.sock.close()
 
 
-# ── 파싱 ─────────────────────────────────────────────────────────────────────
+# ── Parsing helpers ─────────────────────────────────────────────────────────────────────
 PATTERNS = {
     'Ixx': r'Ixx\s*=\s*([\d.]+)',
     'Iyy': r'Iyy\s*=\s*([\d.]+)',
@@ -112,33 +112,33 @@ def parse_attempt(text):
     return (int(m.group(1)), int(m.group(2))) if m else (None, None)
 
 
-# ── 메인 ─────────────────────────────────────────────────────────────────────
+# ── Main routine ─────────────────────────────────────────────────────────────────────
 def main():
     if len(sys.argv) < 3:
-        print("사용법: python3 detumble.py <host> <port>")
-        print("예시:   python3 detumble.py 0.cloud.chals.io 10429")
+        print("Usage: python3 detumble.py <host> <port>")
+        print("Example: python3 detumble.py 0.cloud.chals.io 10429")
         sys.exit(1)
 
     host, port = sys.argv[1], int(sys.argv[2])
-    print(f"[*] 연결: {host}:{port}")
+    print(f"[*] Connecting: {host}:{port}")
     nc = NCClient(host, port)
 
-    # 초기 브리핑 수신
+    # Receive the initial briefing
     text = nc.recv_until(b"Enter control torques")
     print(text)
 
     for attempt in range(1, 6):
-        # 텔레메트리 파싱
+        # Parse telemetry
         p = parse_telemetry(text)
         if len(p) < 6:
-            # 업데이트된 텔레메트리가 없으면 더 읽기
+            # Read more data if no updated telemetry is available
             extra = nc.recv_until(b"Enter control torques")
             print(extra)
             text += extra
             p = parse_telemetry(text)
 
         if len(p) < 6:
-            print(f"[!] 파라미터 파싱 실패: {p}")
+            print(f"[!] Failed to parse parameters: {p}")
             break
 
         omega_mag = parse_omega_mag(text)
@@ -149,10 +149,10 @@ def main():
         print(f"    ω  = ({p['wx']:+.6f}, {p['wy']:+.6f}, {p['wz']:+.6f}) rad/s")
 
         if omega_mag is not None and omega_mag < 0.01:
-            print("[+] |ω| < 0.01 — 이미 안정화됨")
+            print("[+] |ω| < 0.01 — already stabilized")
             break
 
-        # 토크 계산
+        # Compute control torque
         Tx, Ty, Tz, dur, L_mag = compute_torque(
             p['Ixx'], p['Iyy'], p['Izz'],
             p['wx'],  p['wy'],  p['wz'],
@@ -164,17 +164,17 @@ def main():
         print(f"    dur= {dur:.1f} s")
 
         cmd = f"{Tx:.6f} {Ty:.6f} {Tz:.6f} {dur:.1f}\n"
-        print(f"[*] 제출: {cmd.strip()}")
+        print(f"[*] Submitting: {cmd.strip()}")
         nc.send(cmd)
 
-        # 응답 수신
-        # 성공이면 flag, 실패면 다음 attempt 프롬프트
+        # Receive server response
+        # On success, the response contains the flag; otherwise it contains the next-attempt prompt
         try:
             resp = nc.recv_until(b"Enter control torques", timeout=15.0)
         except Exception:
             resp = ""
 
-        # flag / success 확인
+        # Check for flag / success
         full = resp
         flag = parse_flag(full)
         if flag or "SUCCESS" in full or "stabilized" in full.lower() or "flag" in full.lower():
@@ -184,9 +184,9 @@ def main():
             break
 
         print(full)
-        text = full   # 다음 루프에서 파싱할 텍스트 업데이트
+        text = full   # Update the text parsed on the next loop iteration
 
-    # 마지막 응답 수신 시도
+    # Try to receive any final response
     try:
         tail = nc.recv_until(b"}", timeout=5.0)
         print(tail)

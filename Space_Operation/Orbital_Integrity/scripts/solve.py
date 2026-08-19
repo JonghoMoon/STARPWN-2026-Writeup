@@ -1,20 +1,20 @@
 def calculate_tle_checksum(line):
     checksum = 0
-    # 마지막 문자(X)를 제외한 앞부분까지만 계산
+    # Calculate using all characters except the final checksum character
     for char in line[:-1]:
         if char.isdigit():
-            checksum += int(char)  # 숫자는 해당 숫자값을 더함
+            checksum += int(char)  # Add the numeric value of each digit
         elif char == '-':
-            checksum += 1          # -는 1을 더함
-                                   # 나머지 문자는 0이므로 생략
+            checksum += 1          # A minus sign contributes 1
+                                   # All other characters contribute 0
 
-    # 합계를 10으로 나눈 나머지 반환
+    # Return the sum modulo 10
     return str(checksum % 10)
 
 def main():
     filename = 'corrupted_tles.txt'
 
-    # 요구사항의 출력에 맞게 위성 이름을 치환하기 위한 매핑 딕셔너리
+    # Map satellite names to the format used in the expected output
     name_mapping = {
         "ISS (ZARYA)": "ISS",
         "HUBBLE SPACE TELESCOPE": "HUBBLE",
@@ -25,21 +25,21 @@ def main():
 
     try:
         with open(filename, 'r', encoding='utf-8') as f:
-            # 빈 줄을 제외하고 파일의 모든 줄을 읽어옴
+            # Read all non-empty lines from the file
             lines = [line.strip() for line in f if line.strip()]
     except FileNotFoundError:
-        print(f"[-] '{filename}' 파일을 찾을 수 없습니다. 스크립트와 같은 경로에 파일을 만들어주세요.")
+        print(f"[-] File not found: '{filename}'. Place the file in the same directory as this script.")
         return
 
     total_checksum_string = ""
 
-    # 3줄씩(위성 이름, Line 1, Line 2) 그룹지어 처리
+    # Process the input in groups of three lines: satellite name, TLE line 1, and TLE line 2
     for i in range(0, len(lines), 3):
         raw_name = lines[i]
         line1 = lines[i+1]
         line2 = lines[i+2]
 
-        # 매핑된 이름이 있으면 가져오고, 없으면 원본 이름 사용
+        # Use the mapped display name if available; otherwise keep the original name
         display_name = name_mapping.get(raw_name, raw_name)
 
         chk1 = calculate_tle_checksum(line1)
@@ -47,10 +47,10 @@ def main():
 
         total_checksum_string += chk1 + chk2
 
-        # 위성 이름을 왼쪽 정렬하여 11칸을 차지하도록 포맷팅
+        # Left-align the satellite name in an 11-character field
         print(f"{display_name:<11}: {chk1} {chk2}")
 
-    print("\n따라서 10자리 숫자는: " + total_checksum_string)
+    print("\nThe resulting 10-digit number is: " + total_checksum_string)
     print("\nSTARPWN{" + total_checksum_string + "}\n")
 
 if __name__ == "__main__":
