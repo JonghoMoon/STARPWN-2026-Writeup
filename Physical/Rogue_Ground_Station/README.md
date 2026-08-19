@@ -77,7 +77,7 @@ python3 decode_qry_apid.py 0x341
 [+] Fragment #2 | Seq: 12750 | Packet size: 27 bytes | Type: Continuation
 [+] Fragment #3 | Seq: 12751 | Packet size: 99 bytes | Type: Last
 
-[+] Reassembled 3 fragmented cFS packets and saved the payload to 'fragmented_payload_341.bin'.
+[+] Reassembled 3 fragmented cFS packets and saved the payload to 'apid_341_QRY1_payload.bin'.
 ```
 
 **3. Reassemble QRY1 / RSP1 conversations**
