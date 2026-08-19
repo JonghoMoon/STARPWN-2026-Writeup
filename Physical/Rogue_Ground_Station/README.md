@@ -67,7 +67,17 @@ The CCSDS sequence flags indicate whether a packet is the first, continuation, l
 The capture contains CCSDS (Consultative Committee for Space Data Systems) Space Packets transported over UDP. Extract the byte stream, split by APID, and identify fragmented packets using the sequence flags. Reassemble fragmented payloads into complete application-layer messages.
 
 ```bash
-python3 decode_qry_apid.py <APID>
+python3 decode_qry_apid.py 0x341
+
+2026-08-16 15:37:00,075 - ccsdspy - INFO - CCSDSPy version 2.0.0 initialized.
+[1] Extracting the cFS CCSDS binary stream from the PCAP...
+[2] Splitting CCSDS packets by APID (Target: 833 / 0x341)...
+[3] Scanning cFS APID 833 (0x341) using packet-length information...
+[+] Fragment #1 | Seq: 12749 | Packet size: 76 bytes | Type: First
+[+] Fragment #2 | Seq: 12750 | Packet size: 27 bytes | Type: Continuation
+[+] Fragment #3 | Seq: 12751 | Packet size: 99 bytes | Type: Last
+
+[+] Reassembled 3 fragmented cFS packets and saved the payload to 'fragmented_payload_341.bin'.
 ```
 
 **3. Reassemble QRY1 / RSP1 conversations**
