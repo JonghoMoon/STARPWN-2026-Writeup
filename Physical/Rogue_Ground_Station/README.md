@@ -138,7 +138,7 @@ Command = CRC-16-CCITT-ZERO(ANSWER in all caps)
 import crcmod
 
 crc_fn = crcmod.mkCrcFun(
-    0x11021,
+    0x11021, # 0x1021 with the implicit x^16 term included
     initCrc=0x0000,
     rev=False,
     xorOut=0x0000,
