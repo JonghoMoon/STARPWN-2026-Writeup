@@ -49,10 +49,12 @@ After reconstruction, eight complete `QRY1` request messages were recovered. Eac
 ```bash
 python3 extract_qry_rsp.py spacecraft_capture.pcap
 ```
+```bash
 [+] CCSDS packets : 5008<br>
 [+] QRY1 messages : 8<br>
 [+] RSP1 messages : 8<br>
 [+] Matched pairs : 8<br>
+
 
 | APID   | RSP1 Response | Correlation Field (4B) |
 |--------|---------------|------------------------|
@@ -64,7 +66,7 @@ python3 extract_qry_rsp.py spacecraft_capture.pcap
 | 0x198  | **41**        | 00809840               |
 | 0x4A7  | UNKNOWN       | ea715537               |
 | 0x313  | SKYNET        | 3f584b71               |
-
+```
 
 **3. Identify the incorrect repeated response**
 
