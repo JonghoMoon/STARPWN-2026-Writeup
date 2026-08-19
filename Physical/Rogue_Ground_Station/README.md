@@ -132,9 +132,9 @@ The challenge specifies:
 
 ```
 Command = CRC-16-CCITT-ZERO(ANSWER in all caps)
+
 The challenge specifies `CRC-16-CCITT-ZERO`, which uses the following parameters:
 
-```text
 width   = 16
 poly    = 0x1021
 init    = 0x0000
