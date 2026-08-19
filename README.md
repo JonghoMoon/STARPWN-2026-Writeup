@@ -22,7 +22,7 @@ Most write-ups include not only the final solution but also the analysis scripts
 ## Environment
 
 - Ubuntu 22.04.5(5.15.0-185-generic)
-- Python 3.12
+- Python 3.10.12
 - pymavlink
 - scapy
 - ccsdspy
