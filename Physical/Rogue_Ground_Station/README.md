@@ -132,7 +132,18 @@ The challenge specifies:
 
 ```
 Command = CRC-16-CCITT-ZERO(ANSWER in all caps)
+The challenge specifies `CRC-16-CCITT-ZERO`, which uses the following parameters:
+
+```text
+width   = 16
+poly    = 0x1021
+init    = 0x0000
+refin   = false
+refout  = false
+xorout  = 0x0000
 ```
+
+When using crcmod.mkCrcFun(), the polynomial must include the implicit highest-order x^16 term. Therefore, 0x1021 is passed as 0x11021:
 
 ```python
 import crcmod
