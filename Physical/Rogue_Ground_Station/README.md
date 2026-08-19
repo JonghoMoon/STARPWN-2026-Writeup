@@ -48,13 +48,11 @@ After reconstruction, eight complete `QRY1` request messages were recovered. Eac
 
 ```bash
 python3 extract_qry_rsp.py spacecraft_capture.pcap
-```
-```bash
-[+] CCSDS packets : 5008<br>
-[+] QRY1 messages : 8<br>
-[+] RSP1 messages : 8<br>
-[+] Matched pairs : 8<br>
 
+[+] CCSDS packets : 5008
+[+] QRY1 messages : 8
+[+] RSP1 messages : 8
+[+] Matched pairs : 8
 
 | APID   | RSP1 Response | Correlation Field (4B) |
 |--------|---------------|------------------------|
