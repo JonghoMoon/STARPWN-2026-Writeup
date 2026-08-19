@@ -159,8 +159,28 @@ Attempt 1: 174.067 26514.44
 → Required wait time: 18204.091 s
 
 Attempt 2: 127.051 18204.091
-→ INTERCEPT SUCCESS!
-→ Here is your flag: STARPWN{h0hm4nn_tr4nsf3r_1nt3rc3pt}
+Calculating intercept trajectory...
+TRAJECTORY ANALYSIS:
+  Submitted delta-v: 127.051 m/s
+  Required delta-v: 127.051 m/s
+  Error: 0.000 m/s
+  Submitted wait time: 18204.091 s (303.40 min)
+  Required wait time: 18204.091 s (303.40 min)
+  Error: 0.000 s
+======================================================================
+INTERCEPT SUCCESS!
+======================================================================
+Excellent work! Your calculations are accurate.
+Simulating intercept sequence...
+  T-303.4 minutes: Waiting for phase angle alignment...
+  T-00:00: Phase angle optimal
+  T+00:00: Executing burn, Δv = 127.1 m/s
+  T+50.7 minutes: Coast phase complete
+  T+50.7 minutes: Circularization burn, Δv = 124.9 m/s
+  T+END: Rendezvous achieved!
+The aggressor satellite has been successfully intercepted.
+Mission accomplished.
+Here is your flag: STARPWN{h0hm4nn_tr4nsf3r_1nt3rc3pt}
 ```
 
 ## Flag
