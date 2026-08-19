@@ -388,16 +388,29 @@ def pair_queries_and_responses(queries, responses):
 
 def print_table(pairs):
     print()
-    print("| APID | RSP1 Response | Correlation Field (4B) |")
-    print("|------|---------------|------------------------|")
+
+    print(
+        f"| {'APID':<6} "
+        f"| {'RSP1 Response':<13} "
+        f"| {'Correlation Field (4B)':<22} |"
+    )
+
+    print(
+        f"|{'-' * 8}"
+        f"|{'-' * 15}"
+        f"|{'-' * 24}|"
+    )
 
     for query, response in pairs:
         rsp = response["message"] if response else "<not found>"
 
+        apid = f"0x{query['apid']:03X}"
+        correlation = query["correlation_field"].hex()
+
         print(
-            f"| 0x{query['apid']:03X} "
-            f"| {rsp} "
-            f"| {query['correlation_field'].hex()} |"
+            f"| {apid:<6} "
+            f"| {rsp:<13} "
+            f"| {correlation:<22} |"
         )
 
     print()
