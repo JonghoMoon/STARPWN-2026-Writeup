@@ -34,7 +34,26 @@ Once you have recovered a valid answer, construct an infrared transmission and s
 
 ### Steps
 
-**1. Parse the PCAP and extract CCSDS packets**
+**1. Inspect the PCAP in Wireshark**
+
+Open `spacecraft_capture.pcap` in Wireshark and inspect the traffic.
+
+The capture contains UDP communication between `10.42.0.10` and `10.42.0.20`. Examining the UDP packets shows that the spacecraft communication uses ports `4242` and `4243`.
+
+At this point, Wireshark does not automatically decode the UDP payload as CCSDS, so configure the dissector manually.
+
+1. Open **Analyze → Decode As...**
+2. Set UDP port `4242` to `CCSDS`.
+3. Set UDP port `4243` to `CCSDS`.
+4. Click **Save** and then **OK**.
+
+![Wireshark Decode As](/Physical/Rogue_Ground_Station/images/wireshark-decode-as.png)
+
+After applying the CCSDS dissector, Wireshark exposes the CCSDS primary and secondary headers, including the APID, sequence number, sequence flags, and packet length.
+
+![CCSDS packets in Wireshark](/Physical/Rogue_Ground_Station/images/wireshark-ccsds.png)
+
+**2. Parse the PCAP and extract CCSDS packets**
 
 The capture contains CCSDS (Consultative Committee for Space Data Systems) Space Packets transported over UDP. Extract the byte stream, split by APID, and identify fragmented packets using the sequence flags. Reassemble fragmented payloads into complete application-layer messages.
 
@@ -42,7 +61,7 @@ The capture contains CCSDS (Consultative Committee for Space Data Systems) Space
 python3 decode_qry_apid.py <APID>
 ```
 
-**2. Reassemble QRY1 / RSP1 conversations**
+**3. Reassemble QRY1 / RSP1 conversations**
 
 After reconstruction, eight complete `QRY1` request messages were recovered. Each `QRY1` was matched with a corresponding `RSP1` ground station response using correlation fields:
 
@@ -68,7 +87,7 @@ python3 extract_qry_rsp.py spacecraft_capture.pcap
 
 **The only repeated response is 41.**
 
-**3. Identify the incorrect repeated response**
+**4. Identify the incorrect repeated response**
 
 The challenge states *"the ground station repeatedly answers incorrectly."* Only the response `41` appears twice across all conversations — this is the intentionally incorrect answer. The natural correct answer is therefore:
 
@@ -78,7 +97,7 @@ The challenge states *"the ground station repeatedly answers incorrectly."* Only
 
 (A classic reference to *The Hitchhiker's Guide to the Galaxy*: "the answer to life, the universe, and everything.")
 
-**4. Determine the address**
+**5. Determine the address**
 
 The reconstructed application packets consistently use the address field:
 
@@ -88,7 +107,7 @@ CAFE
 
 Therefore the NECext address is `CAFE0000`.
 
-**5. Compute the NECext command**
+**6. Compute the NECext command**
 
 The challenge specifies:
 
@@ -105,7 +124,7 @@ print(hex(crc_fn(answer)))   # → 0xdf40
 
 Result: `DF40` → padded to `DF400000`
 
-**6. Transmit via NECext IR protocol**
+**7. Transmit via NECext IR protocol**
 
 Send the NECext IR command to the spacecraft:
 
@@ -116,7 +135,7 @@ Command : DF400000
 
 The spacecraft accepts the response and acknowledges through its onboard indicators.
 
-**7. Reconstructed QRY1 Layout**
+**8. Reconstructed QRY1 Layout**
 
 The application payload format could be partially reconstructed.
 
