@@ -53,6 +53,15 @@ After applying the CCSDS dissector, Wireshark exposes the CCSDS primary and seco
 
 ![CCSDS packets in Wireshark](/Physical/Rogue_Ground_Station/images/wireshark-ccsds.png)
 
+An important observation is that the CCSDS sequence numbers and capture timestamps do not provide a consistent global ordering across the entire capture. In contrast, packets belonging to the same fragmented message follow the expected sequence order. Therefore, rather than sorting all packets globally by sequence number or timestamp, the fragmented packets should be identified using the CCSDS sequence flags and reassembled according to their fragment sequence.
+
+The CCSDS sequence flags indicate whether a packet is the first, continuation, last, or an unsegmented packet:
+
+- `01` — First fragment
+- `00` — Continuation fragment
+- `10` — Last fragment
+- `11` — Unsegmented packet
+
 **2. Parse the PCAP and extract CCSDS packets**
 
 The capture contains CCSDS (Consultative Committee for Space Data Systems) Space Packets transported over UDP. Extract the byte stream, split by APID, and identify fragmented packets using the sequence flags. Reassemble fragmented payloads into complete application-layer messages.
