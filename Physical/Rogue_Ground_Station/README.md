@@ -162,7 +162,7 @@ print(f"{crc_fn(answer):04X}")
 
 Result: `DF40` → padded to `DF400000`
 
-Therefore, address and command are
+Therefore, address and command are:
 
 ```
 Address : CAFE0000
