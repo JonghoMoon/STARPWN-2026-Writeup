@@ -6,36 +6,36 @@ import ccsdspy
 from ccsdspy.utils import split_by_apid
 from scapy.all import rdpcap, UDP
 
-# ccsdspy 내부 Warning 로그 차단
+# Suppress internal ccsdspy warning messages
 logging.getLogger("ccsdspy").setLevel(logging.ERROR)
 
-# --- 1. 실행 인자 및 파일/환경 설정 ---
+# --- 1. Command-line arguments and file/environment setup ---
 parser = argparse.ArgumentParser(
-    description="PCAP에서 지정 APID의 CCSDS fragmented payload를 재조립합니다."
+    description="Reassemble fragmented CCSDS payloads for a specified APID from a PCAP file."
 )
 parser.add_argument(
     "apid",
-    help="대상 APID. 10진수(예: 833) 또는 16진수(예: 0x341) 사용 가능"
+    help="Target APID. Decimal (e.g. 833) or hexadecimal (e.g. 0x341) is accepted."
 )
 args = parser.parse_args()
 
 try:
     TARGET_APID = int(args.apid, 0)
 except ValueError:
-    parser.error(f"잘못된 APID 값입니다: {args.apid}")
+    parser.error(f"Invalid APID value: {args.apid}")
 
 if not (0 <= TARGET_APID <= 0x7FF):
-    parser.error(f"CCSDS APID 범위를 벗어났습니다: 0x{TARGET_APID:X} (허용: 0x000~0x7FF)")
+    parser.error(f"APID is outside the CCSDS range: 0x{TARGET_APID:X} (valid: 0x000-0x7FF)")
 
 pcap_file = "spacecraft_capture.pcap"
 temp_bin_file = "extracted_ccsds.bin"
 
-# ⚠️ cFS 텔레메트리 세컨더리 헤더 기본 크기 설정 (시간 정보: 6바이트)
+# cFS telemetry header sizes (secondary header contains 6 bytes of time information)
 PRIMARY_HEADER_SIZE = 6
 CFS_SECONDARY_HEADER_SIZE = 6
 PACKET_PREFIX_SIZE = 2   # CA FE
 
-print("📦 [1단계] PCAP에서 cFS CCSDS 바이너리 스트림 추출 중...")
+print("[1] Extracting the cFS CCSDS binary stream from the PCAP...")
 packets = rdpcap(pcap_file)
 ccsds_raw_data = bytearray()
 for packet in packets:
@@ -44,7 +44,7 @@ for packet in packets:
 with open(temp_bin_file, 'wb') as f:
     f.write(ccsds_raw_data)
 
-print(f"📦 [2단계] APID별 분할 프로세스 가동 (Target: {TARGET_APID} / 0x{TARGET_APID:03X})...")
+print(f"[2] Splitting CCSDS packets by APID (Target: {TARGET_APID} / 0x{TARGET_APID:03X})...")
 split_files = split_by_apid(temp_bin_file)
 
 target_buffer = None
@@ -54,66 +54,66 @@ for apid_key in split_files.keys():
         break
 
 if target_buffer is None:
-    print(f"❌ 에러: APID {TARGET_APID} 데이터를 찾을 수 없습니다.")
+    print(f"[!] Error: No data found for APID {TARGET_APID}.")
     exit()
 
 if isinstance(target_buffer, io.BytesIO):
     target_buffer.seek(0)
 raw_bytes = target_buffer.read()
 
-# --- 3. cFS 규격 가변 패킷 길이 분석 및 정확한 Fragmentation 필터링 ---
-print(f"🚀 [3단계] cFS APID {TARGET_APID} (0x{TARGET_APID:03X}) 패킷 길이 정보 기반 정밀 스캔 시작...")
+# --- 3. Parse variable-length cFS packets and filter fragmented packets ---
+print(f"[3] Scanning cFS APID {TARGET_APID} (0x{TARGET_APID:03X}) using packet-length information...")
 
 fragmented_payloads = bytearray()
 packet_count = 0
 pointer = 0
 total_bytes = len(raw_bytes)
 
-flag_names = {0: "중간 조각(Continuation)", 1: "첫 번째 조각(First)", 2: "마지막 조각(Last)"}
+flag_names = {0: "Continuation", 1: "First", 2: "Last"}
 
 while pointer < total_bytes:
-    # 최소 CCSDS 주 헤더(6바이트)가 없으면 종료
+    # Stop if fewer than 6 bytes remain for a CCSDS primary header
     if pointer + PRIMARY_HEADER_SIZE > total_bytes:
         break
         
     packet_header = raw_bytes[pointer : pointer + PRIMARY_HEADER_SIZE]
     
-    # 1. 주 헤더 5, 6번째 바이트에서 패킷 크기 정보 파싱 (Big-Endian 규격)
+    # 1. Parse packet length from bytes 5-6 of the primary header (big-endian)
     payload_length = ((packet_header[4] << 8) | packet_header[5]) + 1
     total_packet_size = PRIMARY_HEADER_SIZE + payload_length
     
-    # 잔여 바이트 검증 에러 방지
+    # Stop if the remaining data is shorter than the declared packet size
     if pointer + total_packet_size > total_bytes:
         break
         
     full_packet = raw_bytes[pointer : pointer + total_packet_size]
     
-    # 2. 주 헤더 3번째 바이트에서 Sequence Flags(상위 2비트) 추출
+    # 2. Extract Sequence Flags from the upper two bits of byte 3
     seq_flags = (packet_header[2] & 0xC0) >> 6
     
-    # 3. 시퀀스 카운트 추출 (나머지 14비트)
+    # 3. Extract the 14-bit sequence count
     seq_count = ((packet_header[2] & 0x3F) << 8) | packet_header[3]
     
-    # 분할 패킷(Flags가 3이 아닌 경우)만 정확히 걸러내기
+    # Keep only segmented packets (Sequence Flags != 3)
     if seq_flags != 3:
         packet_count += 1
         
-        # ⚠️ cFS 핵심: 주 헤더(6B)와 cFS 세컨더리 헤더(6B)를 모두 도려낸 순수 데이터 슬라이싱
+        # Strip the 6-byte CCSDS primary header, 6-byte cFS secondary header, and 2-byte CA FE prefix
         header_offset = PRIMARY_HEADER_SIZE + CFS_SECONDARY_HEADER_SIZE + PACKET_PREFIX_SIZE
         pure_payload = full_packet[header_offset:]
         fragmented_payloads.extend(pure_payload)
         
-        print(f"🚨 cFS 분할 패킷! [번호: #{packet_count}] 순서번호(Seq): {seq_count} | 패킷 전체크기: {total_packet_size} 바이트 | 종류: {flag_names.get(seq_flags)}")
+        print(f"[+] Fragment #{packet_count} | Seq: {seq_count} | Packet size: {total_packet_size} bytes | Type: {flag_names.get(seq_flags)}")
 
-    # 다음 패킷으로 포인터 점프
+    # Advance to the next packet
     pointer += total_packet_size
 
-# --- 4. 추출된 분할 페이로드 파일 저장 ---
+# --- 4. Save the reassembled fragmented payload ---
 if packet_count > 0:
     output_bin = f"fragmented_payload_{TARGET_APID:03X}.bin"
     with open(output_bin, 'wb') as f:
         f.write(fragmented_payloads)
-    print(f"\n💾 [추출 완료] cFS 규격의 진짜 분할 패킷 {packet_count}개를 병합하여 '{output_bin}' 파일로 저장했습니다.")
+    print(f"\n[+] Reassembled {packet_count} fragmented cFS packets and saved the payload to '{output_bin}'.")
 else:
-    print("\n✅ cFS 규격 정밀 스캔 결과, APID 833 패킷 중 분할 전송(Fragmentation)된 패킷이 없습니다.")
+    print(f"\n[-] No fragmented packets found for APID {TARGET_APID} during the cFS scan.")
 
