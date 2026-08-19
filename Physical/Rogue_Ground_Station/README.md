@@ -136,9 +136,17 @@ Command = CRC-16-CCITT-ZERO(ANSWER in all caps)
 
 ```python
 import crcmod
-crc_fn = crcmod.predefined.mkCrcFun('crc-ccitt-false')  # CRC-16-CCITT-ZERO
-answer = "42".encode('ascii')
-print(hex(crc_fn(answer)))   # → 0xdf40
+
+crc_fn = crcmod.mkCrcFun(
+    0x11021,
+    initCrc=0x0000,
+    rev=False,
+    xorOut=0x0000,
+)
+
+answer = b"42"
+
+print(f"{crc_fn(answer):04X}")
 ```
 
 Result: `DF40` → padded to `DF400000`
