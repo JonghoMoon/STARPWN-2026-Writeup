@@ -169,7 +169,7 @@ Address : CAFE0000
 Command : DF400000
 ```
 
-**7. Reconstructed QRY1 Layout**
+**A. Reconstructed QRY1 Layout(Additional)**
 
 The application payload format could be partially reconstructed.
 
