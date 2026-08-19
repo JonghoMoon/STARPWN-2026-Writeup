@@ -162,18 +162,14 @@ print(f"{crc_fn(answer):04X}")
 
 Result: `DF40` → padded to `DF400000`
 
-**7. Transmit via NECext IR protocol**
-
-Send the NECext IR command to the spacecraft:
+Therefore, address and command is
 
 ```
 Address : CAFE0000
 Command : DF400000
 ```
 
-The spacecraft accepts the response and acknowledges through its onboard indicators.
-
-**8. Reconstructed QRY1 Layout**
+**7. Reconstructed QRY1 Layout**
 
 The application payload format could be partially reconstructed.
 
