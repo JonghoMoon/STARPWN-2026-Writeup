@@ -65,6 +65,10 @@ ZMQ float32 I/Q
 
 Use `extract_synnode_flag_standalone.py` to automate the full pipeline from the captured binary.
 
+```bash
+python3 extract_synnode_flag_standalone.py synnode_signal.bin
+```
+
 **4. Extract the flag from motion vectors**
 
 The decoded H.264 video stream contains moving white dots on a dark background. The flag is encoded in the **motion vectors** of the video — the movement pattern of the dots spells out the flag when analyzed frame by frame.
