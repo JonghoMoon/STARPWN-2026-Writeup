@@ -57,14 +57,16 @@ python3 extract_qry_rsp.py spacecraft_capture.pcap
 | APID   | RSP1 Response | Correlation Field (4B) |
 |--------|---------------|------------------------|
 | 0x341  | RETRY         | 85b6d49a               |
-| 0x219  | **41**        | 940f1e28               |
+| 0x219  | 41            | 940f1e28               |
 | 0x100  | NOMINAL       | ed65a4fb               |
 | 0x013  | NOMINAL       | f558ed49               |
 | 0x306  | APOLLO11      | c5988fbb               |
-| 0x198  | **41**        | 00809840               |
+| 0x198  | 41            | 00809840               |
 | 0x4A7  | UNKNOWN       | ea715537               |
 | 0x313  | SKYNET        | 3f584b71               |
 ```
+
+**The only repeated response is 41.**
 
 **3. Identify the incorrect repeated response**
 
