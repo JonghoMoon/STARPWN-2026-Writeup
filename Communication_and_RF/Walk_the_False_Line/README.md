@@ -47,7 +47,7 @@ python3 truth_log.py <truth_port> -o truth_log.csv
 
 Active PRNs in this session: **1, 2, 7, 14, 15, 17, 19, 20**
 
-The PRNs are randomly assigned for each server instance. When a new server is launched, check the truth monitor logs to identify the PRNs assigned to that instance.
+**The PRNs are randomly assigned for each server instance. When a new server is launched, check the truth monitor logs to identify the PRNs assigned to that instance.**
 
 For example,
 
