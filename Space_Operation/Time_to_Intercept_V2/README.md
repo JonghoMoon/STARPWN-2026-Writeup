@@ -136,8 +136,26 @@ nc.close()
 ```
 Attempt 1/5
 > 150.2 32454.8
-→ INTERCEPT SUCCESS!
-→ FLAG: STARPWN{dont_print_th3_answer_}
+
+Calculating intercept trajectory... 
+
+TRAJECTORY ANALYSIS: 
+Submitted delta-v: 150.200 m/s 
+Submitted wait time: 32454.800 s (540.91 min) 
+====================================================================== 
+INTERCEPT SUCCESS! 
+====================================================================== 
+Excellent work! Your calculations are accurate. 
+Simulating intercept sequence... 
+T-540.9 minutes: Waiting for phase angle alignment... 
+T-00:00: Phase angle optimal 
+T+00:00: Executing burn, Δv = 150.2 m/s T+50.1 
+minutes: Coast phase complete T+50.1 
+minutes: Circularization burn, Δv = 147.3 m/s 
+T+END: Rendezvous achieved! 
+The aggressor satellite has been successfully intercepted. 
+Mission accomplished. Here is your flag: STARPWN{dont_print_th3_answer_} 
+======================================================================
 ```
 
 ## Flag
