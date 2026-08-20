@@ -112,11 +112,7 @@ The enhanced comparison:
 
 ![ABC enhanced comparison](/Misc/DEAD_LIGHT/images/09_compare_ABC_enhanced.png)
 
-The direct one-pass rectification and luminance-only enhancement make several previously blurred sections substantially clearer. No single ghost contains every character perfectly, but comparing the three aligned copies makes the two-line message readable enough to recover:
-
-```text
-STARPWN{DEAD_SIGN_RETURNS}
-```
+The direct one-pass rectification and luminance-only enhancement make several previously blurred sections substantially clearer. No single ghost contains every character perfectly, but comparing the three aligned copies makes the two-line message readable enough to recover.
 
 ### Images
 
