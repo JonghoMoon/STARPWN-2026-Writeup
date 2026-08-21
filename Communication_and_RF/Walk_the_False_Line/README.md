@@ -160,6 +160,7 @@ Use [gps-sdr-sim](https://github.com/osqzss/gps-sdr-sim) to generate a GPS L1 C/
 
 gps-sdr-sim -e brdc1300_rx_prn_1_2_7_14_15_17_19_20.26n \
             -u motion_hold15_nw700_hold120_600s.csv \
+            -t 2026/05/10, 12:16:35 \
             -s 2600000 \
             -b 16 \
             -o gpssim.bin
