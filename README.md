@@ -8,7 +8,7 @@ Most write-ups include not only the final solution but also the analysis scripts
 
 Repo : https://github.com/JonghoMoon/STARPWN-2026-Writeup
 
-![Starpwn](/starpwn.png)
+![Starpwn](./starpwn.png)
 
 ## Categories
 
