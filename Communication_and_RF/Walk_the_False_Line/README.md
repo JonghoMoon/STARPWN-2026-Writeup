@@ -57,12 +57,95 @@ Receiver logs are available by clicking the antenna icon next to the GPS indicat
 https://starpwn-147a501af55d-walk-the-false-line-0-0.chals.io/receiver
 ```
 
+```
+Current receiver time: 29 min 19 s
+New GPS NAV message received in channel 4: subframe 3 from satellite New GPS NAV message received in channel 2: subframe 3 from satellite GPS PRN 17 (Block IIR-M)
+GPS PRN 14 (Block III)
+New GPS NAV message received in channel 7: subframe 3 from satellite GPS PRN 20 (Block IIR)
+New GPS NAV message received in channel 3: subframe 3 from satellite GPS PRN 15 (Block IIR-M)
+New GPS NAV message received in channel 5: subframe 3 from satellite GPS PRN 19 (Block IIR)
+New GPS NAV message received in channel 0: subframe 3 from satellite GPS PRN 01 (Block IIF)
+New GPS NAV message received in channel 6: subframe 3 from satellite GPS PRN 07 (Block IIR-M)
+New GPS NAV message received in channel 1: subframe 3 from satellite GPS PRN 02 (Block IIR)
+[1m[32mPosition at 2026-May-10 12:29:00.000000 UTC using 7 observations is Lat = 36.119364196 [deg], Long = -115.271040384 [deg], Height = 789.778 [m][0m
+[1m[32mVelocity: East: -0.062 [m/s], North: 0.028 [m/s], Up = -0.223 [m/s][0m
+[1m[32mPosition at 2026-May-10 12:29:00.500000 UTC using 7 observations is Lat = 36.119363704 [deg], Long = -115.271045369 [deg], Height = 789.221 [m][0m
+[1m[32mVelocity: East: -0.027 [m/s], North: 0.090 [m/s], Up = -0.066 [m/s][0m
+Current receiver time: 29 min 20 s
+[1m[32mPosition at 2026-May-10 12:29:01.000000 UTC using 7 observations is Lat = 36.119367063 [deg], Long = -115.271048682 [deg], Height = 789.099 [m][0m
+[1m[32mVelocity: East: -0.062 [m/s], North: -0.013 [m/s], Up = -0.181 [m/s][0m
+[1m[32mPosition at 2026-May-10 12:29:01.500000 UTC using 7 observations is Lat = 36.119364638 [deg], Long = -115.271046781 [deg], Height = 789.579 [m][0m
+[1m[32mVelocity: East: 0.050 [m/s], North: -0.020 [m/s], Up = 0.069 [m/s][0m
+Current receiver time: 29 min 21 s
+[1m[32mPosition at 2026-May-10 12:29:02.000000 UTC using 7 observations is Lat = 36.119361553 [deg], Long = -115.271046992 [deg], Height = 789.169 [m][0m
+[1m[32mVelocity: East: 0.069 [m/s], North: -0.113 [m/s], Up = 0.019 [m/s][0m
+[1m[32mPosition at 2026-May-10 12:29:02.500000 UTC using 7 observations is Lat = 36.119363559 [deg], Long = -115.271040808 [deg], Height = 789.212 [m][0m
+[1m[32mVelocity: East: 0.153 [m/s], North: 0.077 [m/s], Up = 0.106 [m/s][0m
+Current receiver time: 29 min 22 s
+[1m[32mPosition at 2026-May-10 12:29:03.000000 UTC using 7 observations is Lat = 36.119367503 [deg], Long = -115.271043459 [deg], Height = 789.209 [m][0m
+[1m[32mVelocity: East: -0.054 [m/s], North: 0.169 [m/s], Up = 0.073 [m/s][0m
+[1m[32mPosition at 2026-May-10 12:29:03.500000 UTC using 7 observations is Lat = 36.119363446 [deg], Long = -115.271044730 [deg], Height = 788.295 [m][0m
+[1m[32mVelocity: East: 0.002 [m/s], North: -0.011 [m/s], Up = -0.180 [m/s][0m
+Current receiver time: 29 min 23 s
+[1m[32mPosition at 2026-May-10 12:29:04.000000 UTC using 7 observations is Lat = 36.119366031 [deg], Long = -115.271043910 [deg], Height = 789.626 [m][0m
+[1m[32mVelocity: East: -0.023 [m/s], North: -0.067 [m/s], Up = -0.114 [m/s][0m
+[1m[32mPosition at 2026-May-10 12:29:04.500000 UTC using 7 observations is Lat = 36.119362525 [deg], Long = -115.271045067 [deg], Height = 788.528 [m][0m
+[1m[32mVelocity: East: -0.010 [m/s], North: -0.077 [m/s], Up = 0.061 [m/s][0m
+Current receiver time: 29 min 24 s
+[1m[32mPosition at 2026-May-10 12:29:05.000000 UTC using 7 observations is Lat = 36.119366344 [deg], Long = -115.271047473 [deg], Height = 788.813 [m][0m
+[1m[32mVelocity: East: 0.065 [m/s], North: -0.144 [m/s], Up = -0.262 [m/s][0m
+[1m[32mPosition at 2026-May-10 12:29:05.500000 UTC using 7 observations is Lat = 36.119367436 [deg], Long = -115.271041848 [deg], Height = 789.316 [m][0m
+[1m[32mVelocity: East: -0.065 [m/s], North: 0.098 [m/s], Up = 0.135 [m/s][0m
+Current receiver time: 29 min 25 s
+New GPS NAV message received in channel 2: subframe 4 from satellite GPS PRN 17 (Block IIR-M)
+New GPS NAV message received in channel 4: subframe 4 from satellite GPS PRN 14 (Block III)
+New GPS NAV message received in channel 5: subframe 4 from satellite GPS PRN 19 (Block IIR)
+New GPS NAV message received in channel 7: subframe 4 from satellite GPS PRN 20 (Block IIR)
+New GPS NAV message received in channel 3: subframe 4 from satellite GPS PRN 15 (Block IIR-M)
+New GPS NAV message received in channel 0: subframe 4 from satellite GPS PRN 01 (Block IIF)
+New GPS NAV message received in channel 6: subframe 4 from satellite GPS PRN 07 (Block IIR-M)
+New GPS NAV message received in channel 1: subframe 4 from satellite GPS PRN 02 (Block IIR)
+[1m[32mPosition at 2026-May-10 12:29:06.000000 UTC using 7 observations is Lat = 36.119362819 [deg], Long = -115.271042943 [deg], Height = 788.801 [m][0m
+[1m[32mVelocity: East: -0.019 [m/s], North: 0.144 [m/s], Up = 0.031 [m/s][0m
+[1m[32mPosition at 2026-May-10 12:29:06.500000 UTC using 7 observations is Lat = 36.119363046 [deg], Long = -115.271042397 [deg], Height = 789.774 [m][0m
+[1m[32mVelocity: East: 0.055 [m/s], North: -0.098 [m/s], Up = 0.237 [m/s][0m
+Current receiver time: 29 min 26 s
+[1m[32mPosition at 2026-May-10 12:29:07.000000 UTC using 7 observations is Lat = 36.119364887 [deg], Long = -115.271043336 [deg], Height = 789.429 [m][0m
+[1m[32mVelocity: East: 0.043 [m/s], North: -0.112 [m/s], Up = -0.115 [m/s][0m
+[1m[32mPosition at 2026-May-10 12:29:07.500000 UTC using 7 observations is Lat = 36.119365832 [deg], Long = -115.271048382 [deg], Height = 788.522 [m][0m
+[1m[32mVelocity: East: -0.089 [m/s], North: 0.053 [m/s], Up = -0.008 [m/s][0m
+Current receiver time: 29 min 27 s
+[1m[32mPosition at 2026-May-10 12:29:08.000000 UTC using 7 observations is Lat = 36.119364856 [deg], Long = -115.271043868 [deg], Height = 789.213 [m][0m
+[1m[32mVelocity: East: -0.014 [m/s], North: -0.100 [m/s], Up = 0.152 [m/s][0m
+[1m[32mPosition at 2026-May-10 12:29:08.500000 UTC using 7 observations is Lat = 36.119362764 [deg], Long = -115.271045257 [deg], Height = 789.216 [m][0m
+[1m[32mVelocity: East: 0.068 [m/s], North: -0.067 [m/s], Up = -0.235 [m/s][0m
+Current receiver time: 29 min 28 s
+[1m[32mPosition at 2026-May-10 12:29:09.000000 UTC using 7 observations is Lat = 36.119364948 [deg], Long = -115.271044085 [deg], Height = 789.141 [m][0m
+[1m[32mVelocity: East: 0.005 [m/s], North: -0.255 [m/s], Up = 0.048 [m/s][0m
+[1m[32mPosition at 2026-May-10 12:29:09.500000 UTC using 7 observations is Lat = 36.119366809 [deg], Long = -115.271039489 [deg], Height = 789.000 [m][0m
+[1m[32mVelocity: East: -0.091 [m/s], North: 0.004 [m/s], Up = 0.155 [m/s][0m
+Current receiver time: 29 min 29 s
+[1m[32mPosition at 2026-May-10 12:29:10.000000 UTC using 7 observations is Lat = 36.119363807 [deg], Long = -115.271045013 [deg], Height = 788.854 [m][0m
+[1m[32mVelocity: East: 0.005 [m/s], North: -0.151 [m/s], Up = -0.161 [m/s][0m
+[1m[32mPosition at 2026-May-10 12:29:10.500000 UTC using 7 observations is Lat = 36.119360799 [deg], Long = -115.271044892 [deg], Height = 789.100 [m][0m
+[1m[32mVelocity: East: -0.037 [m/s], North: 0.122 [m/s], Up = 0.123 [m/s][0m
+Current receiver time: 29 min 30 s
+[1m[32mPosition at 2026-May-10 12:29:11.000000 UTC using 7 observations is Lat = 36.119368720 [deg], Long = -115.271043564 [deg], Height = 788.878 [m][0m
+[1m[32mVelocity: East: -0.163 [m/s], North: 0.061 [m/s], Up = 0.469 [m/s][0m
+[1m[32mPosition at 2026-May-10 12:29:11.500000 UTC using 7 observations is Lat = 36.119365746 [deg], Long = -115.271045726 [deg], Height = 788.053 [m][0m
+[1m[32mVelocity: East: -0.087 [m/s], North: 0.096 [m/s], Up = 0.081 [m/s][0m
+Current receiver time: 29 min 31 s
+```
+
 The receiver page reports the satellites currently tracked and the computed navigation solution, providing the definitive verification that the spoofed IQ signal is being received correctly.
 
 **The set of satellites actually used by the drone's GPS receiver may differ between challenge instances and does not necessarily include every satellite advertised by the Truth Monitor. Therefore, the filtered RINEX navigation file should be generated based on the satellites actually tracked by the receiver.**
 
-For example, if the receiver is currently tracking PRNs **1, 7, 14, 15, 17, 19, 20, and 22**, generate:
+For example, if the receiver is currently tracking PRNs **1, 7, 14, 15, 17, 19, 20**, generate:
 
+```
+brdc1300_rx_prn_1_2_7_14_15_17_19_20.26n
+```
 
 **3. Generate spoofed GPS IQ samples with gps-sdr-sim**
 
