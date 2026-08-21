@@ -47,11 +47,11 @@ At this point, Wireshark does not automatically decode the UDP payload as CCSDS,
 3. Set UDP port `4243` to `CCSDS`.
 4. Click **Save** and then **OK**.
 
-![Wireshark Decode As](/Physical/Rogue_Ground_Station/images/wireshark-decode-as.png)
+![Wireshark Decode As](./images/wireshark-decode-as.png)
 
 After applying the CCSDS dissector, Wireshark exposes the CCSDS primary and secondary headers, including the APID, sequence number, sequence flags, and packet length.
 
-![CCSDS packets in Wireshark](/Physical/Rogue_Ground_Station/images/wireshark-ccsds.png)
+![CCSDS packets in Wireshark](./images/wireshark-ccsds.png)
 
 An important observation is that the CCSDS sequence numbers and capture timestamps do not provide a consistent global ordering across the entire capture. In contrast, packets belonging to the same fragmented message follow the expected sequence order. Therefore, rather than sorting all packets globally by sequence number or timestamp, the fragmented packets should be identified using the CCSDS sequence flags and reassembled according to their fragment sequence.
 
