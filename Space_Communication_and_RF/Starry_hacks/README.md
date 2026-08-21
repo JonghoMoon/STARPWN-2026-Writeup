@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Category** | Ground Operations |
+| **Category** | Space Communication and RF |
 | **Points** | 490 |
 | **Solves** | 83 |
 
