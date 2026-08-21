@@ -12,7 +12,7 @@ A rooftop hologram in Glittercity displays readable Latin text — but something
 
 **Attachments:** `space3-glitter.png`
 
-![Attchments](/Misc/Strange_Holos_3/challenges/space3-glitter.png)
+![Attchments](./challenges/space3-glitter.png)
 
 ## Solution
 
