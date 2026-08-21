@@ -31,7 +31,7 @@ This is a **GPS spoofing** challenge. The target drone is flying in autonomous m
 
 ### Steps
 
-**1. Identify active PRNs via Truth Monitor**
+**1. Obtain the current session information**
 
 Connect to the Truth Monitor port to observe which GPS satellites (PRNs) the drone is currently tracking:
 
