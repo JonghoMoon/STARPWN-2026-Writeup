@@ -77,7 +77,7 @@ After reboot, the satellite begins downlinking `flag.txt` contents instead of th
 
 ## Flag
 
-![Flag](/Ground_Operations/Space_Infiltrations/images/flag.png)
+![Flag](./images/flag.png)
 
 ```
 STARPWN{9de48ee5d75bd14b45e48948f5b74914}
