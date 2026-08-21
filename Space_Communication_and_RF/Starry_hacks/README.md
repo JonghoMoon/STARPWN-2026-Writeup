@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Category** | Space Communication and RF |
+| **Category** | Space Communication & RF |
 | **Points** | 490 |
 | **Solves** | 83 |
 
