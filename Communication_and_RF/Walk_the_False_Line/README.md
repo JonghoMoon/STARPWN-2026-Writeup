@@ -43,8 +43,6 @@ or
 python3 truth_log.py <truth_port> -o truth_log.csv
 ```
 
-**The PRNs are randomly assigned for each server instance. When a new server is launched, check the truth monitor logs to identify the PRNs assigned to that instance.**
-
 For example,
 
 {"type":"truth_monitor","version":1,"gps_time":"2026/05/10,12:00:10","scenario_seconds":10.0,"sample_rate":2600000,"location":{"lat":36.119343,"lon":-115.271067,"alt":800.0},"observables":[{"prn":1,"doppler_hz":358.007,"cn0_dbhz":43.5,"tracking_state":"locked"},{"prn":2,"doppler_hz":406.987,"cn0_dbhz":42.4,"tracking_state":"locked"},{"prn":7,"doppler_hz":186.222,"cn0_dbhz":41.3,"tracking_state":"locked"},{"prn":14,"doppler_hz":493.149,"cn0_dbhz":40.2,"tracking_state":"locked"},{"prn":15,"doppler_hz":155.416,"cn0_dbhz":39.1,"tracking_state":"locked"},{"prn":17,"doppler_hz":-1367.639,"cn0_dbhz":43.5,"tracking_state":"locked"},{"prn":19,"doppler_hz":-291.67,"cn0_dbhz":42.4,"tracking_state":"locked"},{"prn":20,"doppler_hz":423.763,"cn0_dbhz":41.3,"tracking_state":"locked"},{"prn":22,"doppler_hz":-474.556,"cn0_dbhz":40.2,"tracking_state":"locked"},{"prn":30,"doppler_hz":-1386.003,"cn0_dbhz":39.1,"tracking_state":"locked"}]}
