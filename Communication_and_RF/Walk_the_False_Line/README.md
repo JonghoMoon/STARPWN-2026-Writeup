@@ -137,7 +137,7 @@ Current receiver time: 29 min 30 s
 Current receiver time: 29 min 31 s
 ```
 
-The set of satellites actually tracked by the drone's GPS receiver may vary between challenge instances. Therefore, the filtered RINEX navigation file should be generated using the satellites currently tracked by the receiver, rather than assuming a fixed satellite set.
+The set of satellites actually tracked by the drone's GPS receiver may vary between challenge instances. Therefore, use the receiver output to determine which PRNs should be included in the filtered RINEX navigation file for the current challenge instance.
 
 For example, one server instance may track:
 
@@ -148,11 +148,13 @@ while another instance may instead track:
 1, 7, 14, 15, 17, 19, 20, 22
 
 Generate the filtered RINEX navigation file according to the receiver output for the current challenge instance.
-
-For example, if the receiver is currently tracking PRNs **1, 2, 7, 14, 15, 17, 19, 20**, generate:
+Depending on the challenge instance, the receiver may track different PRN sets.
 
 ```
-brdc1300_rx_prn_1_2_7_14_15_17_19_20.26n
+Examples:
+
+- brdc1300_rx_prn_1_2_7_14_15_17_19_20.26n
+- brdc1300_rx_prn_1_7_14_15_17_19_20_22.26n
 ```
 
 **3. Generate spoofed GPS IQ samples with gps-sdr-sim**
