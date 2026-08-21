@@ -65,8 +65,6 @@ echo "ZmxhZ3s1MHJyeV9XMTVoX1czX0MwdWxkX0cwXzcwXzdoM19NMDBuXzcwZzM3aDNyfQ==" | ba
 flag{50rry_W15h_W3_C0uld_G0_70_7h3_M00n_70g37h3r}
 ```
 
-The decoded value is the flag.
-
 ## Flag
 
 ```
