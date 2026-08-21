@@ -28,7 +28,7 @@ The payload text is hidden in the accretion disk around the black hole. Apply a 
 
 The polar image is kept mainly as a diagnostic view for locating the guide-lights; the final ghost extraction no longer samples from this intermediate bitmap.
 
-![Polar](/Misc/DEAD_LIGHT/images/01_polar.png)
+![Polar](./images/01_polar.png)
 
 **2. Identify the 36 guide-lights manually**
 
