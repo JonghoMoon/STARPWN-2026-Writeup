@@ -95,7 +95,7 @@ ZMQ PUB (tcp://0.cloud.chals.io:32927)
 
 ## Flag
 
-![Flag](./images/synnode_motion_flag_ori.png)
+![Flag](/images/synnode_motion_flag_ori.png)
 
 ```
 STARPWN{sn0wf4ll_1n_$umm3r}
