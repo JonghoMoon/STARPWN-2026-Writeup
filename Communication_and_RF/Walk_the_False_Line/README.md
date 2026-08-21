@@ -33,7 +33,7 @@ This is a **GPS spoofing** challenge. The target drone is flying in autonomous m
 
 **1. Obtain the current session information**
 
-Connect to the Truth Monitor port to observe which GPS satellites (PRNs) the drone is currently tracking:
+Connect to the Truth Monitor to obtain the GPS time, sample rate, and the satellite constellation advertised for the current challenge instance.
 
 ```bash
 python3 connect_monitor.py
@@ -210,7 +210,7 @@ Once the drone enters the ±100m radius around the RP, the ArduPilot console out
 | File | Description |
 |------|-------------|
 | `brdc1300.26n` | Original GPS broadcast ephemeris (provided) |
-| `brdc1300_rx_prn_1_2_7_14_15_17_19_20.26n` | Filtered RINEX for active PRNs |
+| `brdc1300_rx_prn_<tracked_prns>.26n` | Filtered RINEX generated from the PRNs currently tracked by the receiver |
 | `motion_hold15_nw700_hold120_600s.csv` | Spoofed trajectory CSV for gps-sdr-sim |
 | `gpssim.bin` | Generated GPS L1 C/A IQ samples |
 | `stream_iq6.py` | Real-time TCP streamer for IQ data |
