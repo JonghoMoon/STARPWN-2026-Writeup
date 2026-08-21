@@ -12,7 +12,7 @@ A Glittercity billboard reads **DON'T PANIC** in faded letters. Projected over i
 
 **Attachments:** `space5-glitter.png`
 
-![Attchments](/Misc/Strange_Holos_5/challenges/space5-glitter.png)
+![Attchments](./challenges/space5-glitter.png)
 
 ## Solution
 
