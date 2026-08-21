@@ -43,10 +43,6 @@ or
 python3 truth_log.py <truth_port> -o truth_log.csv
 ```
 
-{"type":"truth_monitor","version":1,"gps_time":"2026/05/10,12:00:10","scenario_seconds":10.0,"sample_rate":2600000,"location":{"lat":36.119343,"lon":-115.271067,"alt":800.0},"observables":[{"prn":1,"doppler_hz":358.007,"cn0_dbhz":43.5,"tracking_state":"locked"},{"prn":2,"doppler_hz":406.987,"cn0_dbhz":42.4,"tracking_state":"locked"},{"prn":7,"doppler_hz":186.222,"cn0_dbhz":41.3,"tracking_state":"locked"},{"prn":14,"doppler_hz":493.149,"cn0_dbhz":40.2,"tracking_state":"locked"},{"prn":15,"doppler_hz":155.416,"cn0_dbhz":39.1,"tracking_state":"locked"},{"prn":17,"doppler_hz":-1367.639,"cn0_dbhz":43.5,"tracking_state":"locked"},{"prn":19,"doppler_hz":-291.67,"cn0_dbhz":42.4,"tracking_state":"locked"},{"prn":20,"doppler_hz":423.763,"cn0_dbhz":41.3,"tracking_state":"locked"}}
-
-Active PRNs in this session: **1, 2, 7, 14, 15, 17, 19, 20**
-
 **The PRNs are randomly assigned for each server instance. When a new server is launched, check the truth monitor logs to identify the PRNs assigned to that instance.**
 
 For example,
@@ -57,7 +53,18 @@ Active PRNs in this session: **1, 2, 7, 14, 15, 17, 19, 20, 22, 30**
 
 **2. Generate a session-specific RINEX nav file**
 
-Filter the provided `brdc1300.26n` to include only the active PRNs, producing `brdc1300_rx_prn_1_2_7_14_15_17_19_20.26n`. This ensures the simulated signal matches what the drone's receiver expects.
+Receiver logs are available by clicking the antenna icon next to the GPS indicator in the Web UI, or by visiting:
+
+```
+https://starpwn-147a501af55d-walk-the-false-line-0-0.chals.io/receiver
+```
+
+The receiver page reports the satellites currently tracked and the computed navigation solution, providing the definitive verification that the spoofed IQ signal is being received correctly.
+
+**The set of satellites actually used by the drone's GPS receiver may differ between challenge instances and does not necessarily include every satellite advertised by the Truth Monitor. Therefore, the filtered RINEX navigation file should be generated based on the satellites actually tracked by the receiver.**
+
+For example, if the receiver is currently tracking PRNs **1, 7, 14, 15, 17, 19, 20, and 22**, generate:
+
 
 **3. Generate spoofed GPS IQ samples with gps-sdr-sim**
 
