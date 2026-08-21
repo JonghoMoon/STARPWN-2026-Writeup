@@ -36,7 +36,7 @@ The polar image contains three overlapping "ghost" copies of the same message, e
 
 Each ghost uses 12 points arranged as two ordered rows of six. Ghost C crosses the polar seam, so some of its guide coordinates intentionally extend beyond `x = 2048`.
 
-![Guide-Lights](/Misc/DEAD_LIGHT/images/polar_r220_460_3x.png)
+![Guide-Lights](./images/polar_r220_460_3x.png)
 
 **3. Rectify each ghost directly from the original image**
 
@@ -66,11 +66,11 @@ This removes one full resampling stage and preserves noticeably more detail in t
 
 The three resulting raw images are:
 
-![Raw A](/Misc/DEAD_LIGHT/images/02_raw_A.png)
+![Raw A](./images/02_raw_A.png)
 
-![Raw B flip-x](/Misc/DEAD_LIGHT/images/03_raw_B_flipx.png)
+![Raw B flip-x](./images/03_raw_B_flipx.png)
 
-![Raw C](/Misc/DEAD_LIGHT/images/04_raw_C.png)
+![Raw C](./images/04_raw_C.png)
 
 **4. Correct ghost B orientation**
 
@@ -90,11 +90,11 @@ The enhancement pipeline is:
 
 This makes the weak letter strokes more visible while avoiding unnecessary color destruction.
 
-![Enhanced A](/Misc/DEAD_LIGHT/images/05_A_enhanced.png)
+![Enhanced A](./images/05_A_enhanced.png)
 
-![Enhanced B flip-x](/Misc/DEAD_LIGHT/images/06_B_flipx_enhanced.png)
+![Enhanced B flip-x](./images/06_B_flipx_enhanced.png)
 
-![Enhanced C](/Misc/DEAD_LIGHT/images/07_C_enhanced.png)
+![Enhanced C](./images/07_C_enhanced.png)
 
 **6. Compare the three ghosts instead of averaging all three**
 
@@ -106,11 +106,11 @@ Rather than averaging or majority-voting all three images into a single composit
 
 The raw comparison:
 
-![ABC comparison](/Misc/DEAD_LIGHT/images/08_compare_ABC.png)
+![ABC comparison](./images/08_compare_ABC.png)
 
 The enhanced comparison:
 
-![ABC enhanced comparison](/Misc/DEAD_LIGHT/images/09_compare_ABC_enhanced.png)
+![ABC enhanced comparison](./images/09_compare_ABC_enhanced.png)
 
 The direct one-pass rectification and luminance-only enhancement make several previously blurred sections substantially clearer. No single ghost contains every character perfectly, but comparing the three aligned copies makes the two-line message readable enough to recover.
 
@@ -688,7 +688,7 @@ if __name__ == "__main__":
 
 ## Flag
 
-![Flag](/Misc/DEAD_LIGHT/images/09_compare_ABC_enhanced.png)
+![Flag](./images/09_compare_ABC_enhanced.png)
 
 ```text
 STARPWN{DEAD_SIGN_RETURNS}
