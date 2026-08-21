@@ -28,7 +28,7 @@ Find the ghost. Recover the message.
 
 Opening the MP3 file in Audacity and inspecting its spectrum reveals four distinct 2-FSK signals.
 
-![Audacity](/Space_Communication_and_RF/Glittercity_OST2/images/audacity.png)
+![Audacity](./images/audacity.png)
 
 And convert the MP3 to 48 kHz stereo PCM:
 
@@ -125,7 +125,7 @@ The three calls carry the same frame, but different portions of each reception a
 
 Use GNU Radio Companion with the `gr-satellites` **AFSK Demodulator**.
 
-![GNU Radio](/Space_Communication_and_RF/Glittercity_OST2/images/gnu_radio_g2.png)
+![GNU Radio](./images/gnu_radio_g2.png)
 
 A minimal flowgraph is:
 
@@ -314,7 +314,7 @@ as seven scan lines and render them as a PBM or PNG image.
 
 The resulting image reads:
 
-![Flag](/Space_Communication_and_RF/Glittercity_OST2/images/dead_eye_message.png)
+![Flag](./images/dead_eye_message.png)
 
 ```text
 STARPWN{THIS_WAS_OFF_TOO_MUCH}
