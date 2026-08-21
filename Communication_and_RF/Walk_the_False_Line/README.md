@@ -177,7 +177,7 @@ gps-sdr-sim \
             -o gpssim.bin
 ```
 
-The `gpssim.bim` file is not being uploaded because it exceeds 3 GB in size. It is recommended that you build it yourself.
+The `gpssim.bim` file is not being uploaded because it exceeds 6 GB in size. It is recommended that you build it yourself.
 
 **4. Stream the IQ signal to the RF input port**
 
