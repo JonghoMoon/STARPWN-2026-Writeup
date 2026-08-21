@@ -47,7 +47,7 @@ For example,
 
 {"type":"truth_monitor","version":1,"gps_time":"2026/05/10,12:00:10","scenario_seconds":10.0,"sample_rate":2600000,"location":{"lat":36.119343,"lon":-115.271067,"alt":800.0},"observables":[{"prn":1,"doppler_hz":358.007,"cn0_dbhz":43.5,"tracking_state":"locked"},{"prn":2,"doppler_hz":406.987,"cn0_dbhz":42.4,"tracking_state":"locked"},{"prn":7,"doppler_hz":186.222,"cn0_dbhz":41.3,"tracking_state":"locked"},{"prn":14,"doppler_hz":493.149,"cn0_dbhz":40.2,"tracking_state":"locked"},{"prn":15,"doppler_hz":155.416,"cn0_dbhz":39.1,"tracking_state":"locked"},{"prn":17,"doppler_hz":-1367.639,"cn0_dbhz":43.5,"tracking_state":"locked"},{"prn":19,"doppler_hz":-291.67,"cn0_dbhz":42.4,"tracking_state":"locked"},{"prn":20,"doppler_hz":423.763,"cn0_dbhz":41.3,"tracking_state":"locked"},{"prn":22,"doppler_hz":-474.556,"cn0_dbhz":40.2,"tracking_state":"locked"},{"prn":30,"doppler_hz":-1386.003,"cn0_dbhz":39.1,"tracking_state":"locked"}]}
 
-Active PRNs in this session: **1, 2, 7, 14, 15, 17, 19, 20, 22, 30**
+Advertised PRNs in this session: **1, 2, 7, 14, 15, 17, 19, 20, 22, 30**
 
 **2. Generate a session-specific RINEX nav file**
 
@@ -168,7 +168,8 @@ Use [gps-sdr-sim](https://github.com/osqzss/gps-sdr-sim) to generate a GPS L1 C/
 # - Hold at target for 120s
 # Total: 600s scenario
 
-gps-sdr-sim -e brdc1300_rx_prn_1_2_7_14_15_17_19_20.26n \
+gps-sdr-sim \
+            -e brdc1300_rx_prn_<tracked_prns>.26n \
             -u motion_hold15_nw700_hold120_600s.csv \
             -t 2026/05/10,12:16:35 \
             -s 2600000 \
