@@ -55,7 +55,7 @@ Each challenge directory contains:
 
 All challenges started at 500 points, and the point values ​​listed below are based on the competition's closing date.
 
-### 📡 Communication & RF
+### 📡 [Communication & RF](./Communication_and_RF/README.md)
 
 | # | Challenge | Points | Solves | Flag |
 |---|-----------|--------|--------|------|
@@ -67,21 +67,21 @@ All challenges started at 500 points, and the point values ​​listed below ar
 | 6 | [Walk the False Line](./Communication_and_RF/Walk_the_False_Line/) | 500 | 5 | `starpwn{autonomous_until_someone_speaks_louder}` |
 
 
-### 🔍 Forensics
+### 🔍 [Forensics](./Forensics/README.md)
 
 | # | Challenge | Points | Solves | Flag |
 |---|-----------|--------|--------|------|
 | 1 | [Follow the leak](./Forensics/Follow_the_leak/) | 451 | 177 | `flag{50rry_W15h_W3_C0uld_G0_70_7h3_M00n_70g37h3r}` |
 | 2 | [Silent Horizon](./Forensics/Silent_Horizon/) | 500 | 25 | `STARPWN{450:SAT1208SAT1108SAT1307SAT1207!}` |
 
-### 🖥️ Ground Operations
+### 🖥️ [Ground Operations](./Ground_Operations/README.md)
 
 | # | Challenge | Points | Solves | Flag |
 |---|-----------|--------|--------|------|
 | 1 | [Space Infiltrations](./Ground_Operations/Space_Infiltrations/) | 483 | 105 | `STARPWN{9de48ee5d75bd14b45e48948f5b74914}` |
 | 2 | [Vanguard Orbital Security](./Ground_Operations/Vanguard_Orbital_Security/) | 480 | 115 | `STARPWN{k1ck_1091c_70_7h3_cu28_4nd_d0_7h3_1mp0551813}` |
 
-### 🎲 Misc
+### 🎲 [Misc](./Misc/README.md)
 
 | # | Challenge | Points | Solves | Flag |
 |---|-----------|--------|--------|------|
@@ -93,13 +93,13 @@ All challenges started at 500 points, and the point values ​​listed below ar
 | 6 | [Strange Holos 4](./Misc/Strange_Holos_4/) | 470 | 140 | `I AM SORRY DAVE, I CANT DO THAT` |
 | 7 | [Strange Holos 5](./Misc/Strange_Holos_5/) | 442 | 193 | `so long and thanks for all the phish` |
 
-### 📻 Physical
+### 📻 [Physical](./Physical/README.md)
 
 | # | Challenge | Points | Solves | Flag |
 |---|-----------|--------|--------|------|
 | 1 | [Rogue Ground Station](./Physical/Rogue_Ground_Station/) | 500 | 2 | `flag(CAFE0000,DF400000}` |
 
-### 🛰️ Space Communication & RF
+### 🛰️ [Space Communication & RF](./Space_Communication_and_RF/README.md)
 
 | # | Challenge | Points | Solves | Flag |
 |---|-----------|--------|--------|------|
@@ -109,7 +109,7 @@ All challenges started at 500 points, and the point values ​​listed below ar
 | 4 | [Silent Beacon](./Space_Communication_and_RF/Silent_Beacon/) | 454 | 171 | `STARPWN{h0us3k33p1ng_4n0m4ly}` |
 | 5 | [Starry hacks](./Space_Communication_and_RF/Starry_hacks/) | 490 | 83 | `STARPWN{7h20u9h_v1c702y_my_ch41n5_423_820k3n}` |
 
-### 🚀 Space Operations
+### 🚀 [Space Operations](./Space_Operations/README.md)
 
 | # | Challenge | Points | Solves | Flag |
 |---|-----------|--------|--------|------|
