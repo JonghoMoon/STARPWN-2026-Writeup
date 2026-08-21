@@ -14,7 +14,7 @@ What's going on here?
 
 **Attachments:** `downlink.png`
 
-![Attachments](/Misc/Oversized_Downlink/challenges/downlink.png)
+![Attachments](./challenges/downlink.png)
 
 ## Solution
 
