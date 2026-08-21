@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Category** | Space Operation |
+| **Category** | Space Operations |
 | **Points** | 494 |
 | **Solves** | 65 |
 

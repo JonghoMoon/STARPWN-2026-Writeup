@@ -46,7 +46,7 @@ Each challenge directory contains:
 | Misc | 7 |
 | Physical | 1 |
 | Space Communication & RF | 5 |
-| Space Operation | 4 |
+| Space Operations | 4 |
 | **Total** | **27** |
 
 ---
@@ -109,7 +109,7 @@ All challenges started at 500 points, and the point values ​​listed below ar
 | 4 | [Silent Beacon](./Space_Communication_and_RF/Silent_Beacon/) | 454 | 171 | `STARPWN{h0us3k33p1ng_4n0m4ly}` |
 | 5 | [Starry hacks](./Space_Communication_and_RF/Starry_hacks/) | 490 | 83 | `STARPWN{7h20u9h_v1c702y_my_ch41n5_423_820k3n}` |
 
-### 🚀 Space Operation
+### 🚀 Space Operations
 
 | # | Challenge | Points | Solves | Flag |
 |---|-----------|--------|--------|------|
