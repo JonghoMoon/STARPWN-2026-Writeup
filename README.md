@@ -9,9 +9,11 @@ Most write-ups include not only the final solution but also the analysis scripts
 ## Links
 
 - 🌐**GitHub Pages**
+  
   https://jonghomoon.github.io/STARPWN-2026-Writeup/
 
 - 📁**GitHub Repository**
+  
   https://github.com/JonghoMoon/STARPWN-2026-Writeup
 
 ## Categories
