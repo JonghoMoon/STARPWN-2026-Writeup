@@ -141,7 +141,7 @@ The receiver page reports the satellites currently tracked and the computed navi
 
 **The set of satellites actually used by the drone's GPS receiver may differ between challenge instances and does not necessarily include every satellite advertised by the Truth Monitor. Therefore, the filtered RINEX navigation file should be generated based on the satellites actually tracked by the receiver.**
 
-For example, if the receiver is currently tracking PRNs **1, 7, 14, 15, 17, 19, 20**, generate:
+For example, if the receiver is currently tracking PRNs **1, 2, 7, 14, 15, 17, 19, 20**, generate:
 
 ```
 brdc1300_rx_prn_1_2_7_14_15_17_19_20.26n
