@@ -137,9 +137,17 @@ Current receiver time: 29 min 30 s
 Current receiver time: 29 min 31 s
 ```
 
-The receiver page reports the satellites currently tracked and the computed navigation solution, providing the definitive verification that the spoofed IQ signal is being received correctly.
+The set of satellites actually tracked by the drone's GPS receiver may vary between challenge instances. Therefore, the filtered RINEX navigation file should be generated using the satellites currently tracked by the receiver, rather than assuming a fixed satellite set.
 
-**The set of satellites actually used by the drone's GPS receiver may differ between challenge instances and does not necessarily include every satellite advertised by the Truth Monitor. Therefore, the filtered RINEX navigation file should be generated based on the satellites actually tracked by the receiver.**
+For example, one server instance may track:
+
+1, 2, 7, 14, 15, 17, 19, 20
+
+while another instance may instead track:
+
+1, 7, 14, 15, 17, 19, 20, 22
+
+Generate the filtered RINEX navigation file according to the receiver output for the current challenge instance.
 
 For example, if the receiver is currently tracking PRNs **1, 2, 7, 14, 15, 17, 19, 20**, generate:
 
