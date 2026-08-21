@@ -12,7 +12,7 @@ Another holographic inscription appears on a Glittercity wall. Eight glyphs glow
 
 **Attachments:** `space2-glitter.png`
 
-![Attchments](/Misc/Strange_Holos_2/challenges/space2-glitter.png)
+![Attchments](./challenges/space2-glitter.png)
 
 ## Solution
 
