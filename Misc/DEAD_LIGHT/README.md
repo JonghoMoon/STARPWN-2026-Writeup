@@ -64,6 +64,8 @@ rectified ghost
 
 This removes one full resampling stage and preserves noticeably more detail in the text. Cubic interpolation (`cv2.INTER_CUBIC`) is used for the final sampling.
 
+Ghosts A and C share the same reading direction, but ghost B is mirrored. Flip ghost B horizontally (`03_raw_B_flipx.png`) so that all three ghosts have the same left-to-right reading order.
+
 The three resulting raw images are:
 
 ![Raw A](./images/02_raw_A.png)
@@ -72,11 +74,7 @@ The three resulting raw images are:
 
 ![Raw C](./images/04_raw_C.png)
 
-**4. Correct ghost B orientation**
-
-Ghosts A and C share the same reading direction, but ghost B is mirrored. Flip ghost B horizontally (`03_raw_B_flipx.png`) so that all three ghosts have the same left-to-right reading order.
-
-**5. Enhance the rectified ghosts without discarding color information**
+**4. Enhance the rectified ghosts without discarding color information**
 
 The previous enhancement converted each image to grayscale before applying CLAHE and sharpening. The improved version keeps the original color relationships by converting the image to LAB color space and modifying only the luminance (`L`) channel.
 
@@ -96,7 +94,7 @@ This makes the weak letter strokes more visible while avoiding unnecessary color
 
 ![Enhanced C](./images/07_C_enhanced.png)
 
-**6. Compare the three ghosts instead of averaging all three**
+**5. Compare the three ghosts instead of averaging all three**
 
 The challenge note says:
 
