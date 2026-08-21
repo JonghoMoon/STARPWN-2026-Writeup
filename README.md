@@ -6,7 +6,13 @@ Since I did not participate in the on-site event, this repository excludes chall
 
 Most write-ups include not only the final solution but also the analysis scripts and tools used during the solving process, allowing the results to be reproduced.
 
-Repo : https://github.com/JonghoMoon/STARPWN-2026-Writeup
+## Links
+
+- **GitHub Pages**
+  https://jonghomoon.github.io/STARPWN-2026-Writeup/
+
+- **GitHub Repository**
+  https://github.com/JonghoMoon/STARPWN-2026-Writeup
 
 ![Starpwn](./starpwn.png)
 
