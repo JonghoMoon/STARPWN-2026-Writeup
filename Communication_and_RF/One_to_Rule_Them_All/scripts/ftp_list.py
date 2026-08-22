@@ -9,7 +9,7 @@ os.environ["MAVLINK20"] = "1"
 from pymavlink import mavutil
 
 HOST = "0.cloud.chals.io"
-PORT = 33247
+PORT = 15174
 
 KEY = bytes.fromhex(
     "d4ee003d187614d9ffa24d20f58b448551c2cdc1e54cf42fc00bb86182249126"
