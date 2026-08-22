@@ -62,6 +62,16 @@ The CCSDS sequence flags indicate whether a packet is the first, continuation, l
 - `10` — Last fragment
 - `11` — Unsegmented packet
 
+To identify the fragmented spacecraft command payloads, a Wireshark display filter was applied to show only the first segment of each CCSDS sequence:
+
+```
+ccsds.seqflag == 1
+```
+
+This isolates the eight fragmented command payloads transmitted during the capture, making it easier to identify the relevant APIDs and reconstruct each complete message.
+
+![CCSDS packets in Wireshark](./images/filter.png)
+
 **2. Parse the PCAP and extract CCSDS packets**
 
 The capture contains CCSDS (Consultative Committee for Space Data Systems) Space Packets transported over UDP. Extract the byte stream, split by APID, and identify fragmented packets using the sequence flags. Reassemble fragmented payloads into complete application-layer messages.
