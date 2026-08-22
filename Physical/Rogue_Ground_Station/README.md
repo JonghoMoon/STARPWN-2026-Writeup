@@ -45,7 +45,7 @@ At this point, Wireshark does not automatically decode the UDP payload as CCSDS,
 1. Open **Analyze → Decode As...**
 2. Set UDP port `4242` to `CCSDS`.
 3. Set UDP port `4243` to `CCSDS`.
-4. Click **Save** and then **OK**.
+4. Click **Save**.
 
 ![Wireshark Decode As](./images/wireshark-decode-as.png)
 
