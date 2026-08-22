@@ -96,6 +96,18 @@ The structure is identified using the magic value `0x3852FCD1`.
 
 ```bash
 python3 analyse_signing.py eeprom.bin GCS_Signing.cpp
+
+Signing structure
+-----------------
+MAGIC        : 0x3852FCD1
+Struct Size  : 48
+Key Length   : 32
+
+============================================================
+Offset     : 0x1F80
+Magic      : 0x3852FCD1
+Timestamp  : 36527303400913
+Key        : d4ee003d187614d9ffa24d20f58b448551c2cdc1e54cf42fc00bb86182249126
 ```
 
 Recovered key:
@@ -117,7 +129,24 @@ python3 verify_key.py HOST PORT <KEYHEX>
 Expected:
 
 ```text
+============================================================
+MAVLink2 Signed Packet
+============================================================
+Payload Length : 9
+Sequence       : 244
+System ID      : 2
+Component ID   : 1
+Message ID     : 0
+CRC            : 0xF25D
+
+Link ID        : 2
+Timestamp      : 36736923561411
+
+Received Sig   : 1d63c0d9ebed
+Computed Sig   : 1d63c0d9ebed
+
 [+] KEY VERIFIED
+============================================================
 ```
 
 ---
@@ -128,6 +157,43 @@ A simple heartbeat confirms that the connection and signing work correctly.
 
 ```bash
 python3 heartbeat.py HOST PORT <KEYHEX>
+
+[*] Connecting to tcp:0.cloud.chals.io:15174
+[*] Installing signing key
+[*] Waiting for incoming telemetry...
+RX: sys=  5 comp=  1 HEARTBEAT
+RX: sys=  3 comp=  1 HEARTBEAT
+RX: sys=  1 comp=  1 HEARTBEAT
+RX: sys=  2 comp=  1 HEARTBEAT
+RX: sys=  4 comp=  1 HEARTBEAT
+RX: sys=  5 comp=  1 HEARTBEAT
+RX: sys=  3 comp=  1 HEARTBEAT
+RX: sys=  1 comp=  1 HEARTBEAT
+RX: sys=  2 comp=  1 HEARTBEAT
+RX: sys=  4 comp=  1 HEARTBEAT
+RX: sys=  5 comp=  1 HEARTBEAT
+RX: sys=  3 comp=  1 HEARTBEAT
+RX: sys=  1 comp=  1 HEARTBEAT
+RX: sys=  2 comp=  1 HEARTBEAT
+
+[*] Sending HEARTBEAT
+[+] HEARTBEAT transmitted
+
+[*] Waiting for replies...
+RX: sys=  4 comp=  1 HEARTBEAT
+RX: sys=  5 comp=  1 HEARTBEAT
+RX: sys=  3 comp=  1 HEARTBEAT
+RX: sys=255 comp=230 TERRAIN_DATA
+RX: sys=  1 comp=  1 HEARTBEAT
+RX: sys=255 comp=230 HEARTBEAT
+RX: sys=255 comp=230 TERRAIN_DATA
+RX: sys=  1 comp=  1 MISSION_ITEM_REACHED
+RX: sys=  1 comp=  1 STATUSTEXT
+RX: sys=  1 comp=  1 STATUSTEXT
+RX: sys=255 comp=230 TERRAIN_DATA
+RX: sys=  4 comp=  1 HEARTBEAT
+RX: sys=  2 comp=  1 HEARTBEAT
+...
 ```
 
 ---
