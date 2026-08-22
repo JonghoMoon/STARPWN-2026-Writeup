@@ -226,26 +226,50 @@ Result:
 
 ==========
 DIR: /
-[DIR ] //DCIM
-[DIR ] //terrain
-[DIR ] //@ROMFS
-[DIR ] //@SYS
+DIR: /
+DIR: /
+DIR: /
+DIR: /
 
 ==========
-DIR: //DCIM
-[!] FTP error 129 path = //DCIM
+DIR: /DCIM
+[FILE] /DCIM/flag.jpg (40536 bytes)
+
+########################################
+FOUND IMAGE: /DCIM/flag.jpg
+########################################
 
 ==========
-DIR: //terrain
-[!] FTP error 129 path = //terrain
+DIR: /terrain
+[FILE] /terrain/N36W116.DAT (401408 bytes)
 
 ==========
-DIR: //@ROMFS
-[!] FTP error 129 path = //@ROMFS
+DIR: /@ROMFS
+[FILE] /@ROMFS/locations.txt (4425 bytes)
+DIR: /@ROMFS
 
 ==========
-DIR: //@SYS
-[!] FTP error 129 path = //@SYS
+DIR: /@SYS
+[FILE] /@SYS/threads.txt (100000 bytes)
+[FILE] /@SYS/tasks.txt (100000 bytes)
+[FILE] /@SYS/dma.txt (100000 bytes)
+[FILE] /@SYS/memory.txt (100000 bytes)
+[FILE] /@SYS/uarts.txt (100000 bytes)
+[FILE] /@SYS/timers.txt (100000 bytes)
+[FILE] /@SYS/can_log.txt (100000 bytes)
+[FILE] /@SYS/can0_stats.txt (100000 bytes)
+[FILE] /@SYS/can1_stats.txt (100000 bytes)
+[FILE] /@SYS/crash_dump.bin (100000 bytes)
+[FILE] /@SYS/storage.bin (16384 bytes)
+
+==========
+DIR: /@ROMFS/models
+[FILE] /@ROMFS/models/Callisto.json (1460 bytes)
+[FILE] /@ROMFS/models/freestyle.json (1395 bytes)
+[FILE] /@ROMFS/models/plane-3d.parm (874 bytes)
+[FILE] /@ROMFS/models/plane.parm (1739 bytes)
+[FILE] /@ROMFS/models/xplane_heli.json (1935 bytes)
+[FILE] /@ROMFS/models/xplane_plane.json (1905 bytes)
 ```
 
 ---
