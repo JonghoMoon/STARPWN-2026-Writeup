@@ -70,7 +70,7 @@ ccsds.seqflag == 1
 
 This isolates the eight fragmented command payloads transmitted during the capture, making it easier to identify the relevant APIDs and reconstruct each complete message.
 
-![CCSDS packets in Wireshark](./images/filter.png)
+![CCSDS packets in Wireshark](./images/wireshark-filter.png)
 
 **2. Parse the PCAP and extract CCSDS packets**
 
