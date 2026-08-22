@@ -16,8 +16,9 @@ Most write-ups include not only the final solution but also the analysis scripts
   
   [https://github.com/JonghoMoon/STARPWN-2026-Writeup](https://github.com/JonghoMoon/STARPWN-2026-Writeup)
 
-## Categories
 ![Starpwn](./social-preview.png)
+
+## Categories
 ![Starpwn](./starpwn.png)
 
 - Communication & RF
