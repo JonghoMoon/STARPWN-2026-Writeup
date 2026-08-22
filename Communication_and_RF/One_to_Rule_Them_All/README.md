@@ -211,11 +211,30 @@ python3 find_image.py
 Result:
 
 ```text
-/
- ├── eeprom.bin
- ├── DCIM
- │    └── flag.jpg
- └── terrain
+[*] Connecting...
+
+==========
+DIR: /
+[DIR ] //DCIM
+[DIR ] //terrain
+[DIR ] //@ROMFS
+[DIR ] //@SYS
+
+==========
+DIR: //DCIM
+[!] FTP error 129 path = //DCIM
+
+==========
+DIR: //terrain
+[!] FTP error 129 path = //terrain
+
+==========
+DIR: //@ROMFS
+[!] FTP error 129 path = //@ROMFS
+
+==========
+DIR: //@SYS
+[!] FTP error 129 path = //@SYS
 ```
 
 ---
