@@ -37,7 +37,7 @@ starpwn{[A-Za-z_]+}
 
 The dump begins with the `PA` magic used by ArduPilot AP_Param storage.
 
-```bash
+```text
 python3 analyse_eeprom.py eeprom.bin
 
 ArduPilot EEPROM Analysis
