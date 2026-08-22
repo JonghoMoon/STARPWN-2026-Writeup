@@ -164,7 +164,11 @@ A simple heartbeat confirms that the connection and signing work correctly.
 
 ```bash
 python3 heartbeat.py HOST PORT <KEYHEX>
+```
 
+Expected:
+
+```text
 [*] Connecting to tcp:0.cloud.chals.io:15174
 [*] Installing signing key
 [*] Waiting for incoming telemetry...
