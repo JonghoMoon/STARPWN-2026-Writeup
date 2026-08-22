@@ -37,9 +37,13 @@ starpwn{[A-Za-z_]+}
 
 The dump begins with the `PA` magic used by ArduPilot AP_Param storage.
 
-```text
+```bash
 python3 analyse_eeprom.py eeprom.bin
+```
 
+Expected:
+
+```text
 ArduPilot EEPROM Analysis
 -------------------------
 
@@ -95,7 +99,11 @@ The structure is identified using the magic value `0x3852FCD1`.
 
 ```bash
 python3 analyse_signing.py eeprom.bin GCS_Signing.cpp
+```
 
+Expected:
+
+```text
 Signing structure
 -----------------
 MAGIC        : 0x3852FCD1
