@@ -82,9 +82,9 @@ def main():
     # LIST "."
     #
 
-    payload = make_list_packet(".")
+    payload = make_list_packet("/")
 
-    print("[*] Sending LIST '.'")
+    print("[*] Sending LIST '/'")
 
     m.mav.file_transfer_protocol_send(
         0,
