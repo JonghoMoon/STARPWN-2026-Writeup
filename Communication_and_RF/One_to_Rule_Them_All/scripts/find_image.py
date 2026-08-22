@@ -159,14 +159,11 @@ while queue:
         if name in [".", ".."]:
             continue
 
-        if cur == "":
-            full = name
-        else:
-            full = cur + "/" + name
+        full = (cur.rstrip("/") + "/" + name) if cur else "/" + name
 
         if typ == "D":
 
-            print("[DIR ]", full)
+            print("DIR:", cur)
 
             queue.append(full)
 
@@ -185,3 +182,4 @@ while queue:
                 print("########################################")
                 print("FOUND IMAGE:", full)
                 print("########################################")
+
