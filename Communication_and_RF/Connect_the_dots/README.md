@@ -44,6 +44,57 @@ The drone with the largest maximum excursion is the one that broke formation. Co
 
 The rogue drone's behavior — flying beyond visual line of sight — gives the flag.
 
+## Appendix A. Parsing the Raw MAVLink Telemetry Log
+
+To better understand the swarm behaviour, the raw telemetry log (`PRISM_S03_B10-30_20260830.raw`) was parsed directly instead of using `pymavlink.recv_match()`, which is considerably slower for large binary logs.
+
+The file is a raw MAVLink2 stream rather than an ArduPilot DataFlash log. Each MAVLink2 frame was parsed manually using the following layout:
+
+```
+MAVLink2 Frame
+
+0xFD
+Payload Length
+Incompat Flags
+Compat Flags
+Sequence
+System ID
+Component ID
+Message ID (3 bytes)
+Payload
+CRC
+Signature (optional)
+```
+
+Only `GLOBAL_POSITION_INT` (Message ID **33**) messages were extracted. The parser groups GPS positions by **System ID (SYSID)**, allowing the trajectory of each drone to be reconstructed independently.
+
+Example output:
+
+```
+Detected drones:
+
+SYSID 1: 17672 points
+SYSID 2: 14971 points
+SYSID 3: 14722 points
+...
+SYSID10: 14752 points
+```
+
+The extracted GPS trajectories were then rendered as individual figures, one per drone.
+
+Example:
+
+```
+drone_001.png
+drone_002.png
+...
+drone_010.png
+```
+
+![Drone4](./images/drone_004.png)
+
+This visualization was useful for understanding the overall swarm movement and verifying the behaviour of each drone during the challenge, although it was not required to recover the final flag.
+
 ### Exploit Code
 
 ```python
