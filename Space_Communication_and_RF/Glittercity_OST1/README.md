@@ -59,6 +59,20 @@ Locate `0x7E` flag bytes (`01111110`) in the LSB-first bit stream, remove bit st
 
 Search the decoded ASCII payload for the `STARPWN{...}` pattern.
 
+```bash
+python3 solve.py Glittercity-OST1.mp3 
+```
+
+Result:
+
+```text
+sample offset: +8
+CRC-valid frames: 15
+CHANDELIER-7
+FLAG=STARPWN{Syn7h_v1be$_fr0m_0rb1t}
+FLAG: STARPWN{Syn7h_v1be$_fr0m_0rb1t}
+```
+
 ### Exploit Code
 
 ```python
