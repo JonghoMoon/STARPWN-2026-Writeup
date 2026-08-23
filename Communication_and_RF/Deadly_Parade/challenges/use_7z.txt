@@ -1,0 +1,2 @@
+sudo apt install p7zip-full
+7z x PRISM_S05_DNCN_20260831.zip

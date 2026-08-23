@@ -1,0 +1,2 @@
+sudo apt install p7zip-full
+7z x aquilon_mead_sigint_node42.zip
