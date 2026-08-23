@@ -57,6 +57,23 @@ Walk through the symbol sequence and accumulate dots/dashes into Morse codes, fl
 
 The decoded word list follows the amateur CW format. Skip the leading `VVV`, `DE`, and the repeated callsign group, then take the next 4 words as the payload and join them with `_`.
 
+```bash
+python3 solve.py beacon.wav
+```
+
+Result:
+
+```text
+[*] Loading beacon.wav
+    sample rate: 22050 Hz  |  duration: 82.4 s
+[*] Detecting 600 Hz tone segments …
+    found 217 tone segments
+[*] Decoding Morse …
+    message: VVV VVV VVV DE STARPWN STARPWN STARPWN B34C0N D3C0D3D V14 R4D10 73 DE STARPWN K
+
+[+] FLAG: STARPWN{B34C0N_D3C0D3D_V14_R4D10}
+```
+
 ### Exploit Code
 
 ```python
