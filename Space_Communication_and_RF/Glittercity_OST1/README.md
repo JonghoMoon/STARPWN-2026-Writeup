@@ -33,7 +33,7 @@ This hints that the signal relates to a satellite. The hidden data is not in the
 
 **1. Decode MP3 to stereo PCM**
 
-Use `ffmpeg` to decode the MP3 to 48 kHz signed 16-bit stereo PCM.
+The solver internally invokes `ffmpeg` to decode the MP3 into 48 kHz signed 16-bit stereo PCM.
 
 **2. Extract the side channel**
 
