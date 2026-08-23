@@ -61,8 +61,43 @@ Match AIS-tracked vessels against satellite-confirmed moving objects. Vessels wh
 
 The 3 phantom vessels are not real ships — they are used as a covert data channel. Decode the payload bytes hidden in their AIS transmissions:
 
+```bash
+python3 solve_nice_day_for_fishing.py \
+        aquilon_mead_sigint_node42.sigmf-data \
+        aquilon_mead_sigint_node42.sigmf-meta \
+        outputs_file_1.tiff \
+        outputs_file_2.tiff
 ```
-Covert stream: b'\x00\x00\x00,#%#&)STARPWN.3_SP33DY_MMS1S.","\''
+
+```text
+[AIS] offset=0: 367 valid frames
+[AIS] offset=1: 271 valid frames
+[AIS] offset=2: 363 valid frames
+[AIS] offset=3: 383 valid frames
+[AIS] offset=4: 396 valid frames
+[AIS] offset=5: 388 valid frames
+[AIS] offset=6: 409 valid frames
+[AIS] offset=7: 414 valid frames
+[AIS] offset=8: 419 valid frames
+[AIS] offset=9: 415 valid frames
+[+] Total CRC-valid AIS frames: 425
+[+] TIFF moving objects: 8
+[+] Best TIFF/RF alignment: 37.6s -> 97.2s
+[+] Legitimate moving MMSIs:
+    211695738
+    248917603
+    271834956
+    352781649
+    419263587
+    477328165
+    563104892
+    668195274
+[+] Phantom MMSIs:
+    305718642
+    574902381
+    731405982
+[+] Covert stream: b'\x00\x00\x00,#%#&)STARPWN.3_SP33DY_MMS1S.","\''
+[+] FLAG: STARPWN.3_SP33DY_MMS1S.
 ```
 
 Search for the flag regex `STARPWN\.[A-Za-z0-9_]+\.` in the decoded stream to extract the flag.
