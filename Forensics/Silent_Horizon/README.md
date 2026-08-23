@@ -65,6 +65,27 @@ The flag format specifies the slot order `12, 11, 13, 12` (the first two digits 
 | 3 | 13 | SAT1307 |
 | 4 | 12 | SAT1207 |
 
+```bash
+python3 solve_silent_horizon.py
+```
+
+Result: 
+
+```text
+[*] Satellites connected at each GCS infection time
+    GCS1 @ 24 Apr 2026 20:16:20 -> 2: SAT1212, SAT1211
+    GCS2 @ 24 Apr 2026 20:25:30 -> 2: SAT1304, SAT1303
+    GCS3 @ 24 Apr 2026 20:52:30 -> 1: SAT1111
+    GCS4 @ 24 Apr 2026 23:18:50 -> 4: SAT1208, SAT1307, SAT1108, SAT1207
+[+] Selected event: GCS4 @ 24 Apr 2026 23:18:50
+    SAT1208: 24 Apr 2026 23:10:50.548000 -> 24 Apr 2026 23:20:29.188000
+    SAT1307: 24 Apr 2026 23:13:25.024000 -> 24 Apr 2026 23:23:03.663000
+    SAT1108: 24 Apr 2026 23:15:59.492000 -> 24 Apr 2026 23:25:38.132000
+    SAT1207: 24 Apr 2026 23:18:33.966000 -> 24 Apr 2026 23:28:12.607000
+[+] Slot order: 12,11,13,12
+[+] Flag: STARPWN{450:SAT1208SAT1108SAT1307SAT1207!}
+```
+
 ### Exploit Code
 
 ```python
