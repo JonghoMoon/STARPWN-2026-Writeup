@@ -69,6 +69,8 @@ python3 solve_nice_day_for_fishing.py \
         outputs_file_2.tiff
 ```
 
+Expected:
+
 ```text
 [AIS] offset=0: 367 valid frames
 [AIS] offset=1: 271 valid frames
