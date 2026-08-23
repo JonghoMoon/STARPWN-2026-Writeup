@@ -1,6 +1,6 @@
 """
 CTF: PRISM_S03_B10-30_20260830.raw — MAVLink Rogue Drone Detector
-Parses a MAVLink2 .tlog, finds the drone that broke formation (BVLOS),
+Parses a raw MAVLink2 telemetry log, identifies the drone that broke formation,
 and prints the flag: starpwn{Beyond_Visual_Line_Of_Sight}
 
 Usage:
@@ -138,17 +138,14 @@ def main(path: str) -> str:
     rogue_id, excursion = find_rogue(positions)
 
     print(f"\n    Drone sysid={rogue_id} broke formation.")
-    print(f"    Max excursion outside assigned block: {excursion:,.0f} m")
-
-    # Confirm it crossed the BVLOS threshold (FAA/EASA VLOS ≈ 500 m)
-    bvlos_limit = 500
-    if excursion > bvlos_limit:
-        print(f"    This exceeds the VLOS limit of {bvlos_limit} m → BVLOS confirmed.")
+    print(f"    Maximum excursion from assigned patrol block: {excursion:,.0f} m")
 
     flag = "starpwn{Beyond_Visual_Line_Of_Sight}"
-    print(f"\n[+] FLAG: {flag}")
-    return flag
 
+    print()
+    print("[+] The rogue drone is the unit that broke formation and left its assigned patrol block.")    
+    print(f"[+] FLAG: {flag}")
+    return flag
 
 if __name__ == "__main__":
     tlog_path = sys.argv[1] if len(sys.argv) > 1 else "PRISM_S03_B10-30_20260830.raw"
