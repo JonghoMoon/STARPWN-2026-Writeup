@@ -1,0 +1,2 @@
+sudo apt install p7zip-full
+7z x PRISM_S03_B10-30_20260830.zip
