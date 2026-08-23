@@ -36,6 +36,22 @@ Iterate over every pixel in row-major order (left to right, top to bottom) and c
 
 Group the extracted bits into 8-bit chunks and decode as ASCII. The flag appears near the start of the extracted data.
 
+```bash
+python3 solve.py downlink.png
+```
+
+Result:
+
+```text
+[+] R-channel LSB extraction complete!
+
+--- Beginning of extracted data ---
+*STARPWN{lsb_st3g0_1n_th3_d0wnl1nk_ch4nnel}ÿàÿãÿÿÿR©ÿø¥jªÕUUÿs9þ«U?ÃÇÿÿÿ1ÆÛ6fIãÇãUU?þlÀVªÌÙÿÀÿàãmUZc1Ìà?ÕZàðZÖÖµÇRÖà??ÀÎ8ÿÿ$ÙÁÖðø¥µjcªª<86ÛcU*ÀsKÁÿÀªªÉd*U8ãfl1I-Ã1ÇIxx|<%´Uÿÿ--Km[msqf3pãsãÿÿÛmÌ9¤¶ÌÉi$µ*3ç9Íø>ã9Æ8IªUm´sV«I6ªªqÇÎgÿl
+----------------------------
+
+[!] Flag found: STARPWN{lsb_st3g0_1n_th3_d0wnl1nk_ch4nnel}
+```
+
 ### Exploit Code
 
 ```python
