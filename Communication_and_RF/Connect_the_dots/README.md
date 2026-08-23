@@ -38,11 +38,15 @@ For the remaining 80% of fixes, calculate how far each position lies outside the
 
 **4. Identify the rogue drone**
 
-The drone with the largest maximum excursion is the one that broke formation. Confirm it exceeded the VLOS (Visual Line of Sight) limit of ~500 m, which qualifies as BVLOS (Beyond Visual Line of Sight).
+The drone with the largest maximum excursion is identified as the unit that broke formation and left its assigned patrol block.
+
+Based on the challenge description, the drone that left its designated patrol area is considered to have flown **Beyond Visual Line Of Sight (BVLOS)**.
 
 **5. Construct the flag**
 
-The rogue drone's behavior — flying beyond visual line of sight — gives the flag.
+The challenge asks for the drone that broke formation. Since its behaviour corresponds to flying **Beyond Visual Line Of Sight (BVLOS)**, the resulting flag is:
+
+`starpwn{Beyond_Visual_Line_Of_Sight}`
 
 ## Appendix A. Parsing the Raw MAVLink Telemetry Log
 
@@ -199,7 +203,7 @@ def main(path):
     positions = parse_positions(path)
     rogue_id, excursion = find_rogue(positions)
     print(f"Rogue drone sysid={rogue_id}, max excursion={excursion:,.0f} m")
-    print(f"FLAG: starpwn{{Beyond_Visual_Line_Of_Sight}}")
+    print("FLAG: starpwn{Beyond_Visual_Line_Of_Sight}")
 
 
 if __name__ == "__main__":
