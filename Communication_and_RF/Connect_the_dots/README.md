@@ -73,7 +73,7 @@ Signature (optional)
 Only `GLOBAL_POSITION_INT` (Message ID **33**) messages were extracted. The parser groups GPS positions by **System ID (SYSID)**, allowing the trajectory of each drone to be reconstructed independently.
 
 ```bash
-python3 extract_tracks PRISM_S03_B10-30_20260830.raw
+python3 extract_tracks.py PRISM_S03_B10-30_20260830.raw
 ```
 
 Example output:
