@@ -62,7 +62,7 @@ Non-zero regions
 Searching for SigningKey magic...
 
 ============================================================
-Possible SigningKey
+Possible SigningKeyCommu
 ============================================================
 Offset     : 0x1F80
 Magic      : 0x3852FCD1
@@ -279,8 +279,6 @@ DIR: /@ROMFS/models
 `downloader.py` implements the same packet format used by ArduPilot's `GCS_FTP.cpp`.
 (https://github.com/ArduPilot/ardupilot/blob/master/libraries/GCS_MAVLink/GCS_FTP.cpp)
 
-`N36W116.DAT` was identified as a standard ArduPilot terrain cache tile (36°N, 116°W) and contained no challenge-specific data.
-
 Protocol flow:
 
 ```text
@@ -311,9 +309,10 @@ Output:
 [+] Saved 40536 bytes to flag.jpg
 ```
 
-`storage.bin` was downloaded from the onboard filesystem and compared with the original `eeprom.bin`.
+`storage.bin` was downloaded from the onboard filesystem and compared with the original `eeprom.bin`. Only nine bytes differed across the entire 16 KiB image, indicating that the runtime storage is almost identical to the original EEPROM contents. No additional secrets or challenge-relevant information were found.
 
-Only nine bytes differed across the entire 16 KiB image, indicating that the runtime storage is almost identical to the original EEPROM contents. No additional secrets or challenge-relevant information were found.
+`N36W116.DAT` was identified as a standard ArduPilot terrain cache tile (36°N, 116°W) and contained no challenge-specific data.
+
 
 ---
 
