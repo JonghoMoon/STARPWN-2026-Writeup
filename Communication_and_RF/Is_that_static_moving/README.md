@@ -10,7 +10,7 @@
 
 You got a weird signal in one of your first SynNodes. Apparently it was pointing at an old decomms'd satellite, this should have been long dead but it seems to be resurrected long enough for you to receive a message from it. Who knows when it'll go down again so you better rush.
 
-**Attachments:** `nc 0.cloud.chals.io 25009` (ZMQ PUB endpoint)
+**Attachments:** `nc 0.cloud.chals.io <port>` (ZMQ PUB endpoint)
 
 ## Solution
 
