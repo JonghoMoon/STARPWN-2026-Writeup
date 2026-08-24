@@ -311,11 +311,9 @@ Output:
 
 `N36W116.DAT` was identified as a standard ArduPilot terrain cache tile (36°N, 116°W) and contained no challenge-specific data.
 
-During enumeration, the virtual @SYS directory exposed several diagnostic entries such as threads.txt, memory.txt, and crash_dump.bin. Although these entries were listed successfully, all READ requests returned FTP error 0x0A, indicating that the system diagnostics interface was not accessible through the MAVLink FTP implementation used in the challenge.
+During filesystem enumeration, the virtual `@SYS` directory exposed several diagnostic entries, including `threads.txt`, `memory.txt`, and `crash_dump.bin`. Although these entries were listed successfully, every `READ` request returned FTP error `0x0A`, indicating that the system diagnostics interface was not accessible through the MAVLink FTP implementation used in the challenge.
 
-However, `storage.bin` was downloaded from the onboard filesystem and compared with the original `eeprom.bin`. Only nine bytes differed across the entire 16 KiB image, indicating that the runtime storage is almost identical to the original EEPROM contents. No additional secrets or challenge-relevant information were found.
-
-
+Finally, `storage.bin` was downloaded from the onboard filesystem and compared with the original `eeprom.bin`. Only nine bytes differed across the entire 16 KiB image, indicating that the runtime storage is almost identical to the original EEPROM contents. No additional secrets or challenge-relevant information were found.
 
 ---
 
