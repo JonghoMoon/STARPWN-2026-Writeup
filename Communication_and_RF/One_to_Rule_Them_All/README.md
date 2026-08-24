@@ -279,6 +279,8 @@ DIR: /@ROMFS/models
 `downloader.py` implements the same packet format used by ArduPilot's `GCS_FTP.cpp`.
 (https://github.com/ArduPilot/ardupilot/blob/master/libraries/GCS_MAVLink/GCS_FTP.cpp)
 
+`N36W116.DAT` was identified as a standard ArduPilot terrain cache tile (36°N, 116°W) and contained no challenge-specific data.
+
 Protocol flow:
 
 ```text
