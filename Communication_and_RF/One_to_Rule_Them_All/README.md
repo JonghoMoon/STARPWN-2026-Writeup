@@ -309,6 +309,10 @@ Output:
 [+] Saved 40536 bytes to flag.jpg
 ```
 
+`storage.bin` was downloaded from the onboard filesystem and compared with the original `eeprom.bin`.
+
+Only nine bytes differed across the entire 16 KiB image, indicating that the runtime storage is almost identical to the original EEPROM contents. No additional secrets or challenge-relevant information were found.
+
 ---
 
 ## 7. Read the flag
