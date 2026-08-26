@@ -1,4 +1,4 @@
-# STARPWN 2026 CTF Writeup
+# STARPWN CTF 2026 Writeup
 
 Write-ups and analysis scripts for **STARPWN CTF 2026** challenges.
 
