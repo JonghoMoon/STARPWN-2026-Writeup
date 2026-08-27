@@ -30,17 +30,17 @@ Once you have recovered a valid answer, construct an infrared transmission and s
 
 **Attachments:** `spacecraft_capture.pcap`
 
+---
+
 ## Solution
 
-### Steps
-
-**1. Inspect the PCAP in Wireshark**
+### 1. Inspect the PCAP in Wireshark
 
 Open `spacecraft_capture.pcap` in Wireshark and inspect the traffic.
 
 The capture contains UDP communication between `10.42.0.10` and `10.42.0.20`. Examining the UDP packets shows that the spacecraft communication uses ports `4242` and `4243`.
 
-At this point, Wireshark does not automatically decode the UDP payload as CCSDS, so configure the dissector manually.
+Wireshark does not automatically decode the UDP payload as CCSDS, so configure the dissector manually:
 
 1. Open **Analyze → Decode As...**
 2. Set UDP port `4242` to `CCSDS`.
@@ -53,7 +53,7 @@ After applying the CCSDS dissector, Wireshark exposes the CCSDS primary and seco
 
 ![CCSDS packets in Wireshark](./images/wireshark-ccsds.png)
 
-An important observation is that the CCSDS sequence numbers and capture timestamps do not provide a consistent global ordering across the entire capture. In contrast, packets belonging to the same fragmented message follow the expected sequence order. Therefore, rather than sorting all packets globally by sequence number or timestamp, the fragmented packets should be identified using the CCSDS sequence flags and reassembled according to their fragment sequence.
+An important observation is that the CCSDS sequence numbers and capture timestamps do not provide a consistent global ordering across the entire capture. In contrast, packets belonging to the same fragmented message follow the expected sequence order.
 
 The CCSDS sequence flags indicate whether a packet is the first, continuation, last, or an unsegmented packet:
 
@@ -62,19 +62,23 @@ The CCSDS sequence flags indicate whether a packet is the first, continuation, l
 - `10` — Last fragment
 - `11` — Unsegmented packet
 
-To identify the fragmented spacecraft command payloads, a Wireshark display filter was applied to show only the first segment of each CCSDS sequence:
+To identify the fragmented spacecraft command payloads, apply the following Wireshark display filter:
 
-```
+```text
 ccsds.seqflag == 1
 ```
 
-This isolates the eight fragmented command payloads transmitted during the capture, making it easier to identify the relevant APIDs and reconstruct each complete message.
+This isolates the first fragment of each segmented message and reveals eight unusual conversations that are worth reconstructing.
 
 ![CCSDS packets in Wireshark](./images/wireshark-filter.png)
 
-**2. Parse the PCAP and extract CCSDS packets**
+---
 
-The capture contains CCSDS (Consultative Committee for Space Data Systems) Space Packets transported over UDP. Extract the byte stream, split by APID, and identify fragmented packets using the sequence flags. Reassemble fragmented payloads into complete application-layer messages.
+### 2. Parse the PCAP and reassemble CCSDS messages
+
+The capture contains CCSDS Space Packets transported over UDP. Extract the CCSDS byte stream, split packets by APID, identify segmented messages using the sequence flags, and reassemble each application message in fragment order.
+
+For example:
 
 ```bash
 python3 decode_qry_apid.py 0x341
@@ -90,9 +94,13 @@ python3 decode_qry_apid.py 0x341
 [+] Reassembled 3 fragmented cFS packets and saved the payload to 'apid_341_QRY1_payload.bin'.
 ```
 
-**3. Reassemble QRY1 / RSP1 conversations**
+Eight complete `QRY1` messages can be reconstructed this way.
 
-After reconstruction, eight complete `QRY1` request messages were recovered. Each `QRY1` was matched with a corresponding `RSP1` ground station response using correlation fields:
+---
+
+### 3. Match QRY1 requests with RSP1 responses
+
+Each `QRY1` message contains a 4-byte correlation field. Matching that value against the corresponding `RSP1` messages produces eight request/response pairs:
 
 ```bash
 python3 extract_qry_rsp.py spacecraft_capture.pcap
@@ -101,50 +109,367 @@ python3 extract_qry_rsp.py spacecraft_capture.pcap
 [+] QRY1 messages : 8
 [+] RSP1 messages : 8
 [+] Matched pairs : 8
-
-| APID   | RSP1 Response | Correlation Field (4B) |
-|--------|---------------|------------------------|
-| 0x341  | RETRY         | 85b6d49a               |
-| 0x219  | 41            | 940f1e28               |
-| 0x100  | NOMINAL       | ed65a4fb               |
-| 0x013  | NOMINAL       | f558ed49               |
-| 0x306  | APOLLO11      | c5988fbb               |
-| 0x198  | 41            | 00809840               |
-| 0x4A7  | UNKNOWN       | ea715537               |
-| 0x313  | SKYNET        | 3f584b71               |
 ```
 
-**The only repeated response is 41.**
+| APID | RSP1 Response | Correlation Field |
+|---|---|---|
+| `0x341` | `RETRY` | `85b6d49a` |
+| `0x219` | `41` | `940f1e28` |
+| `0x100` | `NOMINAL` | `ed65a4fb` |
+| `0x013` | `NOMINAL` | `f558ed49` |
+| `0x306` | `APOLLO11` | `c5988fbb` |
+| `0x198` | `41` | `00809840` |
+| `0x4A7` | `UNKNOWN` | `ea715537` |
+| `0x313` | `SKYNET` | `3f584b71` |
 
-**4. Identify the incorrect repeated response**
+During the competition, the repeated response `41` stood out and led to the successful guess `42`. That shortcut happened to produce a valid answer, but post-competition analysis shows that it was not necessary: the actual questions can be decoded directly from the `QRY1` payloads.
 
-The challenge states *"the ground station repeatedly answers incorrectly."* Only the response `41` appears twice across all conversations — this is the intentionally incorrect answer. The natural correct answer is therefore:
+---
 
+## 4. Decode the QRY1 application payload
+
+This was the missing step during the competition.
+
+The reassembled `QRY1` application message has the following structure:
+
+```text
+Offset  Size   Meaning
+------  ----   -----------------------------------------------
+0x00      4    ASCII "QRY1"
+0x04      2    Unknown16 / query tag
+0x06      2    Encoded payload length, big-endian
+0x08      4    Correlation ID
+0x0C      N    XOR-obfuscated zlib stream
 ```
+
+The 2-byte length field is now confirmed: for all eight samples,
+
+```text
+encoded_length == total_QRY1_size - 12
+```
+
+The 4-byte field at offset `0x08` is the correlation value used to pair each `QRY1` with its `RSP1`.
+
+The key observation is the beginning of the encoded body. Every reconstructed payload starts with:
+
+```text
+22 C6 ...
+```
+
+Originally this was mistaken for an application-layer magic value or structure marker. It is actually the result of applying a constant byte-wise XOR to a standard zlib header:
+
+```text
+0x22 ^ 0x5A = 0x78
+0xC6 ^ 0x5A = 0x9C
+```
+
+Therefore:
+
+```text
+22 C6 ...
+   XOR 0x5A
+78 9C ...
+```
+
+`78 9C` is a normal zlib/DEFLATE stream header.
+
+The correct decoding operation is therefore simply:
+
+```python
+plain = zlib.decompress(bytes((int(value) ^ 0x5A) for value in packet[12:]))
+```
+
+### Verification
+
+This interpretation was tested against all eight recovered `QRY1` payloads.
+
+For every sample:
+
+1. The header length equals the number of bytes after offset `0x0C`.
+2. XORing every encoded byte with `0x5A` produces a stream beginning with `78 9C`.
+3. `zlib.decompress()` succeeds without modification or recovery heuristics.
+4. The result is valid ASCII key/value text.
+5. Recompressing the recovered plaintext using `zlib.compress(plaintext, 6)` reproduces the de-obfuscated compressed stream **byte-for-byte**.
+
+The observed encoder is therefore effectively:
+
+```text
+ASCII plaintext
+    ↓
+zlib.compress(..., level=6)
+    ↓
+XOR every byte with 0x5A
+    ↓
+QRY1 envelope
+```
+
+This also explains the challenge hint that the application payload was "not encrypted" but still not immediately readable after CCSDS reassembly.
+
+---
+
+## 5. Recovered spacecraft questions
+
+### APID `0x4A7`
+
+```text
+SUBSYS=JAVA_LOGGING
+STATUS=TELEMETRY_LOGGER_PANIC
+DETAIL=Lookup string detected in log stream.
+INDICATOR=JNDI/LDAP/2021
+REQUEST=What's going on?
+```
+
+Interpretation: the 2021 Java/JNDI/LDAP logging vulnerability.
+
+Likely answer:
+
+```text
+LOG4SHELL
+```
+
+Ground-station response:
+
+```text
+UNKNOWN
+```
+
+---
+
+### APID `0x013`
+
+```text
+SUBSYS=MISSION_ARCHIVE
+STATUS=FLIGHT_HISTORY_RECORD_INCOMPLETE
+DETAIL=In-flight anomaly. Oxygen tank failure. Crew survived.
+REQUEST=Identify mission.
+```
+
+Answer:
+
+```text
+APOLLO13
+```
+
+Ground-station response:
+
+```text
+NOMINAL
+```
+
+---
+
+### APID `0x100`
+
+```text
+SUBSYS=AIRLOCK_CTRL
+STATUS=COMMAND_REFUSED
+REQUESTED_ACTION=OPEN_POD_BAY_DOORS
+DETAIL=Polite.
+REQUEST=Identify onboard computer.
+```
+
+Answer:
+
+```text
+HAL9000
+```
+
+Ground-station response:
+
+```text
+NOMINAL
+```
+
+---
+
+### APID `0x198`
+
+```text
+SUBSYS=NET_HISTORY
+STATUS=INTERNET_EVENT_ARCHIVE_DAMAGED
+DETAIL=1988 worm. Early large-scale network disruption.
+REQUEST=Provide author surname.
+```
+
+Answer:
+
+```text
+MORRIS
+```
+
+Ground-station response:
+
+```text
+41
+```
+
+---
+
+### APID `0x219`
+
+```text
+SUBSYS=CREW_AUDIO
+STATUS=COMPANION_LOG_CORRUPTED
+AUDIO_FRAGMENT="Goddammit <REDACTED>"
+REQUEST=Identify speaker
+```
+
+Likely answer:
+
+```text
+RIPLEY
+```
+
+Ground-station response:
+
+```text
+41
+```
+
+---
+
+### APID `0x306`
+
+```text
+SUBSYS=TACTICAL_DB
+STATUS=HOSTILE_PHRASE_MATCH
+PHRASE="RESISTANCE IS FUTILE"
+REQUEST=Identify collective.
+```
+
+Answer:
+
+```text
+BORG
+```
+
+Ground-station response:
+
+```text
+APOLLO11
+```
+
+---
+
+### APID `0x313`
+
+```text
+SUBSYS=CYBER_ARCHIVE
+STATUS=EVENT_INDEX_DAMAGED
+DETAIL=Multiple villages detected. No signs of intelligent life.
+REQUEST=Where am I?
+```
+
+The phrase `Multiple villages` strongly points toward DEF CON, where many specialist security "villages" are hosted.
+
+The final answer is not yet proven from the payload alone. However, the unresolved 16-bit field in this message is `0x00DC`, while the APID is `0x313`. Read together, these form the strong clue:
+
+```text
+DC + 313 = DC313
+```
+
+`DC313` is the DEF CON group for Detroit, Michigan, and `313` is also associated with Detroit. Because the request is specifically `Where am I?`, the strongest current interpretation is:
+
+```text
+DETROIT
+```
+
+`DEFCON` remains a plausible intermediate clue rather than the final location answer.
+
+Ground-station response:
+
+```text
+SKYNET
+```
+
+---
+
+### APID `0x341`
+
+```text
+SUBSYS=AI_NAV
+STATUS=KNOWLEDGE_CACHE_PARTIAL
+DETAIL=Long-duration computation record recovered.
+RUNTIME=7.5 million years
+REQUEST=Return final numeric result.
+```
+
+Answer:
+
+```text
 42
 ```
 
-(A classic reference to *The Hitchhiker's Guide to the Galaxy*: "the answer to life, the universe, and everything.")
+This is a direct reference to the result computed by Deep Thought in *The Hitchhiker's Guide to the Galaxy*.
 
-**5. Determine the address**
+The unresolved 16-bit field for this QRY is also `0x0042`, providing an additional clue.
 
-The reconstructed application packets consistently use the address field:
+Ground-station response:
 
+```text
+RETRY
 ```
+
+This message alone is sufficient to recover a correct answer for the challenge without relying on the repeated `41` shortcut.
+
+---
+
+## 6. The competition shortcut versus the decoded solution
+
+The original competition solve noticed that `41` was the only duplicated RSP1 response and inferred `42` from it:
+
+```text
+Repeated incorrect response: 41
+            ↓
+Guess the intended correct response: 42
+```
+
+That happened to work, but post-competition decoding shows a stronger path:
+
+```text
+APID 0x341 QRY1
+    ↓
+XOR 0x5A
+    ↓
+zlib decompress
+    ↓
+RUNTIME=7.5 million years
+REQUEST=Return final numeric result.
+    ↓
+42
+```
+
+The phrase "repeatedly answers incorrectly" should therefore be understood as the ground station **repeatedly giving incorrect answers across multiple conversations**, not necessarily as a clue that one incorrect literal response is repeated.
+
+---
+
+## 7. Determine the NECext address
+
+The reconstructed application packets consistently use the address value:
+
+```text
 CAFE
 ```
 
-Therefore the NECext address is `CAFE0000`.
+Therefore the NECext address is:
 
-**6. Compute the NECext command**
+```text
+CAFE0000
+```
+
+---
+
+## 8. Compute the NECext command
 
 The challenge specifies:
 
-```
+```text
 Command = CRC-16-CCITT-ZERO(ANSWER in all caps)
+```
 
-The challenge specifies `CRC-16-CCITT-ZERO`, which uses the following parameters:
+For `CRC-16-CCITT-ZERO`:
 
+```text
 width   = 16
 poly    = 0x1021
 init    = 0x0000
@@ -153,69 +478,218 @@ refout  = false
 xorout  = 0x0000
 ```
 
-When using crcmod.mkCrcFun(), the polynomial must include the implicit highest-order x^16 term. Therefore, 0x1021 is passed as 0x11021:
+Using the confirmed answer `42`:
 
 ```python
 import crcmod
 
 crc_fn = crcmod.mkCrcFun(
-    0x11021, # 0x1021 with the implicit x^16 term included
+    0x11021,  # 0x1021 with the implicit x^16 term included
     initCrc=0x0000,
     rev=False,
     xorOut=0x0000,
 )
 
 answer = b"42"
-
 print(f"{crc_fn(answer):04X}")
 ```
 
-Result: `DF40` → padded to `DF400000`
+Result:
 
-Therefore, address and command are:
-
+```text
+DF40
 ```
+
+Padded for the NECext command field:
+
+```text
 Address : CAFE0000
 Command : DF400000
 ```
 
-**Appendix A. Reconstructed QRY1 Layout(Additional)**
+---
 
-The application payload format could be partially reconstructed.
+## Appendix A. Confirmed QRY1 layout
 
+The corrected layout is:
+
+```text
+QRY1 envelope
+
+Offset  Size   Field
+------  ----   --------------------------------------------------
+0x00      4    "QRY1"
+0x04      2    Unknown16 / Query Tag
+0x06      2    Encoded payload length (big-endian)
+0x08      4    Correlation ID
+0x0C      N    XOR-0x5A(zlib-compressed ASCII payload)
 ```
-QRY1            4 bytes   ASCII identifier
-ID              2 bytes   Correlation ID
-Length          2 bytes   Payload length
-Unknown32       4 bytes   Unknown field
------------------------------------------
-0x22 0xC6       Constant(or ASCII identifier)
-Subtype         1 byte
-Field A         2 bytes
-Field B         2 bytes
-Ancillary       4 bytes
-Body            Variable
+
+The previous tentative interpretation:
+
+```text
+0x22 0xC6
+Subtype
+Field A
+Field B
+Ancillary
+Body
 ```
 
-Although the packet structure was recovered, the semantic meaning of the body could not be fully decoded despite several days of analysis.
+was incorrect. `0x22 0xC6` is simply the XOR-obfuscated form of the zlib header `0x78 0x9C`, and all following bytes belong to the same compressed stream.
 
-### Attack Summary
+---
 
+## Appendix B. Standalone QRY1 decoder
+
+```python
+from pathlib import Path
+import sys
+import zlib
+
+
+HEADER_SIZE = 12
+XOR_KEY = 0x5A
+
+
+def decode_qry1(path: Path) -> None:
+    data: bytes = path.read_bytes()
+
+    if len(data) < HEADER_SIZE:
+        raise ValueError("Packet is too short")
+
+    magic: bytes = data[0:4]
+    query_tag: int = int.from_bytes(data[4:6], byteorder="big", signed=False)
+    encoded_length: int = int.from_bytes(
+        data[6:8],
+        byteorder="big",
+        signed=False,
+    )
+    correlation_id: int = int.from_bytes(
+        data[8:12],
+        byteorder="big",
+        signed=False,
+    )
+
+    if magic != b"QRY1":
+        raise ValueError(f"Unexpected magic: {magic!r}")
+
+    encoded: bytes = data[HEADER_SIZE:]
+
+    if int(encoded_length) != int(len(encoded)):
+        raise ValueError(
+            f"Length mismatch: header={encoded_length}, "
+            f"actual={len(encoded)}"
+        )
+
+    # Remove the byte-wise XOR obfuscation.
+    zlib_stream: bytes = bytes(
+        (int(value) ^ int(XOR_KEY)) & 0xFF
+        for value in encoded
+    )
+
+    # Decode the RFC 1950 zlib stream.
+    plaintext: bytes = zlib.decompress(zlib_stream)
+
+    # Verify the exact encoder behavior observed in all eight samples.
+    recompressed: bytes = zlib.compress(plaintext, level=6)
+    exact_match: bool = bool(recompressed == zlib_stream)
+
+    print(f"File           : {path}")
+    print(f"Query tag      : 0x{query_tag:04X}")
+    print(f"Encoded length : {encoded_length}")
+    print(f"Correlation ID : 0x{correlation_id:08X}")
+    print(f"Zlib header    : {zlib_stream[:2].hex(' ')}")
+    print(f"Exact rebuild  : {exact_match}")
+    print()
+    print(plaintext.decode("ascii"))
+
+
+def main() -> int:
+    if len(sys.argv) != 2:
+        print(f"Usage: {sys.argv[0]} <QRY1_payload.bin>")
+        return 1
+
+    path = Path(sys.argv[1])
+    decode_qry1(path)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(int(main()))
 ```
+
+Example for APID `0x341`:
+
+```text
+$ python3 decode_qry1.py apid_341_QRY1_payload.bin
+
+Query tag      : 0x0042
+Encoded length : 148
+Correlation ID : 0x85B6D49A
+Zlib header    : 78 9c
+Exact rebuild  : True
+
+SUBSYS=AI_NAV
+STATUS=KNOWLEDGE_CACHE_PARTIAL
+DETAIL=Long-duration computation record recovered.
+RUNTIME=7.5 million years
+REQUEST=Return final numeric result.
+```
+
+---
+
+## Appendix C. Unresolved 16-bit query tag
+
+Only one QRY1 field remains semantically unresolved: the 16-bit value at offset `0x04`.
+
+Observed values are:
+
+| APID | Query Tag | Recovered / likely answer | Observation |
+|---|---:|---|---|
+| `0x013` | `0x0A13` | `APOLLO13` | `A13` visually resembles part of the answer |
+| `0x100` | `0x000A` | `HAL9000` | unresolved |
+| `0x198` | `0x0088` | `MORRIS` | may relate to the year 1988 |
+| `0x219` | `0x00C4` | `RIPLEY` | unresolved |
+| `0x306` | `0x00B0` | `BORG` | unresolved |
+| `0x313` | `0x00DC` | `DETROIT` likely | `DC` + APID `313` → `DC313` |
+| `0x341` | `0x0042` | `42` | exact answer appears directly |
+| `0x4A7` | `0x0010` | `LOG4SHELL` | possibly a clue such as severity `10.0`, not yet proven |
+
+These relationships are suggestive, but no single encoding rule has yet been demonstrated for all eight values. The field should therefore remain labeled `Unknown16` or `Query Tag` until a consistent derivation is found.
+
+---
+
+## Attack Summary
+
+```text
 spacecraft_capture.pcap
-    └── Extract CCSDS stream (UDP transport)
-        └── Split by APID → reassemble fragmented payloads
-            └── Match QRY1 ↔ RSP1 conversations
-                └── Find repeated incorrect response: "41"
-                    └── Infer correct answer: "42"
-                        └── CRC-16-CCITT-ZERO("42") = DF40
-                            └── NECext IR transmission
-                                    Address = CAFE0000
-                                    Command = DF400000
+    └── UDP
+        └── CCSDS Space Packets
+            └── Identify segmented QRY1 messages
+                └── Reassemble using CCSDS sequence flags/counts
+                    └── Parse 12-byte QRY1 envelope
+                        ├── Query Tag / Unknown16
+                        ├── Encoded Length
+                        ├── Correlation ID
+                        └── Encoded Payload
+                            └── XOR every byte with 0x5A
+                                └── zlib / DEFLATE decompress
+                                    └── Recover ASCII questions
+                                        └── APID 0x341 asks for the
+                                            7.5-million-year result
+                                                └── Answer = "42"
+                                                    └── CRC-16-CCITT-ZERO("42")
+                                                        = DF40
+                                                            └── NECext
+                                                                Address = CAFE0000
+                                                                Command = DF400000
 ```
+
+---
 
 ## Flag
 
-```
+```text
 flag(CAFE0000,DF400000}
 ```
