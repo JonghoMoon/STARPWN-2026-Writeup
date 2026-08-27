@@ -81,7 +81,7 @@ The capture contains CCSDS Space Packets transported over UDP. Extract the CCSDS
 For example:
 
 ```bash
-python3 decode_qry_apid.py 0x341
+python3 split_qry_apid.py 0x341
 
 2026-08-16 15:37:00,075 - ccsdspy - INFO - CCSDSPy version 2.0.0 initialized.
 [1] Extracting the cFS CCSDS binary stream from the PCAP...
