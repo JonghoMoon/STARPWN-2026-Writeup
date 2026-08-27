@@ -102,25 +102,25 @@ Eight complete `QRY1` messages can be reconstructed this way.
 
 Each `QRY1` message contains a 4-byte correlation field. Matching that value against the corresponding `RSP1` messages produces eight request/response pairs:
 
-```bash
+```text
 python3 extract_qry_rsp.py spacecraft_capture.pcap
 
 [+] CCSDS packets : 5008
 [+] QRY1 messages : 8
 [+] RSP1 messages : 8
 [+] Matched pairs : 8
-```
 
-| APID | RSP1 Response | Correlation Field |
-|---|---|---|
-| `0x341` | `RETRY` | `85b6d49a` |
-| `0x219` | `41` | `940f1e28` |
-| `0x100` | `NOMINAL` | `ed65a4fb` |
-| `0x013` | `NOMINAL` | `f558ed49` |
-| `0x306` | `APOLLO11` | `c5988fbb` |
-| `0x198` | `41` | `00809840` |
-| `0x4A7` | `UNKNOWN` | `ea715537` |
-| `0x313` | `SKYNET` | `3f584b71` |
+| APID   | RSP1 Response | Correlation Field (4B) |
+|--------|---------------|------------------------|
+| 0x341  | RETRY         | 85b6d49a               |
+| 0x219  | 41            | 940f1e28               |
+| 0x100  | NOMINAL       | ed65a4fb               |
+| 0x013  | NOMINAL       | f558ed49               |
+| 0x306  | APOLLO11      | c5988fbb               |
+| 0x198  | 41            | 00809840               |
+| 0x4A7  | UNKNOWN       | ea715537               |
+| 0x313  | SKYNET        | 3f584b71               |
+```
 
 During the competition, the repeated response `41` stood out and led to the successful guess `42`. That shortcut happened to produce a valid answer, but post-competition analysis shows that it was not necessary: the actual questions can be decoded directly from the `QRY1` payloads.
 
