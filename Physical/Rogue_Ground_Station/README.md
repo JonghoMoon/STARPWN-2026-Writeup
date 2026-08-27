@@ -81,7 +81,7 @@ The capture contains CCSDS Space Packets transported over UDP. Extract the CCSDS
 For example:
 
 ```bash
-python3 split_qry_apid.py 0x341
+python3 decode_qry_apid.py 0x341
 
 2026-08-16 15:37:00,075 - ccsdspy - INFO - CCSDSPy version 2.0.0 initialized.
 [1] Extracting the cFS CCSDS binary stream from the PCAP...
@@ -100,7 +100,18 @@ Eight complete `QRY1` messages can be reconstructed this way.
 
 ### 3. Match QRY1 requests with RSP1 responses
 
-Each `QRY1` message contains a 4-byte correlation field. Matching that value against the corresponding `RSP1` messages produces eight request/response pairs:
+The 16-bit field at `QRY1` offset `0x04` is a **Query ID**. The capture also carries the low byte of this ID in the cFS secondary header. The observed convention is:
+
+```text
+QRY1 secondary header: ... 0x51 <Query-ID-low-byte>
+RSP1 secondary header: ... 0x52 <Query-ID-low-byte>
+```
+
+Therefore a request and response can be paired by:
+
+1. the same APID,
+2. the same Query-ID low byte in the secondary header, and
+3. the response occurring after the request.
 
 ```text
 python3 extract_qry_rsp.py spacecraft_capture.pcap
@@ -122,6 +133,8 @@ python3 extract_qry_rsp.py spacecraft_capture.pcap
 | 0x313  | SKYNET        | 3f584b71               |
 ```
 
+The 4-byte field at QRY1 offset `0x08`, previously labeled a correlation field, is actually the **CRC-32 of the decompressed plaintext**. This was verified for all eight requests.
+
 During the competition, the repeated response `41` stood out and led to the successful guess `42`. That shortcut happened to produce a valid answer, but post-competition analysis shows that it was not necessary: the actual questions can be decoded directly from the `QRY1` payloads.
 
 ---
@@ -136,19 +149,27 @@ The reassembled `QRY1` application message has the following structure:
 Offset  Size   Meaning
 ------  ----   -----------------------------------------------
 0x00      4    ASCII "QRY1"
-0x04      2    Unknown16 / query tag
+0x04      2    Query ID, big-endian
 0x06      2    Encoded payload length, big-endian
-0x08      4    Correlation ID
+0x08      4    CRC-32 of decompressed plaintext, big-endian
 0x0C      N    XOR-obfuscated zlib stream
 ```
 
-The 2-byte length field is now confirmed: for all eight samples,
+The 2-byte length field is confirmed: for all eight samples,
 
 ```text
 encoded_length == total_QRY1_size - 12
 ```
 
-The 4-byte field at offset `0x08` is the correlation value used to pair each `QRY1` with its `RSP1`.
+The Query ID at `0x04` is also reflected in the cFS secondary header: the QRY1 packet uses marker `0x51` followed by the Query-ID low byte, while the corresponding RSP1 uses `0x52` followed by the same low byte.
+
+The 4-byte field at `0x08` is not a correlation identifier. After decoding each request, the following identity holds for all eight samples:
+
+```text
+header_crc32 == CRC32(decompressed_plaintext)
+```
+
+For example, APID `0x341` contains `85 B6 D4 9A` at offset `0x08`, and the CRC-32 of its recovered plaintext is exactly `0x85B6D49A`.
 
 The key observation is the beginning of the encoded body. Every reconstructed payload starts with:
 
@@ -208,10 +229,6 @@ This also explains the challenge hint that the application payload was "not encr
 ---
 
 ## 5. Recovered spacecraft questions
-
-```bash
-python3 decoder.py apid_<APID>_QRY1_payload.bin
-```
 
 ### APID `0x4A7`
 
@@ -523,9 +540,9 @@ QRY1 envelope
 Offset  Size   Field
 ------  ----   --------------------------------------------------
 0x00      4    "QRY1"
-0x04      2    Unknown16 / Query Tag
+0x04      2    Query ID (big-endian)
 0x06      2    Encoded payload length (big-endian)
-0x08      4    Correlation ID
+0x08      4    CRC-32 of decompressed plaintext (big-endian)
 0x0C      N    XOR-0x5A(zlib-compressed ASCII payload)
 ```
 
@@ -563,13 +580,13 @@ def decode_qry1(path: Path) -> None:
         raise ValueError("Packet is too short")
 
     magic: bytes = data[0:4]
-    query_tag: int = int.from_bytes(data[4:6], byteorder="big", signed=False)
+    query_id: int = int.from_bytes(data[4:6], byteorder="big", signed=False)
     encoded_length: int = int.from_bytes(
         data[6:8],
         byteorder="big",
         signed=False,
     )
-    correlation_id: int = int.from_bytes(
+    plaintext_crc32: int = int.from_bytes(
         data[8:12],
         byteorder="big",
         signed=False,
@@ -595,14 +612,19 @@ def decode_qry1(path: Path) -> None:
     # Decode the RFC 1950 zlib stream.
     plaintext: bytes = zlib.decompress(zlib_stream)
 
+    # Verify the CRC-32 stored in the QRY1 header.
+    calculated_crc32: int = int(zlib.crc32(plaintext) & 0xFFFFFFFF)
+    crc32_match: bool = bool(calculated_crc32 == int(plaintext_crc32))
+
     # Verify the exact encoder behavior observed in all eight samples.
     recompressed: bytes = zlib.compress(plaintext, level=6)
     exact_match: bool = bool(recompressed == zlib_stream)
 
     print(f"File           : {path}")
-    print(f"Query tag      : 0x{query_tag:04X}")
+    print(f"Query ID       : 0x{query_id:04X}")
     print(f"Encoded length : {encoded_length}")
-    print(f"Correlation ID : 0x{correlation_id:08X}")
+    print(f"Plain CRC-32   : 0x{plaintext_crc32:08X}")
+    print(f"CRC-32 match   : {crc32_match}")
     print(f"Zlib header    : {zlib_stream[:2].hex(' ')}")
     print(f"Exact rebuild  : {exact_match}")
     print()
@@ -628,9 +650,10 @@ Example for APID `0x341`:
 ```text
 $ python3 decode_qry1.py apid_341_QRY1_payload.bin
 
-Query tag      : 0x0042
+Query ID       : 0x0042
 Encoded length : 148
-Correlation ID : 0x85B6D49A
+Plain CRC-32   : 0x85B6D49A
+CRC-32 match   : True
 Zlib header    : 78 9c
 Exact rebuild  : True
 
@@ -643,24 +666,26 @@ REQUEST=Return final numeric result.
 
 ---
 
-## Appendix C. Unresolved 16-bit query tag
+## Appendix C. Query ID observations
 
-Only one QRY1 field remains semantically unresolved: the 16-bit value at offset `0x04`.
+The protocol role of the 16-bit value at offset `0x04` is now confirmed: it is the **Query ID**. Its low byte is repeated in the cFS secondary header and is used to associate a QRY1 with the corresponding RSP1.
+
+What remains unresolved is whether the challenge author deliberately chose the numeric Query ID values as semantic hints or Easter eggs for each question.
 
 Observed values are:
 
-| APID | Query Tag | Recovered / likely answer | Observation |
+| APID | Query ID | Recovered / likely answer | Possible semantic relationship |
 |---|---:|---|---|
-| `0x013` | `0x0A13` | `APOLLO13` | `A13` visually resembles part of the answer |
+| `0x013` | `0x0A13` | `APOLLO13` | `A13` strongly resembles part of `APOLLO13` |
 | `0x100` | `0x000A` | `HAL9000` | unresolved |
-| `0x198` | `0x0088` | `MORRIS` | may relate to the year 1988 |
+| `0x198` | `0x0088` | `MORRIS` | `88` plausibly points to the 1988 Morris worm |
 | `0x219` | `0x00C4` | `RIPLEY` | unresolved |
-| `0x306` | `0x00B0` | `BORG` | unresolved |
-| `0x313` | `0x00DC` | `DETROIT` likely | `DC` + APID `313` → `DC313` |
+| `0x306` | `0x00B0` | `BORG` | possibly `B0` as hexspeak for the beginning of `BORG`; unproven |
+| `0x313` | `0x00DC` | `DETROIT` likely | `DC` + APID `313` gives `DC313`, a DEF CON group associated with Detroit |
 | `0x341` | `0x0042` | `42` | exact answer appears directly |
-| `0x4A7` | `0x0010` | `LOG4SHELL` | possibly a clue such as severity `10.0`, not yet proven |
+| `0x4A7` | `0x0010` | `LOG4SHELL` | possibly points to severity `10.0`; unproven |
 
-These relationships are suggestive, but no single encoding rule has yet been demonstrated for all eight values. The field should therefore remain labeled `Unknown16` or `Query Tag` until a consistent derivation is found.
+The field itself should therefore be labeled **Query ID**, not `Unknown16` or `Query Tag`. The possible semantic relationships above are a separate challenge-design hypothesis and are not required for protocol decoding.
 
 ---
 
@@ -673,9 +698,9 @@ spacecraft_capture.pcap
             └── Identify segmented QRY1 messages
                 └── Reassemble using CCSDS sequence flags/counts
                     └── Parse 12-byte QRY1 envelope
-                        ├── Query Tag / Unknown16
+                        ├── Query ID
                         ├── Encoded Length
-                        ├── Correlation ID
+                        ├── Plaintext CRC-32
                         └── Encoded Payload
                             └── XOR every byte with 0x5A
                                 └── zlib / DEFLATE decompress
