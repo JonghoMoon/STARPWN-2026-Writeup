@@ -669,7 +669,7 @@ if __name__ == "__main__":
 Example for APID `0x341`:
 
 ```text
-$ python3 decode_qry1.py apid_341_QRY1_payload.bin
+python3 decoder.py apid_341_QRY1_payload.bin
 
 Query ID       : 0x0042
 Encoded length : 148
