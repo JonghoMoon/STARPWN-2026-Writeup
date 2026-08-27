@@ -696,14 +696,14 @@ With all eight accepted answers now known, the Query ID values strongly look lik
 
 | APID | Query ID | Confirmed answer | Likely mnemonic relationship | Confidence |
 |---|---:|---|---|---|
-| `0x013` | `0x0A13` | `APOLLO13` | `A13` directly evokes Apollo 13 | High |
-| `0x100` | `0x000A` | `HAL` | No convincing mapping identified | Low |
-| `0x198` | `0x0088` | `MORRIS` | `88` points to the 1988 Morris worm | High |
-| `0x219` | `0x00C4` | `CARL` | `C4` can be read as a loose hex/leetspeak cue toward `CA...` | Medium/low |
-| `0x306` | `0x00B0` | `BORG` | `B0` reads naturally as `BO...` with `0 → O` | Medium/high |
+| `0x013` | `0x0A13` | `APOLLO13` | Ignoring the leading `0`, `A13` directly evokes Apollo 13 | High |
+| `0x100` | `0x000A` | `HAL` | Ignoring the leading zeros leaves `A`, plausibly hinting at *2001: A Space Odyssey*; alternatively `0x0A = 10` may hint at *2010* | Medium/low |
+| `0x198` | `0x0088` | `MORRIS` | `88` points directly to the 1988 Morris worm | High |
+| `0x219` | `0x00C4` | `CARL` | `C4` can be read loosely as `CA...`, with `4` serving as a leetspeak-style `A` cue toward `CARL` | Medium/low |
+| `0x306` | `0x00B0` | `BORG` | `B0` reads naturally as `BO...` when `0 → O`, matching the start of `BORG` | Medium/high |
 | `0x313` | `0x00DC` | `DEFCON` | `DC` is a direct shorthand for DEF CON | High |
-| `0x341` | `0x0042` | `42` | The exact answer is present verbatim | Certain |
-| `0x4A7` | `0x0010` | `LOG4SHELL` | `10` plausibly points to Log4Shell's 10.0 severity; alternatively it can hint at `LO` in loose leetspeak | Medium/high |
+| `0x341` | `0x0042` | `42` | The exact answer is present directly as `42` | Certain |
+| `0x4A7` | `0x0010` | `LOG4SHELL` | `10` plausibly points to Log4Shell's CVSS 10.0 severity; it may also loosely resemble `LO` via `1 → L`, `0 → O` | Medium/high |
 
 The relationships are deliberately heterogeneous. Some IDs encode a year or number, some resemble an abbreviation, and some look like hex/leetspeak fragments of the answer. This makes a single universal derivation unlikely.
 
