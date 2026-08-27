@@ -49,16 +49,19 @@ Each challenge directory contains:
 
 ## Summary
 
+STARPWN 2026 had 31 challenges in total. Four of them were onsite-only challenges that required physical access at DEFCON 34, and those challenges are indicated in parentheses.
+
 | Category | Challenges |
-|----------|--------|
+|----------|------------|
 | Communication & RF | 6 |
 | Forensics | 2 |
 | Ground Operations | 2 |
+| Manhunt | (1) |
 | Misc | 7 |
-| Physical | 1 |
+| Physical | 1(3) |
 | Space Communication & RF | 5 |
 | Space Operations | 4 |
-| **Total** | **27** |
+| **Total** | **27(4)** |
 
 ---
 
