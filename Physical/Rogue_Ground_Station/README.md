@@ -209,6 +209,10 @@ This also explains the challenge hint that the application payload was "not encr
 
 ## 5. Recovered spacecraft questions
 
+```bash
+python3 decoder.py apid_<APID>_QRY1_payload.bin
+```
+
 ### APID `0x4A7`
 
 ```text
