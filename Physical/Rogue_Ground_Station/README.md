@@ -568,10 +568,8 @@ from pathlib import Path
 import sys
 import zlib
 
-
 HEADER_SIZE = 12
 XOR_KEY = 0x5A
-
 
 def decode_qry1(path: Path) -> None:
     data: bytes = path.read_bytes()
@@ -630,7 +628,6 @@ def decode_qry1(path: Path) -> None:
     print()
     print(plaintext.decode("ascii"))
 
-
 def main() -> int:
     if len(sys.argv) != 2:
         print(f"Usage: {sys.argv[0]} <QRY1_payload.bin>")
@@ -640,7 +637,6 @@ def main() -> int:
     decode_qry1(path)
     return 0
 
-
 if __name__ == "__main__":
     raise SystemExit(int(main()))
 ```
@@ -648,7 +644,7 @@ if __name__ == "__main__":
 Example for APID `0x341`:
 
 ```text
-$ python3 decode_qry1.py apid_341_QRY1_payload.bin
+$ python3 decoder.py apid_341_QRY1_payload.bin
 
 Query ID       : 0x0042
 Encoded length : 148
