@@ -410,97 +410,7 @@ The Query ID for this request is also `0x0042`, making this the most explicit of
 
 ---
 
-## 6. All eight valid answers
-
-The challenge was designed so that the solver only needed to recover **one** of the eight questions correctly. Each answer is uppercased and passed through CRC-16-CCITT-ZERO to produce the NECext command.
-
-| APID | Query ID | Correct answer | CRC-16 | NECext command |
-|---|---:|---|---:|---:|
-| `0x013` | `0x0A13` | `APOLLO13` | `4E62` | `4E620000` |
-| `0x100` | `0x000A` | `HAL` | `03B9` | `03B90000` |
-| `0x198` | `0x0088` | `MORRIS` | `25FD` | `25FD0000` |
-| `0x219` | `0x00C4` | `CARL` | `3E48` | `3E480000` |
-| `0x306` | `0x00B0` | `BORG` | `E296` | `E2960000` |
-| `0x313` | `0x00DC` | `DEFCON` | `E78E` | `E78E0000` |
-| `0x341` | `0x0042` | `42` | `DF40` | `DF400000` |
-| `0x4A7` | `0x0010` | `LOG4SHELL` | `0F55` | `0F550000` |
-
-All eight answer strings have now been verified against the challenge:
-
-```text
-flag(CAFE0000,4E620000}   # APOLLO13
-flag(CAFE0000,03B90000}   # HAL
-flag(CAFE0000,25FD0000}   # MORRIS
-flag(CAFE0000,3E480000}   # CARL
-flag(CAFE0000,E2960000}   # BORG
-flag(CAFE0000,E78E0000}   # DEFCON
-flag(CAFE0000,DF400000}   # 42
-flag(CAFE0000,0F550000}   # LOG4SHELL
-```
-
-This confirms that the eight reconstructed QRY1 messages are eight independent valid challenge paths. Solving any one of them is sufficient.
-
----
-
-## 7. The competition shortcut versus the intended decoding path
-
-During the competition, only the RSP1 values had been understood semantically. The only duplicated response was `41`, which suggested `42` and happened to produce a valid flag.
-
-```text
-Two unrelated ground-station responses happen to be "41"
-                    ↓
-                  guess 42
-                    ↓
-CRC-16-CCITT-ZERO("42") = DF40
-                    ↓
-flag(CAFE0000,DF400000}
-```
-
-This worked, but the post-competition analysis shows that the duplicated `41` responses belong to the `MORRIS` and `CARL` questions, not to the `42` question. The shortcut therefore reached one of the eight accepted answers by coincidence rather than by correctly decoding those two conversations.
-
-The intended route is:
-
-```text
-CCSDS fragments
-    ↓
-reassemble QRY1
-    ↓
-parse 12-byte QRY1 envelope
-    ↓
-XOR payload with 0x5A
-    ↓
-zlib / DEFLATE decompress
-    ↓
-read one plaintext question
-    ↓
-recover its answer
-    ↓
-CRC-16-CCITT-ZERO(answer.upper())
-    ↓
-NECext transmission
-```
-
-The challenge wording `identify one correct response` is literal: solving any one of the eight plaintext questions is sufficient.
-
----
-
-## 8. Determine the NECext address
-
-Every relevant CCSDS application packet carries the common two-byte prefix:
-
-```text
-CA FE
-```
-
-This was the address candidate used during the solve, and successful submissions confirm that the correct NECext address representation is:
-
-```text
-CAFE0000
-```
-
----
-
-## 9. Compute the NECext command
+## 6. Compute the NECext command
 
 The challenge specifies:
 
@@ -547,6 +457,96 @@ Therefore one valid transmission is:
 Address : CAFE0000
 Command : DF400000
 ```
+
+---
+
+## 7. Determine the NECext address
+
+Every relevant CCSDS application packet carries the common two-byte prefix:
+
+```text
+CA FE
+```
+
+This was the address candidate used during the solve, and successful submissions confirm that the correct NECext address representation is:
+
+```text
+CAFE0000
+```
+
+---
+
+## 8. All eight valid answers
+
+The challenge was designed so that the solver only needed to recover **one** of the eight questions correctly. Each answer is uppercased and passed through CRC-16-CCITT-ZERO to produce the NECext command.
+
+| APID | Query ID | Correct answer | CRC-16 | NECext command |
+|---|---:|---|---:|---:|
+| `0x013` | `0x0A13` | `APOLLO13` | `4E62` | `4E620000` |
+| `0x100` | `0x000A` | `HAL` | `03B9` | `03B90000` |
+| `0x198` | `0x0088` | `MORRIS` | `25FD` | `25FD0000` |
+| `0x219` | `0x00C4` | `CARL` | `3E48` | `3E480000` |
+| `0x306` | `0x00B0` | `BORG` | `E296` | `E2960000` |
+| `0x313` | `0x00DC` | `DEFCON` | `E78E` | `E78E0000` |
+| `0x341` | `0x0042` | `42` | `DF40` | `DF400000` |
+| `0x4A7` | `0x0010` | `LOG4SHELL` | `0F55` | `0F550000` |
+
+All eight answer strings have now been verified against the challenge:
+
+```text
+flag(CAFE0000,4E620000}   # APOLLO13
+flag(CAFE0000,03B90000}   # HAL
+flag(CAFE0000,25FD0000}   # MORRIS
+flag(CAFE0000,3E480000}   # CARL
+flag(CAFE0000,E2960000}   # BORG
+flag(CAFE0000,E78E0000}   # DEFCON
+flag(CAFE0000,DF400000}   # 42
+flag(CAFE0000,0F550000}   # LOG4SHELL
+```
+
+This confirms that the eight reconstructed QRY1 messages are eight independent valid challenge paths. Solving any one of them is sufficient.
+
+---
+
+## 9. The competition shortcut versus the intended decoding path
+
+During the competition, only the RSP1 values had been understood semantically. The only duplicated response was `41`, which suggested `42` and happened to produce a valid flag.
+
+```text
+Two unrelated ground-station responses happen to be "41"
+                    ↓
+                  guess 42
+                    ↓
+CRC-16-CCITT-ZERO("42") = DF40
+                    ↓
+flag(CAFE0000,DF400000}
+```
+
+This worked, but the post-competition analysis shows that the duplicated `41` responses belong to the `MORRIS` and `CARL` questions, not to the `42` question. The shortcut therefore reached one of the eight accepted answers by coincidence rather than by correctly decoding those two conversations.
+
+The intended route is:
+
+```text
+CCSDS fragments
+    ↓
+reassemble QRY1
+    ↓
+parse 12-byte QRY1 envelope
+    ↓
+XOR payload with 0x5A
+    ↓
+zlib / DEFLATE decompress
+    ↓
+read one plaintext question
+    ↓
+recover its answer
+    ↓
+CRC-16-CCITT-ZERO(answer.upper())
+    ↓
+NECext transmission
+```
+
+The challenge wording `identify one correct response` is literal: solving any one of the eight plaintext questions is sufficient.
 
 ---
 
