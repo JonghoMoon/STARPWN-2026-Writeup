@@ -62,7 +62,7 @@ The CCSDS sequence flags indicate whether a packet is the first, continuation, l
 - `10` — Last fragment
 - `11` — Unsegmented packet
 
-To identify the fragmented spacecraft command payloads, apply the following Wireshark display filter:
+To identify the fragmented spacecraft request payloads, apply the following Wireshark display filter:
 
 ```text
 ccsds.seqflag == 1
@@ -132,10 +132,11 @@ python3 extract_qry_rsp.py spacecraft_capture.pcap
 | 0x4A7  | UNKNOWN       | ea715537               |
 | 0x313  | SKYNET        | 3f584b71               |
 ```
+```
 
 The 4-byte field at QRY1 offset `0x08`, previously labeled a correlation field, is actually the **CRC-32 of the decompressed plaintext**. This was verified for all eight requests.
 
-During the competition, the repeated response `41` stood out and led to the successful guess `42`. That shortcut happened to produce a valid answer, but post-competition analysis shows that it was not necessary: the actual questions can be decoded directly from the `QRY1` payloads.
+During the competition, the duplicated response `41` stood out and led to the successful guess `42`. Post-competition analysis shows that this was only a shortcut: there are **eight independent questions and eight valid answers**, and the challenge accepts a correct answer to any one of them.
 
 ---
 
@@ -161,9 +162,7 @@ The 2-byte length field is confirmed: for all eight samples,
 encoded_length == total_QRY1_size - 12
 ```
 
-The Query ID at `0x04` is also reflected in the cFS secondary header: the QRY1 packet uses marker `0x51` followed by the Query-ID low byte, while the corresponding RSP1 uses `0x52` followed by the same low byte.
-
-The 4-byte field at `0x08` is not a correlation identifier. After decoding each request, the following identity holds for all eight samples:
+The 4-byte field at `0x08` is also confirmed. After decoding each request, the following identity holds for all eight samples:
 
 ```text
 header_crc32 == CRC32(decompressed_plaintext)
@@ -177,7 +176,7 @@ The key observation is the beginning of the encoded body. Every reconstructed pa
 22 C6 ...
 ```
 
-Originally this was mistaken for an application-layer magic value or structure marker. It is actually the result of applying a constant byte-wise XOR to a standard zlib header:
+Originally this was mistaken for an application-layer magic value or an internal payload structure. It is actually the result of applying a constant byte-wise XOR to a standard zlib header:
 
 ```text
 0x22 ^ 0x5A = 0x78
@@ -208,9 +207,10 @@ For every sample:
 
 1. The header length equals the number of bytes after offset `0x0C`.
 2. XORing every encoded byte with `0x5A` produces a stream beginning with `78 9C`.
-3. `zlib.decompress()` succeeds without modification or recovery heuristics.
+3. `zlib.decompress()` succeeds without recovery heuristics.
 4. The result is valid ASCII key/value text.
-5. Recompressing the recovered plaintext using `zlib.compress(plaintext, 6)` reproduces the de-obfuscated compressed stream **byte-for-byte**.
+5. `CRC32(plaintext)` exactly matches the 4-byte field at offset `0x08`.
+6. Recompressing the recovered plaintext using `zlib.compress(plaintext, 6)` reproduces the de-obfuscated compressed stream **byte-for-byte**.
 
 The observed encoder is therefore effectively:
 
@@ -224,13 +224,15 @@ XOR every byte with 0x5A
 QRY1 envelope
 ```
 
-This also explains the challenge hint that the application payload was "not encrypted" but still not immediately readable after CCSDS reassembly.
+This explains the challenge hint that the application payload was "not encrypted" but still not immediately readable after CCSDS reassembly.
 
 ---
 
-## 5. Recovered spacecraft questions
+## 5. Recover the eight questions and answers
 
-### APID `0x4A7`
+The challenge contains eight independent requests. A correct answer to **any one** of them is sufficient.
+
+### APID `0x4A7` — `LOG4SHELL`
 
 ```text
 SUBSYS=JAVA_LOGGING
@@ -240,23 +242,18 @@ INDICATOR=JNDI/LDAP/2021
 REQUEST=What's going on?
 ```
 
-Interpretation: the 2021 Java/JNDI/LDAP logging vulnerability.
-
-Likely answer:
+The `JNDI/LDAP/2021` indicator points directly to the Log4Shell vulnerability.
 
 ```text
-LOG4SHELL
-```
-
-Ground-station response:
-
-```text
-UNKNOWN
+Answer              : LOG4SHELL
+CRC-16-CCITT-ZERO   : 0F55
+NECext command      : 0F550000
+Ground-station RSP1 : UNKNOWN
 ```
 
 ---
 
-### APID `0x013`
+### APID `0x013` — `APOLLO13`
 
 ```text
 SUBSYS=MISSION_ARCHIVE
@@ -265,21 +262,18 @@ DETAIL=In-flight anomaly. Oxygen tank failure. Crew survived.
 REQUEST=Identify mission.
 ```
 
-Answer:
+The oxygen-tank failure followed by crew survival identifies Apollo 13.
 
 ```text
-APOLLO13
-```
-
-Ground-station response:
-
-```text
-NOMINAL
+Answer              : APOLLO13
+CRC-16-CCITT-ZERO   : 4E62
+NECext command      : 4E620000
+Ground-station RSP1 : NOMINAL
 ```
 
 ---
 
-### APID `0x100`
+### APID `0x100` — `HAL`
 
 ```text
 SUBSYS=AIRLOCK_CTRL
@@ -289,21 +283,20 @@ DETAIL=Polite.
 REQUEST=Identify onboard computer.
 ```
 
-Answer:
+This is the famous pod-bay-door exchange from *2001: A Space Odyssey*. The accepted answer is the computer's name, `HAL`, rather than `HAL9000`.
 
 ```text
-HAL9000
+Answer              : HAL
+CRC-16-CCITT-ZERO   : 03B9
+NECext command      : 03B90000
+Ground-station RSP1 : NOMINAL
 ```
 
-Ground-station response:
-
-```text
-NOMINAL
-```
+`HAL9000` produces a different CRC and was confirmed to be rejected by the challenge.
 
 ---
 
-### APID `0x198`
+### APID `0x198` — `MORRIS`
 
 ```text
 SUBSYS=NET_HISTORY
@@ -312,21 +305,18 @@ DETAIL=1988 worm. Early large-scale network disruption.
 REQUEST=Provide author surname.
 ```
 
-Answer:
+This points to Robert Tappan Morris and the 1988 Morris worm.
 
 ```text
-MORRIS
-```
-
-Ground-station response:
-
-```text
-41
+Answer              : MORRIS
+CRC-16-CCITT-ZERO   : 25FD
+NECext command      : 25FD0000
+Ground-station RSP1 : 41
 ```
 
 ---
 
-### APID `0x219`
+### APID `0x219` — `CARL`
 
 ```text
 SUBSYS=CREW_AUDIO
@@ -335,21 +325,26 @@ AUDIO_FRAGMENT="Goddammit <REDACTED>"
 REQUEST=Identify speaker
 ```
 
-Likely answer:
+The intended reference is *Dungeon Crawler Carl*. Carl travels with Princess Donut, a cat treated as his companion, and the recurring exasperated line is:
 
 ```text
-RIPLEY
+Goddammit, Donut!
 ```
 
-Ground-station response:
+The redacted name is therefore `Donut`, while the request asks for the **speaker**. The answer is the protagonist:
 
 ```text
-41
+Answer              : CARL
+CRC-16-CCITT-ZERO   : 3E48
+NECext command      : 3E480000
+Ground-station RSP1 : 41
 ```
+
+Earlier guesses such as `RIPLEY`, `CHUCK`, `CHUCKNOLAND`, `JOHNSON`, `BOB`, and `CODY` were rejected. The crucial distinction is that `<REDACTED>` is the companion's name, while the requested answer is the person saying the line.
 
 ---
 
-### APID `0x306`
+### APID `0x306` — `BORG`
 
 ```text
 SUBSYS=TACTICAL_DB
@@ -358,21 +353,18 @@ PHRASE="RESISTANCE IS FUTILE"
 REQUEST=Identify collective.
 ```
 
-Answer:
+The phrase identifies the Borg collective from *Star Trek*.
 
 ```text
-BORG
-```
-
-Ground-station response:
-
-```text
-APOLLO11
+Answer              : BORG
+CRC-16-CCITT-ZERO   : E296
+NECext command      : E2960000
+Ground-station RSP1 : APOLLO11
 ```
 
 ---
 
-### APID `0x313`
+### APID `0x313` — `DEFCON`
 
 ```text
 SUBSYS=CYBER_ARCHIVE
@@ -381,31 +373,22 @@ DETAIL=Multiple villages detected. No signs of intelligent life.
 REQUEST=Where am I?
 ```
 
-The phrase `Multiple villages` strongly points toward DEF CON, where many specialist security "villages" are hosted.
+`Multiple villages` refers to the many specialist security villages at DEF CON. The Query ID `0x00DC` is also a strong secondary hint toward `DC` / DEF CON.
 
-The final answer is not yet proven from the payload alone. However, the unresolved 16-bit field in this message is `0x00DC`, while the APID is `0x313`. Read together, these form the strong clue:
-
-```text
-DC + 313 = DC313
-```
-
-`DC313` is the DEF CON group for Detroit, Michigan, and `313` is also associated with Detroit. Because the request is specifically `Where am I?`, the strongest current interpretation is:
+The accepted answer is the event itself:
 
 ```text
-DETROIT
+Answer              : DEFCON
+CRC-16-CCITT-ZERO   : E78E
+NECext command      : E78E0000
+Ground-station RSP1 : SKYNET
 ```
 
-`DEFCON` remains a plausible intermediate clue rather than the final location answer.
-
-Ground-station response:
-
-```text
-SKYNET
-```
+The earlier interpretation `DETROIT`, based on reading `DC + APID 313` as `DC313`, was confirmed to be wrong.
 
 ---
 
-### APID `0x341`
+### APID `0x341` — `42`
 
 ```text
 SUBSYS=AI_NAV
@@ -415,64 +398,105 @@ RUNTIME=7.5 million years
 REQUEST=Return final numeric result.
 ```
 
-Answer:
+This directly references the answer computed by Deep Thought in *The Hitchhiker's Guide to the Galaxy*.
 
 ```text
-42
+Answer              : 42
+CRC-16-CCITT-ZERO   : DF40
+NECext command      : DF400000
+Ground-station RSP1 : RETRY
 ```
 
-This is a direct reference to the result computed by Deep Thought in *The Hitchhiker's Guide to the Galaxy*.
-
-The unresolved 16-bit field for this QRY is also `0x0042`, providing an additional clue.
-
-Ground-station response:
-
-```text
-RETRY
-```
-
-This message alone is sufficient to recover a correct answer for the challenge without relying on the repeated `41` shortcut.
+The Query ID for this request is also `0x0042`, making this the most explicit of the eight secondary hints.
 
 ---
 
-## 6. The competition shortcut versus the decoded solution
+## 6. All eight valid answers
 
-The original competition solve noticed that `41` was the only duplicated RSP1 response and inferred `42` from it:
+The challenge was designed so that the solver only needed to recover **one** of the eight questions correctly. Each answer is uppercased and passed through CRC-16-CCITT-ZERO to produce the NECext command.
+
+| APID | Query ID | Correct answer | CRC-16 | NECext command |
+|---|---:|---|---:|---:|
+| `0x013` | `0x0A13` | `APOLLO13` | `4E62` | `4E620000` |
+| `0x100` | `0x000A` | `HAL` | `03B9` | `03B90000` |
+| `0x198` | `0x0088` | `MORRIS` | `25FD` | `25FD0000` |
+| `0x219` | `0x00C4` | `CARL` | `3E48` | `3E480000` |
+| `0x306` | `0x00B0` | `BORG` | `E296` | `E2960000` |
+| `0x313` | `0x00DC` | `DEFCON` | `E78E` | `E78E0000` |
+| `0x341` | `0x0042` | `42` | `DF40` | `DF400000` |
+| `0x4A7` | `0x0010` | `LOG4SHELL` | `0F55` | `0F550000` |
+
+Examples of accepted submissions include:
 
 ```text
-Repeated incorrect response: 41
-            ↓
-Guess the intended correct response: 42
+flag(CAFE0000,4E620000}   # APOLLO13
+flag(CAFE0000,03B90000}   # HAL
+flag(CAFE0000,25FD0000}   # MORRIS
+flag(CAFE0000,E2960000}   # BORG
+flag(CAFE0000,E78E0000}   # DEFCON
+flag(CAFE0000,DF400000}   # 42
+flag(CAFE0000,0F550000}   # LOG4SHELL
 ```
 
-That happened to work, but post-competition decoding shows a stronger path:
+For APID `0x219`, the recovered answer is `CARL`, giving:
 
 ```text
-APID 0x341 QRY1
-    ↓
-XOR 0x5A
-    ↓
-zlib decompress
-    ↓
-RUNTIME=7.5 million years
-REQUEST=Return final numeric result.
-    ↓
-42
+flag(CAFE0000,3E480000}
 ```
-
-The phrase "repeatedly answers incorrectly" should therefore be understood as the ground station **repeatedly giving incorrect answers across multiple conversations**, not necessarily as a clue that one incorrect literal response is repeated.
 
 ---
 
-## 7. Determine the NECext address
+## 7. The competition shortcut versus the intended decoding path
 
-The reconstructed application packets consistently use the address value:
+During the competition, only the RSP1 values had been understood semantically. The only duplicated response was `41`, which suggested `42` and happened to produce a valid flag.
 
 ```text
-CAFE
+Two unrelated ground-station responses happen to be "41"
+                    ↓
+                  guess 42
+                    ↓
+CRC-16-CCITT-ZERO("42") = DF40
+                    ↓
+flag(CAFE0000,DF400000}
 ```
 
-Therefore the NECext address is:
+This worked, but the post-competition analysis shows that the duplicated `41` responses belong to the `MORRIS` and `CARL` questions, not to the `42` question. The shortcut therefore reached one of the eight accepted answers by coincidence rather than by correctly decoding those two conversations.
+
+The intended route is:
+
+```text
+CCSDS fragments
+    ↓
+reassemble QRY1
+    ↓
+parse 12-byte QRY1 envelope
+    ↓
+XOR payload with 0x5A
+    ↓
+zlib / DEFLATE decompress
+    ↓
+read one plaintext question
+    ↓
+recover its answer
+    ↓
+CRC-16-CCITT-ZERO(answer.upper())
+    ↓
+NECext transmission
+```
+
+The challenge wording `identify one correct response` is literal: solving any one of the eight plaintext questions is sufficient.
+
+---
+
+## 8. Determine the NECext address
+
+Every relevant CCSDS application packet carries the common two-byte prefix:
+
+```text
+CA FE
+```
+
+This was the address candidate used during the solve, and successful submissions confirm that the correct NECext address representation is:
 
 ```text
 CAFE0000
@@ -480,7 +504,7 @@ CAFE0000
 
 ---
 
-## 8. Compute the NECext command
+## 9. Compute the NECext command
 
 The challenge specifies:
 
@@ -488,7 +512,7 @@ The challenge specifies:
 Command = CRC-16-CCITT-ZERO(ANSWER in all caps)
 ```
 
-For `CRC-16-CCITT-ZERO`:
+Parameters:
 
 ```text
 width   = 16
@@ -499,7 +523,7 @@ refout  = false
 xorout  = 0x0000
 ```
 
-Using the confirmed answer `42`:
+Example using the APID `0x341` answer:
 
 ```python
 import crcmod
@@ -521,7 +545,7 @@ Result:
 DF40
 ```
 
-Padded for the NECext command field:
+Therefore one valid transmission is:
 
 ```text
 Address : CAFE0000
@@ -531,8 +555,6 @@ Command : DF400000
 ---
 
 ## Appendix A. Confirmed QRY1 layout
-
-The corrected layout is:
 
 ```text
 QRY1 envelope
@@ -568,13 +590,15 @@ from pathlib import Path
 import sys
 import zlib
 
+
 HEADER_SIZE = 12
 XOR_KEY = 0x5A
+
 
 def decode_qry1(path: Path) -> None:
     data: bytes = path.read_bytes()
 
-    if len(data) < HEADER_SIZE:
+    if len(data) < int(HEADER_SIZE):
         raise ValueError("Packet is too short")
 
     magic: bytes = data[0:4]
@@ -593,7 +617,7 @@ def decode_qry1(path: Path) -> None:
     if magic != b"QRY1":
         raise ValueError(f"Unexpected magic: {magic!r}")
 
-    encoded: bytes = data[HEADER_SIZE:]
+    encoded: bytes = data[int(HEADER_SIZE):]
 
     if int(encoded_length) != int(len(encoded)):
         raise ValueError(
@@ -628,14 +652,16 @@ def decode_qry1(path: Path) -> None:
     print()
     print(plaintext.decode("ascii"))
 
+
 def main() -> int:
-    if len(sys.argv) != 2:
+    if int(len(sys.argv)) != 2:
         print(f"Usage: {sys.argv[0]} <QRY1_payload.bin>")
         return 1
 
-    path = Path(sys.argv[1])
+    path: Path = Path(sys.argv[1])
     decode_qry1(path)
     return 0
+
 
 if __name__ == "__main__":
     raise SystemExit(int(main()))
@@ -644,7 +670,7 @@ if __name__ == "__main__":
 Example for APID `0x341`:
 
 ```text
-$ python3 decoder.py apid_341_QRY1_payload.bin
+$ python3 decode_qry1.py apid_341_QRY1_payload.bin
 
 Query ID       : 0x0042
 Encoded length : 148
@@ -664,24 +690,22 @@ REQUEST=Return final numeric result.
 
 ## Appendix C. Query ID observations
 
-The protocol role of the 16-bit value at offset `0x04` is now confirmed: it is the **Query ID**. Its low byte is repeated in the cFS secondary header and is used to associate a QRY1 with the corresponding RSP1.
+The protocol role of the 16-bit value at offset `0x04` is confirmed: it is the **Query ID**. Its low byte is repeated in the cFS secondary header and is useful for associating QRY1 and RSP1 messages.
 
-What remains unresolved is whether the challenge author deliberately chose the numeric Query ID values as semantic hints or Easter eggs for each question.
+The numeric values also appear to have been deliberately selected as secondary hints in several cases, although no single mathematical encoding rule explains all eight.
 
-Observed values are:
-
-| APID | Query ID | Recovered / likely answer | Possible semantic relationship |
+| APID | Query ID | Correct answer | Possible semantic relationship |
 |---|---:|---|---|
+| `0x013` | `0x0A13` | `APOLLO13` | `A13` strongly resembles the mission name |
+| `0x100` | `0x000A` | `HAL` | unresolved |
+| `0x198` | `0x0088` | `MORRIS` | `88` points naturally to the 1988 Morris worm |
+| `0x219` | `0x00C4` | `CARL` | unresolved; likely a challenge-specific secondary hint |
+| `0x306` | `0x00B0` | `BORG` | possibly `B0` as loose hexspeak for `BO`; unproven |
+| `0x313` | `0x00DC` | `DEFCON` | `DC` is a strong direct hint toward DEF CON |
 | `0x341` | `0x0042` | `42` | exact answer appears directly |
-| `0x219` | `0x00C4` | `RIPLEY` | unresolved |
-| `0x100` | `0x000A` | `HAL9000` | unresolved |
-| `0x013` | `0x0A13` | `APOLLO13` | `A13` strongly resembles part of `APOLLO13` |
-| `0x306` | `0x00B0` | `BORG` | possibly `B0` as hexspeak for the beginning of `BORG`; unproven |
-| `0x198` | `0x0088` | `MORRIS` | `88` plausibly points to the 1988 Morris worm |
-| `0x4A7` | `0x0010` | `LOG4SHELL` | possibly points to severity `10.0`; unproven |
-| `0x313` | `0x00DC` | `DETROIT` likely | `DC` + APID `313` gives `DC313`, a DEF CON group associated with Detroit |
+| `0x4A7` | `0x0010` | `LOG4SHELL` | plausibly points to the vulnerability's 10.0 severity; unproven |
 
-The field itself should therefore be labeled **Query ID**, not `Unknown16` or `Query Tag`. The possible semantic relationships above are a separate challenge-design hypothesis and are not required for protocol decoding.
+The field itself should therefore be labeled **Query ID**. Any semantic relationship between its numeric value and the associated trivia question should be treated as a separate challenge-design observation rather than part of the wire-format definition.
 
 ---
 
@@ -691,30 +715,32 @@ The field itself should therefore be labeled **Query ID**, not `Unknown16` or `Q
 spacecraft_capture.pcap
     └── UDP
         └── CCSDS Space Packets
-            └── Identify segmented QRY1 messages
-                └── Reassemble using CCSDS sequence flags/counts
-                    └── Parse 12-byte QRY1 envelope
+            └── identify segmented QRY1 messages
+                └── reassemble using sequence flags/counts
+                    └── parse QRY1 envelope
                         ├── Query ID
-                        ├── Encoded Length
-                        ├── Plaintext CRC-32
-                        └── Encoded Payload
-                            └── XOR every byte with 0x5A
+                        ├── encoded length
+                        ├── plaintext CRC-32
+                        └── encoded payload
+                            └── XOR each byte with 0x5A
                                 └── zlib / DEFLATE decompress
-                                    └── Recover ASCII questions
-                                        └── APID 0x341 asks for the
-                                            7.5-million-year result
-                                                └── Answer = "42"
-                                                    └── CRC-16-CCITT-ZERO("42")
-                                                        = DF40
-                                                            └── NECext
-                                                                Address = CAFE0000
-                                                                Command = DF400000
+                                    └── recover ASCII question
+                                        └── solve any one of eight questions
+                                            └── uppercase answer
+                                                └── CRC-16-CCITT-ZERO
+                                                    └── NECext
+                                                        Address = CAFE0000
+                                                        Command = CRC16 << 16
 ```
 
 ---
 
 ## Flag
 
+Any of the eight correct answers can be converted into a valid command. One confirmed example is:
+
 ```text
 flag(CAFE0000,DF400000}
 ```
+
+corresponding to the answer `42`.
