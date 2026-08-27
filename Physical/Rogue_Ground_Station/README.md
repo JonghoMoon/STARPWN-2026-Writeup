@@ -410,7 +410,23 @@ The Query ID for this request is also `0x0042`, making this the most explicit of
 
 ---
 
-## 6. Compute the NECext command
+## 6. Determine the NECext address
+
+Every relevant CCSDS application packet carries the common two-byte prefix:
+
+```text
+CA FE
+```
+
+This was the address candidate used during the solve, and successful submissions confirm that the correct NECext address representation is:
+
+```text
+CAFE0000
+```
+
+---
+
+## 7. Compute the NECext command
 
 The challenge specifies:
 
@@ -456,22 +472,6 @@ Therefore one valid transmission is:
 ```text
 Address : CAFE0000
 Command : DF400000
-```
-
----
-
-## 7. Determine the NECext address
-
-Every relevant CCSDS application packet carries the common two-byte prefix:
-
-```text
-CA FE
-```
-
-This was the address candidate used during the solve, and successful submissions confirm that the correct NECext address representation is:
-
-```text
-CAFE0000
 ```
 
 ---
