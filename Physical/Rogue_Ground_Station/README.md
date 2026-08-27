@@ -113,7 +113,7 @@ Therefore a request and response can be paired by:
 2. the same Query-ID low byte in the secondary header, and
 3. the response occurring after the request.
 
-```text
+```
 python3 extract_qry_rsp.py spacecraft_capture.pcap
 
 [+] CCSDS packets : 5008
@@ -425,23 +425,20 @@ The challenge was designed so that the solver only needed to recover **one** of 
 | `0x341` | `0x0042` | `42` | `DF40` | `DF400000` |
 | `0x4A7` | `0x0010` | `LOG4SHELL` | `0F55` | `0F550000` |
 
-Examples of accepted submissions include:
+All eight answer strings have now been verified against the challenge:
 
 ```text
 flag(CAFE0000,4E620000}   # APOLLO13
 flag(CAFE0000,03B90000}   # HAL
 flag(CAFE0000,25FD0000}   # MORRIS
+flag(CAFE0000,3E480000}   # CARL
 flag(CAFE0000,E2960000}   # BORG
 flag(CAFE0000,E78E0000}   # DEFCON
 flag(CAFE0000,DF400000}   # 42
 flag(CAFE0000,0F550000}   # LOG4SHELL
 ```
 
-For APID `0x219`, the recovered answer is `CARL`, giving:
-
-```text
-flag(CAFE0000,3E480000}
-```
+This confirms that the eight reconstructed QRY1 messages are eight independent valid challenge paths. Solving any one of them is sufficient.
 
 ---
 
@@ -669,7 +666,7 @@ if __name__ == "__main__":
 Example for APID `0x341`:
 
 ```text
-python3 decoder.py apid_341_QRY1_payload.bin
+$ python3 decoder.py apid_341_QRY1_payload.bin
 
 Query ID       : 0x0042
 Encoded length : 148
@@ -689,22 +686,40 @@ REQUEST=Return final numeric result.
 
 ## Appendix C. Query ID observations
 
-The protocol role of the 16-bit value at offset `0x04` is confirmed: it is the **Query ID**. Its low byte is repeated in the cFS secondary header and is useful for associating QRY1 and RSP1 messages.
+The 16-bit value at QRY1 offset `0x04` is retained as the **Query ID**. Its low byte is mirrored in the cFS secondary header and is useful when associating a QRY1 request with the corresponding RSP1 response:
 
-The numeric values also appear to have been deliberately selected as secondary hints in several cases, although no single mathematical encoding rule explains all eight.
+```text
+QRY1 secondary header: ... 0x51 <Query-ID-low-byte>
+RSP1 secondary header: ... 0x52 <Query-ID-low-byte>
+```
 
-| APID | Query ID | Correct answer | Possible semantic relationship |
-|---|---:|---|---|
-| `0x013` | `0x0A13` | `APOLLO13` | `A13` strongly resembles the mission name |
-| `0x100` | `0x000A` | `HAL` | unresolved |
-| `0x198` | `0x0088` | `MORRIS` | `88` points naturally to the 1988 Morris worm |
-| `0x219` | `0x00C4` | `CARL` | unresolved; likely a challenge-specific secondary hint |
-| `0x306` | `0x00B0` | `BORG` | possibly `B0` as loose hexspeak for `BO`; unproven |
-| `0x313` | `0x00DC` | `DEFCON` | `DC` is a strong direct hint toward DEF CON |
-| `0x341` | `0x0042` | `42` | exact answer appears directly |
-| `0x4A7` | `0x0010` | `LOG4SHELL` | plausibly points to the vulnerability's 10.0 severity; unproven |
+Only the low byte is needed for the observed request/response association, but there is not enough evidence to split the 16-bit QRY1 field itself into two independent 1-byte fields. In particular, the lone value `0x0A13` does not justify changing the wire-format interpretation. The simpler representation remains a single 16-bit Query ID whose low byte is repeated elsewhere in the packet metadata.
 
-The field itself should therefore be labeled **Query ID**. Any semantic relationship between its numeric value and the associated trivia question should be treated as a separate challenge-design observation rather than part of the wire-format definition.
+With all eight accepted answers now known, the Query ID values strongly look like **manually selected mnemonic hints** rather than values generated from the answers by one common checksum, hash, or arithmetic rule.
+
+| APID | Query ID | Confirmed answer | Likely mnemonic relationship | Confidence |
+|---|---:|---|---|---|
+| `0x013` | `0x0A13` | `APOLLO13` | `A13` directly evokes Apollo 13 | High |
+| `0x100` | `0x000A` | `HAL` | No convincing mapping identified | Low |
+| `0x198` | `0x0088` | `MORRIS` | `88` points to the 1988 Morris worm | High |
+| `0x219` | `0x00C4` | `CARL` | `C4` can be read as a loose hex/leetspeak cue toward `CA...` | Medium/low |
+| `0x306` | `0x00B0` | `BORG` | `B0` reads naturally as `BO...` with `0 → O` | Medium/high |
+| `0x313` | `0x00DC` | `DEFCON` | `DC` is a direct shorthand for DEF CON | High |
+| `0x341` | `0x0042` | `42` | The exact answer is present verbatim | Certain |
+| `0x4A7` | `0x0010` | `LOG4SHELL` | `10` plausibly points to Log4Shell's 10.0 severity; alternatively it can hint at `LO` in loose leetspeak | Medium/high |
+
+The relationships are deliberately heterogeneous. Some IDs encode a year or number, some resemble an abbreviation, and some look like hex/leetspeak fragments of the answer. This makes a single universal derivation unlikely.
+
+The most plausible challenge-design interpretation is therefore:
+
+```text
+Query ID
+├── protocol role: identify / associate the query
+└── challenge role: provide a small question-specific mnemonic hint
+```
+
+The mnemonic interpretation is **not part of the wire protocol** and is not required to decode the QRY1 payload. It is best treated as an additional author-selected clue that can help a solver recognize the intended answer.
+
 
 ---
 
