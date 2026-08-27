@@ -1,4 +1,4 @@
-def calculate_tle_checksum(line):
+def calculate_tle_checksum(line): 
     checksum = 0
     # Calculate using all characters except the final checksum character
     for char in line[:-1]:
