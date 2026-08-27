@@ -672,14 +672,14 @@ Observed values are:
 
 | APID | Query ID | Recovered / likely answer | Possible semantic relationship |
 |---|---:|---|---|
-| `0x013` | `0x0A13` | `APOLLO13` | `A13` strongly resembles part of `APOLLO13` |
-| `0x100` | `0x000A` | `HAL9000` | unresolved |
-| `0x198` | `0x0088` | `MORRIS` | `88` plausibly points to the 1988 Morris worm |
-| `0x219` | `0x00C4` | `RIPLEY` | unresolved |
-| `0x306` | `0x00B0` | `BORG` | possibly `B0` as hexspeak for the beginning of `BORG`; unproven |
-| `0x313` | `0x00DC` | `DETROIT` likely | `DC` + APID `313` gives `DC313`, a DEF CON group associated with Detroit |
 | `0x341` | `0x0042` | `42` | exact answer appears directly |
+| `0x219` | `0x00C4` | `RIPLEY` | unresolved |
+| `0x100` | `0x000A` | `HAL9000` | unresolved |
+| `0x013` | `0x0A13` | `APOLLO13` | `A13` strongly resembles part of `APOLLO13` |
+| `0x306` | `0x00B0` | `BORG` | possibly `B0` as hexspeak for the beginning of `BORG`; unproven |
+| `0x198` | `0x0088` | `MORRIS` | `88` plausibly points to the 1988 Morris worm |
 | `0x4A7` | `0x0010` | `LOG4SHELL` | possibly points to severity `10.0`; unproven |
+| `0x313` | `0x00DC` | `DETROIT` likely | `DC` + APID `313` gives `DC313`, a DEF CON group associated with Detroit |
 
 The field itself should therefore be labeled **Query ID**, not `Unknown16` or `Query Tag`. The possible semantic relationships above are a separate challenge-design hypothesis and are not required for protocol decoding.
 
