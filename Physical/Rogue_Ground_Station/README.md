@@ -132,7 +132,6 @@ python3 extract_qry_rsp.py spacecraft_capture.pcap
 | 0x4A7  | UNKNOWN       | ea715537               |
 | 0x313  | SKYNET        | 3f584b71               |
 ```
-```
 
 The 4-byte field at QRY1 offset `0x08`, previously labeled a correlation field, is actually the **CRC-32 of the decompressed plaintext**. This was verified for all eight requests.
 
