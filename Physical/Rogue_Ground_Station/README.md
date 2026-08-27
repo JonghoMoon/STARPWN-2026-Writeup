@@ -748,10 +748,15 @@ spacecraft_capture.pcap
 
 ## Flag
 
-Any of the eight correct answers can be converted into a valid command. One confirmed example is:
+**Any one of the eight correct answers can be converted into a valid command and is accepted by the challenge.**
 
 ```text
+flag(CAFE0000,4E620000}
+flag(CAFE0000,03B90000}
+flag(CAFE0000,25FD0000}
+flag(CAFE0000,3E480000}
+flag(CAFE0000,E2960000}
+flag(CAFE0000,E78E0000}
 flag(CAFE0000,DF400000}
+flag(CAFE0000,0F550000}
 ```
-
-corresponding to the answer `42`.
