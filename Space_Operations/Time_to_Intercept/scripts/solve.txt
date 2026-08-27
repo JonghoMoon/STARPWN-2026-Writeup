@@ -1,4 +1,4 @@
-user@user:~/Downloads$ nc 0.cloud.chals.io 20725
+user@user:~/Downloads$ nc 0.cloud.chals.io 20725 
 ======================================================================
   SATELLITE ORBITAL INTERCEPT MISSION
   Space Force - Orbital Warfare Division
